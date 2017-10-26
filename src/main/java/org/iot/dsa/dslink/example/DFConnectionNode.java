@@ -1,10 +1,5 @@
 package org.iot.dsa.dslink.example;
 
-import org.iot.dsa.node.DSInfo;
-import org.iot.dsa.node.action.ActionInvocation;
-import org.iot.dsa.node.action.ActionResult;
-import org.iot.dsa.node.action.DSAction;
-
 /**
  * @author James (Juris) Puchin
  * Created on 10/25/2017

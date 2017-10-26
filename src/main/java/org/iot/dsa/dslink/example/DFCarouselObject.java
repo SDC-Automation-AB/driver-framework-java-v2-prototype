@@ -44,10 +44,11 @@ public class DFCarouselObject implements Runnable {
         running = false;
         //TODO Stop childern
         homeNode.closeConnection();
+        homeNode.onDfStopped();
     }
     
-    public void onConnected() { }
-    public void onFailed() { }
+//    public void onConnected() { }
+//    public void onFailed() { }
     
     @Override
     public void run() {
@@ -57,14 +58,14 @@ public class DFCarouselObject implements Runnable {
         if (connected) {
             connected = homeNode.ping();
             if (!connected) {
-                onFailed();
+                homeNode.onFailed();
             }
         } else {
             connected = homeNode.createConnection();
             if (connected) {
-                onConnected();
+                homeNode.onConnected();
             } else {
-                onFailed();
+                homeNode.onFailed();
             }
         }
         DSRuntime.runDelayed(this, getDelay());

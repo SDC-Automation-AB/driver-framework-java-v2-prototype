@@ -1,5 +1,6 @@
 package org.iot.dsa.dslink.example;
 
+import org.iot.dsa.dslink.example.DFWHelpers.DFStatus;
 import org.iot.dsa.node.DSBool;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSNode;
@@ -33,11 +34,12 @@ public abstract class DFAbstractNode extends DSNode {
     @Override
     protected void declareDefaults() {
         super.declareDefaults();
-        declareDefault(DFWHelpers.STATUS, DSString.valueOf("unknown")).setReadOnly(true);
+        declareDefault(DFWHelpers.STATUS, DSString.valueOf(DFStatus.NEW)).setReadOnly(true);
         //TODO: add full timestamp reporting
         declareDefault(DFWHelpers.STOP, makeStopAction());
         declareDefault(DFWHelpers.START, makeStartAction());
         declareDefault(DFWHelpers.RESTART, makeRestartAction());
+        declareDefault(DFWHelpers.REMOVE, makeRemoveAction());
 
         declareDefault(DFWHelpers.IS_STOPPED, DSBool.FALSE).setReadOnly(true).setHidden(true);
     }
@@ -46,7 +48,7 @@ public abstract class DFAbstractNode extends DSNode {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DFConnectionNode) info.getParent()).stopConnection();
+                ((DFAbstractNode) info.getParent()).stopConnection();
                 return null;
             }
         };
@@ -64,7 +66,7 @@ public abstract class DFAbstractNode extends DSNode {
         return new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DFConnectionNode) info.getParent()).startConnection();
+                ((DFAbstractNode) info.getParent()).startConnection();
                 return null;
             }
         };
@@ -80,12 +82,32 @@ public abstract class DFAbstractNode extends DSNode {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DFConnectionNode) info.getParent()).stopConnection();
-                ((DFConnectionNode) info.getParent()).startConnection();
+                ((DFAbstractNode) info.getParent()).restartConnection();
                 return null;
             }
         };
         return act;
+    }
+    
+    void restartConnection() {
+        stopConnection();
+        startConnection();
+    }
+    
+    DSAction makeRemoveAction() {
+        DSAction act = new DSAction() {
+            @Override
+            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
+                ((DFAbstractNode) info.getParent()).removeConnection();
+                return null;
+            }
+        };
+        return act;
+    }
+    
+    void removeConnection() {
+        stopConnection();
+        getParent().remove(getInfo());
     }
 
     public long getRefresh() {
@@ -98,5 +120,17 @@ public abstract class DFAbstractNode extends DSNode {
 
     public DFWHelpers.DFWRefChangeStrat getRefreshChangeStrat() {
         return REFRESH_CHANGE_STRAT_DEF;
+    }
+
+    public void onConnected() {
+        put(DFWHelpers.STATUS, DSString.valueOf(DFStatus.CONNECTED));
+    }
+    
+    public void onFailed() {
+        put(DFWHelpers.STATUS, DSString.valueOf(DFStatus.FAILED));
+    }
+
+    public void onDfStopped() {
+        put(DFWHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED));
     }
 }

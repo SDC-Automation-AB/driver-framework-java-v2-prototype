@@ -25,6 +25,7 @@ repositories {
 dependencies {
     compile 'org.iot.dsa:dslink-core:+'
     compile 'org.iot.dsa:dslink-websocket-standalone:+'
+    compile 'org.glassfish.tyrus.bundles:tyrus-standalone-client:1.13'
     testCompile 'junit:junit:+'
 }
 
