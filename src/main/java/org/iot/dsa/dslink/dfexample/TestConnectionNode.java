@@ -48,8 +48,10 @@ public class TestConnectionNode extends DFConnectionNode {
     }
 
     void addDevice(DSMap deviceParameters) {
-        String name = parameters.getString("Name");
-        put(name, new TestDeviceNode(parameters));
+        String name = deviceParameters.getString("Name");
+        TestDeviceNode device = new TestDeviceNode(deviceParameters);
+        put(name, device);
+        device.startCarObject();
     }
 
     @Override
