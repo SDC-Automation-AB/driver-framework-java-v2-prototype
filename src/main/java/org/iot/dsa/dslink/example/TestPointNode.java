@@ -7,49 +7,22 @@ import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
 import org.iot.dsa.node.DSString;
-import org.iot.dsa.node.DSValueType;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
 
-public class TestConnectionNode extends DFConnectionNode {
-    protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.LINEAR;
-
+public class TestPointNode extends DFDeviceNode {
+    
     DSMap parameters;
     File fileObj;
     
-    public TestConnectionNode() {
+    public TestPointNode() {
     }
     
-    public TestConnectionNode(DSMap parameters) {
+    public TestPointNode(DSMap parameters) {
         this.parameters = parameters;
     }
     
-    @Override
-    protected void declareDefaults() {
-        super.declareDefaults();
-        declareDefault("Add Device", makeAddDeviceAction());
-    }
-
-    private DSIObject makeAddDeviceAction() {
-        DSAction act = new DSAction() {
-            @Override
-            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((TestConnectionNode) info.getParent()).addDevice(invocation.getParameters());
-                return null;
-            }
-        };
-        act.addParameter("Name", DSValueType.STRING, null);
-        act.addParameter("Filepath", DSValueType.STRING, null);
-        act.addDefaultParameter("Ping Rate", DSLong.valueOf(TestConnectionNode.REFRESH_DEF), null);
-        return act;
-    }
-
-    void addDevice(DSMap deviceParameters) {
-        String name = parameters.getString("Name");
-        put(name, new TestDeviceNode(parameters));
-    }
-
     @Override
     protected void onStarted() {
         if (this.parameters == null) {
@@ -71,12 +44,12 @@ public class TestConnectionNode extends DFConnectionNode {
             return false;
         }
         fileObj = new File(fpath);
-        return fileObj.canRead() && fileObj.isDirectory();
+        return fileObj.canRead() && fileObj.isFile();
     }
 
     @Override
     boolean ping() {
-        return fileObj != null && fileObj.canRead() && fileObj.isDirectory();
+        return fileObj != null && fileObj.canRead() && fileObj.isFile();
     }
 
     @Override
@@ -97,7 +70,7 @@ public class TestConnectionNode extends DFConnectionNode {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((TestConnectionNode) info.getParent()).edit(invocation.getParameters());
+                ((TestPointNode) info.getParent()).edit(invocation.getParameters());
                 return null;
             }
         };
