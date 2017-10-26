@@ -1,6 +1,6 @@
-package org.iot.dsa.dslink.example;
+package org.iot.dsa.dslink.dframework;
 
-import org.iot.dsa.dslink.example.DFHelpers.DFStatus;
+import org.iot.dsa.dslink.dframework.DFHelpers.DFStatus;
 import org.iot.dsa.node.DSBool;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSNode;
@@ -27,9 +27,9 @@ public abstract class DFAbstractNode extends DSNode {
     }
 
     //Carousel Management Methods
-    abstract boolean createConnection();
-    abstract boolean ping();
-    abstract void closeConnection();
+    abstract public boolean createConnection();
+    abstract public boolean ping();
+    abstract public void closeConnection();
 
     @Override
     protected void declareDefaults() {
@@ -48,14 +48,15 @@ public abstract class DFAbstractNode extends DSNode {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DFAbstractNode) info.getParent()).stopConnection();
+                ((DFAbstractNode) info.getParent()).stopCarObject();
+                put(DFHelpers.IS_STOPPED, DSBool.TRUE);
                 return null;
             }
         };
         return act;
     }
 
-    void stopConnection() {
+    public void stopCarObject() {
         if (carObject != null) {
             carObject.close();
             carObject = null;
@@ -66,13 +67,14 @@ public abstract class DFAbstractNode extends DSNode {
         return new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DFAbstractNode) info.getParent()).startConnection();
+                ((DFAbstractNode) info.getParent()).startCarObject();
                 return null;
             }
         };
     }
 
-    void startConnection() {
+    public void startCarObject() {
+        put(DFHelpers.IS_STOPPED, DSBool.FALSE);
         if (carObject == null) {
             carObject = new DFCarouselObject(this);
         }
@@ -89,9 +91,9 @@ public abstract class DFAbstractNode extends DSNode {
         return act;
     }
     
-    void restartConnection() {
-        stopConnection();
-        startConnection();
+    public void restartConnection() {
+        stopCarObject();
+        startCarObject();
     }
     
     DSAction makeRemoveAction() {
@@ -106,7 +108,7 @@ public abstract class DFAbstractNode extends DSNode {
     }
     
     void removeConnection() {
-        stopConnection();
+        stopCarObject();
         getParent().remove(getInfo());
     }
 

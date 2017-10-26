@@ -1,6 +1,7 @@
-package org.iot.dsa.dslink.example;
+package org.iot.dsa.dslink.dfexample;
 
 import java.io.File;
+import org.iot.dsa.dslink.dframework.DFDeviceNode;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSInfo;
@@ -11,15 +12,15 @@ import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
 
-public class TestPointNode extends DFDeviceNode {
+public class TestDeviceNode extends DFDeviceNode {
     
     DSMap parameters;
     File fileObj;
     
-    public TestPointNode() {
+    public TestDeviceNode() {
     }
     
-    public TestPointNode(DSMap parameters) {
+    public TestDeviceNode(DSMap parameters) {
         this.parameters = parameters;
     }
     
@@ -42,7 +43,7 @@ public class TestPointNode extends DFDeviceNode {
     }
 
     @Override
-    boolean createConnection() {
+    public boolean createConnection() {  
         String fpath = parameters.getString("Filepath");
         if (fpath == null) {
             return false;
@@ -52,12 +53,12 @@ public class TestPointNode extends DFDeviceNode {
     }
 
     @Override
-    boolean ping() {
+    public boolean ping() {
         return fileObj != null && fileObj.canRead() && fileObj.isFile();
     }
 
     @Override
-    void closeConnection() {
+    public void closeConnection() {
         fileObj = null;
     }
     
@@ -74,7 +75,7 @@ public class TestPointNode extends DFDeviceNode {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((TestPointNode) info.getParent()).edit(invocation.getParameters());
+                ((TestDeviceNode) info.getParent()).edit(invocation.getParameters());
                 return null;
             }
         };

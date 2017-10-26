@@ -1,8 +1,8 @@
-package org.iot.dsa.dslink.example;
+package org.iot.dsa.dslink.dframework;
 
 import org.iot.dsa.DSRuntime;
-import org.iot.dsa.dslink.example.DFHelpers.DFConnStrat;
-import org.iot.dsa.dslink.example.DFHelpers.DFRefChangeStrat;
+import org.iot.dsa.dslink.dframework.DFHelpers.DFConnStrat;
+import org.iot.dsa.dslink.dframework.DFHelpers.DFRefChangeStrat;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSIValue;
 import org.iot.dsa.node.DSInfo;
@@ -29,7 +29,7 @@ public class DFCarouselObject implements Runnable {
             if (o instanceof DFAbstractNode) {
                 DFAbstractNode child = (DFAbstractNode) o;
                 if (!child.getIsStopped()) {
-                    child.startConnection();
+                    child.startCarObject();
                 }
             }
         }

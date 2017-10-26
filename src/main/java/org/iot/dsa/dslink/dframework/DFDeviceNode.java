@@ -1,4 +1,4 @@
-package org.iot.dsa.dslink.example;
+package org.iot.dsa.dslink.dframework;
 
 /**
  * @author James (Juris) Puchin

@@ -1,4 +1,4 @@
-package org.iot.dsa.dslink.example;
+package org.iot.dsa.dslink.dframework;
 
 public class DFHelpers {
     static final String STATUS = "Status";

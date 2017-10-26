@@ -1,4 +1,4 @@
-package org.iot.dsa.dslink.example;
+package org.iot.dsa.dslink.dfexample;
 
 import org.iot.dsa.dslink.DSRootNode;
 import org.iot.dsa.node.DSInfo;
