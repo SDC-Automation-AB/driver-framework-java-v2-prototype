@@ -2,6 +2,7 @@ package org.iot.dsa.dslink.dfexample;
 
 import java.io.File;
 import org.iot.dsa.dslink.dframework.DFDeviceNode;
+import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSInfo;
