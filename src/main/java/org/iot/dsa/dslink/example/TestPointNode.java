@@ -34,11 +34,15 @@ public class TestPointNode extends DFDeviceNode {
             put("parameters", parameters.copy());
         }
     }
+    
+    @Override
+    protected void onStable() {
+        put("Edit", makeEditAction());
+        super.onStable();
+    }
 
     @Override
     boolean createConnection() {
-        put("Edit", makeEditAction());
-        
         String fpath = parameters.getString("Filepath");
         if (fpath == null) {
             return false;
@@ -84,7 +88,7 @@ public class TestPointNode extends DFDeviceNode {
     private void edit(DSMap newParameters) {
         this.parameters = newParameters;
         put("parameters", parameters.copy());
-        //put("Edit", makeEditAction());
+        put("Edit", makeEditAction());
         restartConnection();
     }
 
