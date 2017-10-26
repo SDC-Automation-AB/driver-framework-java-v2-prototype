@@ -11,16 +11,15 @@ import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
 
-public class TestConnectionNode extends DFConnectionNode {
-    protected static DFWHelpers.DFWRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFWHelpers.DFWRefChangeStrat.LINEAR;
-
+public class TestDeviceNode extends DFDeviceNode {
+    
     DSMap parameters;
     File fileObj;
     
-    public TestConnectionNode() {
+    public TestDeviceNode() {
     }
     
-    public TestConnectionNode(DSMap parameters) {
+    public TestDeviceNode(DSMap parameters) {
         this.parameters = parameters;
     }
     
@@ -45,12 +44,12 @@ public class TestConnectionNode extends DFConnectionNode {
             return false;
         }
         fileObj = new File(fpath);
-        return fileObj.canRead() && fileObj.isDirectory();
+        return fileObj.canRead() && fileObj.isFile();
     }
 
     @Override
     boolean ping() {
-        return fileObj != null && fileObj.canRead() && fileObj.isDirectory();
+        return fileObj != null && fileObj.canRead() && fileObj.isFile();
     }
 
     @Override
@@ -71,7 +70,7 @@ public class TestConnectionNode extends DFConnectionNode {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((TestConnectionNode) info.getParent()).edit(invocation.getParameters());
+                ((TestDeviceNode) info.getParent()).edit(invocation.getParameters());
                 return null;
             }
         };
