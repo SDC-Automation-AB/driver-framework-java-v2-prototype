@@ -32,7 +32,7 @@ public class TestConnectionNode extends DFConnectionNode {
                 this.parameters = (DSMap) o;
             }
         } else {
-            put("parameters", parameters);
+            put("parameters", parameters.copy());
         }
     }
 
@@ -84,8 +84,8 @@ public class TestConnectionNode extends DFConnectionNode {
     
     private void edit(DSMap newParameters) {
         this.parameters = newParameters;
-        put("parameters", parameters);
-        put("Edit", makeEditAction());
+        put("parameters", parameters.copy());
+        //put("Edit", makeEditAction());
         restartConnection();
     }
 
