@@ -28,7 +28,7 @@ public class DFCarouselObject implements Runnable {
             DSIObject o = info.getObject();
             if (o instanceof DFAbstractNode) {
                 DFAbstractNode child = (DFAbstractNode) o;
-                if (!child.getIsStopped()) {
+                if (!child.isNodeStopped()) {
                     child.startCarObject();
                 }
             }

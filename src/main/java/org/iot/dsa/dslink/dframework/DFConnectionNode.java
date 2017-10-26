@@ -13,7 +13,7 @@ public abstract class DFConnectionNode extends DFAbstractNode {
     @Override
     protected void onStable() {
         super.onStable();
-        if (!getIsStopped()) {
+        if (!isNodeStopped()) {
             startCarObject();
         }
     }

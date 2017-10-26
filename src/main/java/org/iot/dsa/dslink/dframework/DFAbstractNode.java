@@ -22,7 +22,7 @@ public abstract class DFAbstractNode extends DSNode {
     DFCarouselObject carObject;
 
     private final DSInfo is_stopped = getInfo(DFHelpers.IS_STOPPED);
-    boolean getIsStopped() {
+    boolean isNodeStopped() {
         return is_stopped.getValue().equals(DSBool.TRUE);
     }
 
@@ -36,24 +36,48 @@ public abstract class DFAbstractNode extends DSNode {
         super.declareDefaults();
         declareDefault(DFHelpers.STATUS, DSString.valueOf(DFStatus.NEW)).setReadOnly(true);
         //TODO: add full timestamp reporting
-        declareDefault(DFHelpers.STOP, makeStopAction());
-        declareDefault(DFHelpers.START, makeStartAction());
         declareDefault(DFHelpers.RESTART, makeRestartAction());
         declareDefault(DFHelpers.REMOVE, makeRemoveAction());
 
         declareDefault(DFHelpers.IS_STOPPED, DSBool.FALSE).setReadOnly(true).setHidden(true);
     }
 
-    DSAction makeStopAction() {
+    DSAction makeStartStopAction() {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DFAbstractNode) info.getParent()).stopCarObject();
-                put(DFHelpers.IS_STOPPED, DSBool.TRUE);
+                DFAbstractNode par = ((DFAbstractNode) info.getParent());
+                if (par.isNodeStopped()) {
+                    par.setNodeRunning();
+                }
+                else {
+                    par.setNodeStopped();
+                }
                 return null;
             }
         };
         return act;
+    }
+
+    @Override
+    protected void onStable() {
+        super.onStable();
+        if (isNodeStopped()) put(DFHelpers.START, makeStartStopAction());
+        else put(DFHelpers.STOP, makeStartStopAction());
+    }
+
+    public void setNodeStopped() {
+        put(DFHelpers.IS_STOPPED, DSBool.TRUE);
+        stopCarObject();
+        remove(DFHelpers.STOP);
+        put(DFHelpers.START,makeStartStopAction());
+    }
+
+    public void setNodeRunning() {
+        put(DFHelpers.IS_STOPPED, DSBool.FALSE);
+        startCarObject();
+        remove(DFHelpers.START);
+        put(DFHelpers.STOP,makeStartStopAction());
     }
 
     public void stopCarObject() {
@@ -63,37 +87,26 @@ public abstract class DFAbstractNode extends DSNode {
         }
     }
 
-    DSAction makeStartAction() {
-        return new DSAction() {
-            @Override
-            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DFAbstractNode) info.getParent()).startCarObject();
-                return null;
-            }
-        };
-    }
-
     public void startCarObject() {
-        put(DFHelpers.IS_STOPPED, DSBool.FALSE);
         if (carObject == null) {
             carObject = new DFCarouselObject(this);
         }
+    }
+
+    public void restartNode() {
+        setNodeStopped();
+        setNodeRunning();
     }
 
     DSAction makeRestartAction() {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DFAbstractNode) info.getParent()).restartConnection();
+                ((DFAbstractNode) info.getParent()).restartNode();
                 return null;
             }
         };
         return act;
-    }
-    
-    public void restartConnection() {
-        stopCarObject();
-        startCarObject();
     }
     
     DSAction makeRemoveAction() {

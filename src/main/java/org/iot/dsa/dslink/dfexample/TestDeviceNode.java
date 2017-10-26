@@ -90,7 +90,7 @@ public class TestDeviceNode extends DFDeviceNode {
         this.parameters = newParameters;
         put("parameters", parameters.copy());
         put("Edit", makeEditAction());
-        restartConnection();
+        restartNode();
     }
 
 }

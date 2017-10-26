@@ -7,7 +7,7 @@
     "rootType": {
       "desc": "Fully qualified class name of the root node of the link.",
       "type": "string",
-      "value": "org.iot.dsa.dslink.example.RootNode"
+      "value": "org.iot.dsa.dslink.dfexample.RootNode"
     },
     "broker": {
       "desc": "URL to broker.",

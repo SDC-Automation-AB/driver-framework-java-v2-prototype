@@ -3,7 +3,6 @@ package org.iot.dsa.dslink.dfexample;
 import java.io.File;
 import org.iot.dsa.dslink.dframework.DFConnectionNode;
 import org.iot.dsa.dslink.dframework.DFHelpers;
-import org.iot.dsa.dslink.dframework.DFHelpers.DFRefChangeStrat;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSInfo;
@@ -119,7 +118,7 @@ public class TestConnectionNode extends DFConnectionNode {
         this.parameters = newParameters;
         put("parameters", parameters.copy());
         put("Edit", makeEditAction());
-        restartConnection();
+        restartNode();
     }
 
 }
