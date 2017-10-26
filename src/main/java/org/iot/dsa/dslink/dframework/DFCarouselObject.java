@@ -23,17 +23,23 @@ public class DFCarouselObject implements Runnable {
         this.refresh = home.getRefresh();
         this.connStrat = home.getConnStrat();
         this.refChangeStrat = home.getRefreshChangeStrat();
+        killOrSpawnChildren(false);
+        run();
+    }
 
+    private void killOrSpawnChildren(boolean kill) {
         for (DSInfo info : homeNode) {
             DSIObject o = info.getObject();
             if (o instanceof DFAbstractNode) {
                 DFAbstractNode child = (DFAbstractNode) o;
-                if (!child.isNodeStopped()) {
-                    child.startCarObject();
-                }
+                    if (kill) {
+                        child.stopCarObject();
+                    } else {
+                        if (!child.isNodeStopped())
+                            child.startCarObject();
+                    }
             }
         }
-        run();
     }
     
     private long getDelay() {
@@ -42,13 +48,10 @@ public class DFCarouselObject implements Runnable {
     
     public void close() {
         running = false;
-        //TODO Stop childern
+        killOrSpawnChildren(true);
         homeNode.closeConnection();
         homeNode.onDfStopped();
     }
-    
-//    public void onConnected() { }
-//    public void onFailed() { }
     
     @Override
     public void run() {
