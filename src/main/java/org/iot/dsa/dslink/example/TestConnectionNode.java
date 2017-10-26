@@ -12,7 +12,7 @@ import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
 
 public class TestConnectionNode extends DFConnectionNode {
-    protected static DFWHelpers.DFWRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFWHelpers.DFWRefChangeStrat.LINEAR;
+    protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.LINEAR;
 
     DSMap parameters;
     File fileObj;

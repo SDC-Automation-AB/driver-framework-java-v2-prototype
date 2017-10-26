@@ -1,8 +1,8 @@
 package org.iot.dsa.dslink.example;
 
 import org.iot.dsa.DSRuntime;
-import org.iot.dsa.dslink.example.DFWHelpers.DFWConnStrat;
-import org.iot.dsa.dslink.example.DFWHelpers.DFWRefChangeStrat;
+import org.iot.dsa.dslink.example.DFHelpers.DFConnStrat;
+import org.iot.dsa.dslink.example.DFHelpers.DFRefChangeStrat;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSIValue;
 import org.iot.dsa.node.DSInfo;
@@ -12,8 +12,8 @@ public class DFCarouselObject implements Runnable {
 
     private DFAbstractNode homeNode;
     private long refresh;
-    private DFWConnStrat connStrat;
-    private DFWRefChangeStrat refChangeStrat;
+    private DFConnStrat connStrat;
+    private DFRefChangeStrat refChangeStrat;
     private boolean connected = false;
     private boolean running = true;
     DSIValue status;
