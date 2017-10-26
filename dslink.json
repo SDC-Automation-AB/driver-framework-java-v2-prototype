@@ -1,18 +1,16 @@
 {
-  "name": "dslink-java-v2-example",
+  "name": "DFTesting",
   "version": "1.0.0",
-  "description": "Example Java Link",
+  "description": "Test link for Driver Framework",
   "main": "bin/dslink-java-v2-example",
   "configs": {
     "rootType": {
-      "desc1": "*************** THIS IS REQUIRED AND MUST BE CHANGED ***************",
-      "desc2": "Fully qualified class name of the root node of the link.",
+      "desc": "Fully qualified class name of the root node of the link.",
       "type": "string",
       "value": "org.iot.dsa.dslink.example.RootNode"
     },
     "broker": {
-      "desc1": "*************** OPTIONAL CONFIGS IN ALPHABETICAL ORDER ***************",
-      "desc2": "URL to broker.",
+      "desc": "URL to broker.",
       "type": "url",
       "value": null
     },
