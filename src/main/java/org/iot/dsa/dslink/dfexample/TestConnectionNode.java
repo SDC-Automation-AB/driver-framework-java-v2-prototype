@@ -1,6 +1,9 @@
-package org.iot.dsa.dslink.example;
+package org.iot.dsa.dslink.dfexample;
 
 import java.io.File;
+import org.iot.dsa.dslink.dframework.DFConnectionNode;
+import org.iot.dsa.dslink.dframework.DFHelpers;
+import org.iot.dsa.dslink.dframework.DFHelpers.DFRefChangeStrat;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSInfo;
@@ -61,11 +64,15 @@ public class TestConnectionNode extends DFConnectionNode {
             put("parameters", parameters.copy());
         }
     }
+    
+    @Override
+    protected void onStable() {
+        put("Edit", makeEditAction());
+        super.onStable();
+    }
 
     @Override
-    boolean createConnection() {
-        put("Edit", makeEditAction());
-        
+    public boolean createConnection() {
         String fpath = parameters.getString("Filepath");
         if (fpath == null) {
             return false;
@@ -75,12 +82,12 @@ public class TestConnectionNode extends DFConnectionNode {
     }
 
     @Override
-    boolean ping() {
+    public boolean ping() {
         return fileObj != null && fileObj.canRead() && fileObj.isDirectory();
     }
 
     @Override
-    void closeConnection() {
+    public void closeConnection() {
         fileObj = null;
     }
     
@@ -111,7 +118,7 @@ public class TestConnectionNode extends DFConnectionNode {
     private void edit(DSMap newParameters) {
         this.parameters = newParameters;
         put("parameters", parameters.copy());
-        //put("Edit", makeEditAction());
+        put("Edit", makeEditAction());
         restartConnection();
     }
 
