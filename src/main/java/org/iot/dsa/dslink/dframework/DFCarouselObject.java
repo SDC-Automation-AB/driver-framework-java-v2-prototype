@@ -58,6 +58,7 @@ public class DFCarouselObject implements Runnable {
         if (!running) {
             return;
         }
+        //Can add redundant check for isNodeStopped here
         if (connected) {
             connected = homeNode.ping();
             if (!connected) {
