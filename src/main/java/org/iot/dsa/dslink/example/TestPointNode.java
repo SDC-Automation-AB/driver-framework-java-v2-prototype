@@ -11,7 +11,7 @@ import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
 
-public class TestPointNode extends DFDeviceNode {
+public class TestPointNode extends DFPointNode {
     
     DSMap parameters;
     File fileObj;
