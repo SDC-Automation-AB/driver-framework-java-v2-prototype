@@ -84,6 +84,7 @@ public class TestConnectionNode extends DFConnectionNode {
     
     private void edit(DSMap newParameters) {
         this.parameters = newParameters;
+        put("parameters", parameters);
         put("Edit", makeEditAction());
         restartConnection();
     }
