@@ -8,6 +8,7 @@ import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
 import org.iot.dsa.node.DSString;
+import org.iot.dsa.node.DSValueType;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
@@ -22,6 +23,12 @@ public class TestDeviceNode extends DFDeviceNode {
     
     public TestDeviceNode(DSMap parameters) {
         this.parameters = parameters;
+    }
+    
+    @Override
+    protected void declareDefaults() {
+        super.declareDefaults();
+        declareDefault("Add Point", makeAddPointAction());
     }
     
     @Override
@@ -91,6 +98,26 @@ public class TestDeviceNode extends DFDeviceNode {
         put("parameters", parameters.copy());
         put("Edit", makeEditAction());
         restartNode();
+    }
+    
+    private DSAction makeAddPointAction() {
+        DSAction act = new DSAction() {
+            @Override
+            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
+                ((TestDeviceNode) info.getParent()).addPoint(invocation.getParameters());
+                return null;
+            }
+        };
+        act.addParameter("Name", DSValueType.STRING, null);
+        act.addParameter("Line", DSValueType.NUMBER, null);
+        act.addDefaultParameter("Poll Rate", DSLong.valueOf(TestConnectionNode.REFRESH_DEF), null);
+        return act;
+    }
+
+    void addPoint(DSMap pointParameters) {
+        String name = pointParameters.getString("Name");
+        TestPointNode point = new TestPointNode(pointParameters);
+        put(name, point);
     }
 
 }

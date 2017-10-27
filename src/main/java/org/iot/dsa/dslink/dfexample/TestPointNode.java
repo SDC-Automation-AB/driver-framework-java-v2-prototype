@@ -1,22 +1,26 @@
 package org.iot.dsa.dslink.dfexample;
 
 import java.io.File;
-
+import java.nio.file.Files;
 import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
+import org.iot.dsa.node.DSIValue;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
+import org.iot.dsa.node.DSNode;
 import org.iot.dsa.node.DSString;
+import org.iot.dsa.node.DSValueType;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
 
-public class TestPointNode extends DFPointNode {
+public class TestPointNode extends DFPointNode implements DSIValue {
     
     DSMap parameters;
     File fileObj;
+    private DSInfo value = getInfo("Value");
     
     public TestPointNode() {
     }
@@ -38,24 +42,15 @@ public class TestPointNode extends DFPointNode {
     }
     
     @Override
+    protected void declareDefaults() {
+        super.declareDefaults();
+        declareDefault("Value", DSString.EMPTY);
+    }
+    
+    @Override
     protected void onStable() {
         put("Edit", makeEditAction());
         super.onStable();
-    }
-
-    @Override
-    public boolean createConnection() {
-        String fpath = parameters.getString("Filepath");
-        if (fpath == null) {
-            return false;
-        }
-        fileObj = new File(fpath);
-        return fileObj.canRead() && fileObj.isFile();
-    }
-
-    @Override
-    public boolean ping() {
-        return fileObj != null && fileObj.canRead() && fileObj.isFile();
     }
 
     @Override
@@ -65,7 +60,7 @@ public class TestPointNode extends DFPointNode {
     
     @Override
     public long getRefresh() {
-        DSElement rate = parameters.get("Ping Rate");
+        DSElement rate = parameters.get("Poll Rate");
         if (rate != null && rate.isNumber()) {
             return rate.toLong();
         }
@@ -82,8 +77,8 @@ public class TestPointNode extends DFPointNode {
         };
         DSElement defFilepath = parameters.get("Filepath");
         DSElement defPingRate = parameters.get("Ping Rate");
-        act.addDefaultParameter("Filepath", defFilepath != null ? defFilepath : DSString.EMPTY, null);
-        act.addDefaultParameter("Ping Rate", defPingRate != null ? defPingRate : DSLong.valueOf(REFRESH_DEF), null);
+        act.addDefaultParameter("Line", defFilepath != null ? defFilepath : DSLong.NULL, null);
+        act.addDefaultParameter("Poll Rate", defPingRate != null ? defPingRate : DSLong.valueOf(REFRESH_DEF), null);
         return act;
     }
     
@@ -92,6 +87,56 @@ public class TestPointNode extends DFPointNode {
         put("parameters", parameters.copy());
         put("Edit", makeEditAction());
         restartNode();
+    }
+
+    @Override
+    public DSValueType getValueType() {
+        return DSValueType.STRING;
+    }
+
+    @Override
+    public DSIValue restore(DSElement element) {
+        return valueOf(element);
+    }
+
+    @Override
+    public DSElement store() {
+        return toElement();
+    }
+
+    @Override
+    public DSElement toElement() {
+        return value.getValue().toElement();
+    }
+
+    @Override
+    public DSIValue valueOf(DSElement element) {
+        return value.getValue().valueOf(element);
+    }
+
+    @Override
+    public boolean poll() {
+        try {
+            int lineNo = parameters.getInt("Line");
+            TestDeviceNode parent = getParentNode();
+            synchronized(parent) {
+               String line = Files.readAllLines(parent.fileObj.toPath()).get(lineNo);
+               put(value, DSString.valueOf(line));
+            }
+            return true;
+        } catch (Exception e) {
+            warn(e);
+            return false;
+        }
+    }
+    
+    private TestDeviceNode getParentNode() {
+        DSNode parent =  getParent();
+        if (parent instanceof TestDeviceNode) {
+            return (TestDeviceNode) getParent();
+        } else {
+            throw new RuntimeException("Wrong parent class");
+        }
     }
 
 }
