@@ -1,6 +1,7 @@
 package org.iot.dsa.dslink.dframework;
 
 import org.iot.dsa.DSRuntime;
+import org.iot.dsa.dslink.DSRootNode;
 import org.iot.dsa.dslink.dframework.DFHelpers.DFConnStrat;
 import org.iot.dsa.dslink.dframework.DFHelpers.DFRefChangeStrat;
 import org.iot.dsa.node.DSIObject;
@@ -35,7 +36,8 @@ public class DFCarouselObject implements Runnable {
             DFAbstractNode par = (DFAbstractNode) homeNode.getParent();
             return !par.isNodeConnected();
         }
-        else { return false; }
+        else if (homeNode.getParent() instanceof DSRootNode) { return false; }
+        else { throw new RuntimeException("Wrong parent class"); }
     }
 
     private void killOrSpawnChildren(boolean kill) {
