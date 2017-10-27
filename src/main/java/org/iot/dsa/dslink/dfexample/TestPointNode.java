@@ -122,6 +122,7 @@ public class TestPointNode extends DFPointNode implements DSIValue {
             synchronized(parent) {
                String line = Files.readAllLines(parent.fileObj.toPath()).get(lineNo);
                put(value, DSString.valueOf(line));
+               getParent().childChanged(getInfo());
             }
             return true;
         } catch (Exception e) {
