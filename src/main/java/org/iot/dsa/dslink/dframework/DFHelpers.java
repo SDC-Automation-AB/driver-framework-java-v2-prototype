@@ -24,7 +24,8 @@ public class DFHelpers {
         NEW("Unknown"),
         CONNECTED("Connected"),
         FAILED("Failed"),
-        STOPPED(IS_STOPPED);
+        STOPPED(IS_STOPPED),
+        STOPPED_BYP("Stopped by Parent");
         
         String display;
         DFStatus(String display) {

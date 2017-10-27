@@ -20,11 +20,22 @@ public class DFCarouselObject implements Runnable {
     
     public DFCarouselObject(DFAbstractNode home) {
         homeNode = home;
-        this.refresh = home.getRefresh();
-        this.connStrat = home.getConnStrat();
-        this.refChangeStrat = home.getRefreshChangeStrat();
-        killOrSpawnChildren(false);
-        run();
+        if (iAmAnOrphan()) {
+            this.close();
+        } else {
+            this.refresh = home.getRefresh();
+            this.connStrat = home.getConnStrat();
+            this.refChangeStrat = home.getRefreshChangeStrat();
+            run();
+        }
+    }
+
+    private boolean iAmAnOrphan() {
+        if (homeNode.getParent() instanceof  DFAbstractNode) {
+            DFAbstractNode par = (DFAbstractNode) homeNode.getParent();
+            return !par.isNodeConnected();
+        }
+        else { return false; }
     }
 
     private void killOrSpawnChildren(boolean kill) {
@@ -63,13 +74,16 @@ public class DFCarouselObject implements Runnable {
             connected = homeNode.ping();
             if (!connected) {
                 homeNode.onFailed();
+                killOrSpawnChildren(true);
             }
         } else {
             connected = homeNode.createConnection();
             if (connected) {
                 homeNode.onConnected();
+                killOrSpawnChildren(false);
             } else {
                 homeNode.onFailed();
+                killOrSpawnChildren(true);
             }
         }
         DSRuntime.runDelayed(this, getDelay());

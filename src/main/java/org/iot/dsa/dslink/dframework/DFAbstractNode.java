@@ -25,6 +25,8 @@ public abstract class DFAbstractNode extends DSNode {
     boolean isNodeStopped() {
         return is_stopped.getValue().equals(DSBool.TRUE);
     }
+    private final DSInfo status = getInfo(DFHelpers.STATUS);
+    boolean isNodeConnected() { return status.getValue().equals(DSString.valueOf(DFStatus.CONNECTED)); }
 
     //Carousel Management Methods
     abstract public boolean createConnection();
@@ -68,6 +70,7 @@ public abstract class DFAbstractNode extends DSNode {
 
     public void setNodeStopped() {
         put(DFHelpers.IS_STOPPED, DSBool.TRUE);
+        put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED));
         stopCarObject();
         remove(DFHelpers.STOP);
         put(DFHelpers.START,makeStartStopAction());
@@ -146,6 +149,9 @@ public abstract class DFAbstractNode extends DSNode {
     }
 
     public void onDfStopped() {
-        put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED));
+        if (!isNodeStopped())
+            put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED_BYP));
+        else
+            put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED));
     }
 }
