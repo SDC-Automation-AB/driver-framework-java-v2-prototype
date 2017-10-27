@@ -20,14 +20,10 @@ public class DFCarouselObject implements Runnable {
     
     public DFCarouselObject(DFAbstractNode home) {
         homeNode = home;
-        if (iAmAnOrphan()) {
-            this.close();
-        } else {
-            this.refresh = home.getRefresh();
-            this.connStrat = home.getConnStrat();
-            this.refChangeStrat = home.getRefreshChangeStrat();
-            run();
-        }
+        this.refresh = home.getRefresh();
+        this.connStrat = home.getConnStrat();
+        this.refChangeStrat = home.getRefreshChangeStrat();
+        DSRuntime.run(this);
     }
 
     private boolean iAmAnOrphan() {
@@ -67,6 +63,10 @@ public class DFCarouselObject implements Runnable {
     @Override
     public void run() {
         if (!running) {
+            return;
+        }
+        if (iAmAnOrphan()) {
+            homeNode.stopCarObject();
             return;
         }
         //Can add redundant check for isNodeStopped here
