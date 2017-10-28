@@ -1,13 +1,11 @@
 package org.iot.dsa.dslink.dfexample;
 
-import java.io.File;
 import org.iot.dsa.dslink.dframework.DFDeviceNode;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
-import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.DSValueType;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
@@ -16,7 +14,6 @@ import org.iot.dsa.node.action.DSAction;
 public class TestDeviceNode extends DFDeviceNode {
     
     DSMap parameters;
-    File fileObj;
     
     public TestDeviceNode() {
     }
@@ -51,22 +48,30 @@ public class TestDeviceNode extends DFDeviceNode {
 
     @Override
     public boolean createConnection() {  
-        String fpath = parameters.getString("Filepath");
-        if (fpath == null) {
+        try {
+            int lineNo = parameters.getInt("Line");
+            String str = getParent().get("TESTSTRING").toString();
+            String result = str.split("\n")[lineNo];
+            return !result.toLowerCase().endsWith("fail");
+        } catch (Exception e) {
             return false;
         }
-        fileObj = new File(fpath);
-        return fileObj.canRead() && fileObj.isFile();
     }
 
     @Override
     public boolean ping() {
-        return fileObj != null && fileObj.canRead() && fileObj.isFile();
+        try {
+            int lineNo = parameters.getInt("Line");
+            String str = getParent().getParent().get("TESTSTRING").toString();
+            String result = str.split("\n")[lineNo];
+            return !result.toLowerCase().endsWith("fail");
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
     public void closeConnection() {
-        fileObj = null;
     }
     
     @Override
@@ -86,9 +91,9 @@ public class TestDeviceNode extends DFDeviceNode {
                 return null;
             }
         };
-        DSElement defFilepath = parameters.get("Filepath");
+        DSElement defLine = parameters.get("Line");
         DSElement defPingRate = parameters.get("Ping Rate");
-        act.addDefaultParameter("Filepath", defFilepath != null ? defFilepath : DSString.EMPTY, null);
+        act.addDefaultParameter("Line", defLine != null ? defLine : DSLong.NULL, null);
         act.addDefaultParameter("Ping Rate", defPingRate != null ? defPingRate : DSLong.valueOf(REFRESH_DEF), null);
         return act;
     }

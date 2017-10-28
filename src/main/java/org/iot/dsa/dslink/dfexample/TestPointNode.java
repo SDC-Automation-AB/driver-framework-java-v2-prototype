@@ -1,7 +1,5 @@
 package org.iot.dsa.dslink.dfexample;
 
-import java.io.File;
-import java.nio.file.Files;
 import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
@@ -19,7 +17,6 @@ import org.iot.dsa.node.action.DSAction;
 public class TestPointNode extends DFPointNode implements DSIValue {
     
     DSMap parameters;
-    File fileObj;
     private DSInfo value = getInfo("Value");
     
     public TestPointNode() {
@@ -55,7 +52,6 @@ public class TestPointNode extends DFPointNode implements DSIValue {
 
     @Override
     public void closeConnection() {
-        fileObj = null;
     }
     
     @Override
@@ -75,9 +71,9 @@ public class TestPointNode extends DFPointNode implements DSIValue {
                 return null;
             }
         };
-        DSElement defFilepath = parameters.get("Filepath");
+        DSElement defLine = parameters.get("Line");
         DSElement defPingRate = parameters.get("Ping Rate");
-        act.addDefaultParameter("Line", defFilepath != null ? defFilepath : DSLong.NULL, null);
+        act.addDefaultParameter("Line", defLine != null ? defLine : DSLong.NULL, null);
         act.addDefaultParameter("Poll Rate", defPingRate != null ? defPingRate : DSLong.valueOf(REFRESH_DEF), null);
         return act;
     }
@@ -118,15 +114,16 @@ public class TestPointNode extends DFPointNode implements DSIValue {
     public boolean poll() {
         try {
             int lineNo = parameters.getInt("Line");
-            TestDeviceNode parent = getParentNode();
-            synchronized(parent) {
-               String line = Files.readAllLines(parent.fileObj.toPath()).get(lineNo);
-               put(value, DSString.valueOf(line));
-               getParent().childChanged(getInfo());
+            String str = getParent().getParent().getParent().get("TESTSTRING").toString();
+            String result = str.split("\n")[lineNo];
+            if (result.toLowerCase().endsWith("fail")) {
+                return false;
+            } else {
+                put(value, DSString.valueOf(result));
+                getParent().childChanged(getInfo());
+                return true;
             }
-            return true;
         } catch (Exception e) {
-            warn(e);
             return false;
         }
     }
