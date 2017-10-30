@@ -1,11 +1,14 @@
 package org.iot.dsa.dslink.dfexample;
 
 import org.iot.dsa.dslink.dframework.DFDeviceNode;
+import org.iot.dsa.dslink.dftest.TestingDevice;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
+import org.iot.dsa.node.DSNode;
+import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.DSValueType;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
@@ -14,6 +17,7 @@ import org.iot.dsa.node.action.DSAction;
 public class TestDeviceNode extends DFDeviceNode {
     
     DSMap parameters;
+    TestingDevice devObj;
     
     public TestDeviceNode() {
     }
@@ -47,24 +51,25 @@ public class TestDeviceNode extends DFDeviceNode {
     }
 
     @Override
-    public boolean createConnection() {  
+    public boolean createConnection() {
+        boolean success;
         try {
-            int lineNo = parameters.getInt("Line");
-            String str = getParent().get("TESTSTRING").toString();
-            String result = str.split("\n")[lineNo];
-            return !result.toLowerCase().endsWith("fail");
+            String devStr = parameters.getString("Device String");
+            devObj = getParentNode().connObj.getDevice(devStr);
+            success = getParentNode().connObj.pingDevice(devObj);
         } catch (Exception e) {
-            return false;
+            success = false;
         }
+        if (!success) {
+            devObj = null;
+        }
+        return success;
     }
 
     @Override
     public boolean ping() {
         try {
-            int lineNo = parameters.getInt("Line");
-            String str = getParent().getParent().get("TESTSTRING").toString();
-            String result = str.split("\n")[lineNo];
-            return !result.toLowerCase().endsWith("fail");
+            return getParentNode().connObj.pingDevice(devObj);
         } catch (Exception e) {
             return false;
         }
@@ -72,6 +77,7 @@ public class TestDeviceNode extends DFDeviceNode {
 
     @Override
     public void closeConnection() {
+        devObj = null;
     }
     
     @Override
@@ -91,9 +97,9 @@ public class TestDeviceNode extends DFDeviceNode {
                 return null;
             }
         };
-        DSElement defLine = parameters.get("Line");
+        DSElement defStr = parameters.get("Device String");
         DSElement defPingRate = parameters.get("Ping Rate");
-        act.addDefaultParameter("Line", defLine != null ? defLine : DSLong.NULL, null);
+        act.addDefaultParameter("Device String", defStr != null ? defStr : DSString.EMPTY, null);
         act.addDefaultParameter("Ping Rate", defPingRate != null ? defPingRate : DSLong.valueOf(REFRESH_DEF), null);
         return act;
     }
@@ -114,7 +120,7 @@ public class TestDeviceNode extends DFDeviceNode {
             }
         };
         act.addParameter("Name", DSValueType.STRING, null);
-        act.addParameter("Line", DSValueType.NUMBER, null);
+        act.addParameter("ID", DSValueType.STRING, null);
         act.addDefaultParameter("Poll Rate", DSLong.valueOf(TestConnectionNode.REFRESH_DEF), null);
         return act;
     }
@@ -123,6 +129,15 @@ public class TestDeviceNode extends DFDeviceNode {
         String name = pointParameters.getString("Name");
         TestPointNode point = new TestPointNode(pointParameters);
         put(name, point);
+    }
+    
+    TestConnectionNode getParentNode() {
+        DSNode parent = getParent();
+        if (parent instanceof TestConnectionNode) {
+            return (TestConnectionNode) parent;
+        } else {
+            throw new RuntimeException("Wrong parent class");
+        }
     }
 
 }

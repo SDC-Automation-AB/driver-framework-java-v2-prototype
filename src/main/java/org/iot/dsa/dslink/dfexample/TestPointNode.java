@@ -71,9 +71,9 @@ public class TestPointNode extends DFPointNode implements DSIValue {
                 return null;
             }
         };
-        DSElement defLine = parameters.get("Line");
+        DSElement defID = parameters.get("ID");
         DSElement defPingRate = parameters.get("Ping Rate");
-        act.addDefaultParameter("Line", defLine != null ? defLine : DSLong.NULL, null);
+        act.addDefaultParameter("ID", defID != null ? defID : DSString.EMPTY, null);
         act.addDefaultParameter("Poll Rate", defPingRate != null ? defPingRate : DSLong.valueOf(REFRESH_DEF), null);
         return act;
     }
@@ -113,16 +113,12 @@ public class TestPointNode extends DFPointNode implements DSIValue {
     @Override
     public boolean poll() {
         try {
-            int lineNo = parameters.getInt("Line");
-            String str = getParent().getParent().getParent().get("TESTSTRING").toString();
-            String result = str.split("\n")[lineNo];
-            if (result.toLowerCase().endsWith("fail")) {
-                return false;
-            } else {
-                put(value, DSString.valueOf(result));
-                getParent().childChanged(getInfo());
-                return true;
-            }
+            String id = parameters.getString("ID");
+            String result = getParentNode().getParentNode().connObj.readPoint(getParentNode().devObj, id);
+
+            put(value, DSString.valueOf(result));
+            getParent().childChanged(getInfo());
+            return true;
         } catch (Exception e) {
             return false;
         }

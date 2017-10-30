@@ -2,11 +2,13 @@ package org.iot.dsa.dslink.dfexample;
 
 import org.iot.dsa.dslink.dframework.DFConnectionNode;
 import org.iot.dsa.dslink.dframework.DFHelpers;
+import org.iot.dsa.dslink.dftest.TestingConnection;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
+import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.DSValueType;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
@@ -16,6 +18,7 @@ public class TestConnectionNode extends DFConnectionNode {
     protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.LINEAR;
 
     DSMap parameters;
+    TestingConnection connObj;
     
     public TestConnectionNode() {
     }
@@ -39,7 +42,7 @@ public class TestConnectionNode extends DFConnectionNode {
             }
         };
         act.addParameter("Name", DSValueType.STRING, null);
-        act.addParameter("Line", DSValueType.NUMBER, null);
+        act.addParameter("Device String", DSValueType.STRING, null);
         act.addDefaultParameter("Ping Rate", DSLong.valueOf(TestConnectionNode.REFRESH_DEF), null);
         return act;
     }
@@ -72,11 +75,12 @@ public class TestConnectionNode extends DFConnectionNode {
     @Override
     public boolean createConnection() {
         try {
-            int lineNo = parameters.getInt("Line");
-            String str = getParent().get("TESTSTRING").toString();
-            String result = str.split("\n")[lineNo];
-            return !result.toLowerCase().endsWith("fail");
+            String cs = parameters.getString("Connection String");
+            connObj = TestingConnection.getConnection(cs);
+            connObj.connect();
+            return true;
         } catch (Exception e) {
+            connObj = null;
             return false;
         }
     }
@@ -84,10 +88,7 @@ public class TestConnectionNode extends DFConnectionNode {
     @Override
     public boolean ping() {
         try {
-            int lineNo = parameters.getInt("Line");
-            String str = getParent().get("TESTSTRING").toString();
-            String result = str.split("\n")[lineNo];
-            return !result.toLowerCase().endsWith("fail");
+            return connObj.isConnected();
         } catch (Exception e) {
             return false;
         }
@@ -95,6 +96,8 @@ public class TestConnectionNode extends DFConnectionNode {
 
     @Override
     public void closeConnection() {
+        connObj.close();
+        connObj = null;
     }
     
     @Override
@@ -114,9 +117,9 @@ public class TestConnectionNode extends DFConnectionNode {
                 return null;
             }
         };
-        DSElement defLine = parameters.get("Line");
+        DSElement defStr = parameters.get("Connection String");
         DSElement defPingRate = parameters.get("Ping Rate");
-        act.addDefaultParameter("Line", defLine != null ? defLine : DSLong.NULL, null);
+        act.addDefaultParameter("Connection String", defStr != null ? defStr : DSString.EMPTY, null);
         act.addDefaultParameter("Ping Rate", defPingRate != null ? defPingRate : DSLong.valueOf(REFRESH_DEF), null);
         return act;
     }
