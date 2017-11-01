@@ -2,6 +2,7 @@ package org.iot.dsa.dslink.dftest;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class TestingConnection {
     
@@ -70,6 +71,14 @@ public class TestingConnection {
         } else {
             return device.points.get(pointId);
         }
+    }
+    
+    public Map<String, String> batchRead(TestingDevice device, Set<String> ids) throws TestingException {
+        Map<String, String> results = new HashMap<String, String>();
+        for (String id: ids) {
+            results.put(id, readPoint(device, id));
+        }
+        return results;
     }
     
     

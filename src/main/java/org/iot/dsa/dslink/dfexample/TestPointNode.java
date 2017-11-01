@@ -1,5 +1,11 @@
 package org.iot.dsa.dslink.dfexample;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
@@ -113,15 +119,34 @@ public class TestPointNode extends DFPointNode implements DSIValue {
     @Override
     public boolean poll() {
         try {
-            String id = parameters.getString("ID");
-            String result = getParentNode().getParentNode().connObj.readPoint(getParentNode().devObj, id);
+            Map<String, TestPointNode> polledPoints = new HashMap<String, TestPointNode>();
+            TestPointNode sibling = this;
+            while(sibling != null) {
+                polledPoints.put(sibling.getPointID(), sibling);
+                sibling = (TestPointNode) sibling.nextSibling;
+            }
+            
+            Set<String> batch = polledPoints.keySet();
+            Map<String, String> results = getParentNode().getParentNode().connObj.batchRead(getParentNode().devObj, batch);
+            
+            for (Entry<String, String> entry: results.entrySet()) {
+                TestPointNode point = polledPoints.get(entry.getKey());
+                point.updateValue(entry.getValue());
+            }
 
-            put(value, DSString.valueOf(result));
-            getParent().childChanged(getInfo());
             return true;
         } catch (Exception e) {
             return false;
         }
+    }
+    
+    void updateValue(String value) {
+        put(value, DSString.valueOf(value));
+        getParent().childChanged(getInfo());
+    }
+    
+    private String getPointID() {
+        return parameters.getString("ID");
     }
     
     private TestDeviceNode getParentNode() {
