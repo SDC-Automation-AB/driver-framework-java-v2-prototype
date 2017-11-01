@@ -10,4 +10,6 @@ public abstract class DFDeviceNode extends DFAbstractNode {
     protected static DFHelpers.DFConnStrat CONN_STRAT_DEF = DFHelpers.DFConnStrat.LAZY;
     protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.CONSTANT;
 
+//    public boolean poll()
+    
 }

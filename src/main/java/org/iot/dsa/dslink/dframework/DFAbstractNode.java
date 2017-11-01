@@ -19,7 +19,7 @@ public abstract class DFAbstractNode extends DSNode {
     protected static DFHelpers.DFConnStrat CONN_STRAT_DEF;
     protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF;
 
-    DFCarouselObject carObject;
+    DFBranchCarouselObject carObject;
 
     private final DSInfo is_stopped = getInfo(DFHelpers.IS_STOPPED);
     boolean isNodeStopped() {
@@ -92,7 +92,7 @@ public abstract class DFAbstractNode extends DSNode {
 
     public void startCarObject() {
         if (carObject == null) {
-            carObject = new DFCarouselObject(this);
+            carObject = new DFBranchCarouselObject(this);
         }
     }
 
