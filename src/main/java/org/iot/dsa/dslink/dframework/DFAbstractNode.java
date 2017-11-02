@@ -19,7 +19,7 @@ public abstract class DFAbstractNode extends DSNode {
     protected static DFHelpers.DFConnStrat CONN_STRAT_DEF;
     protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF;
 
-    DFBranchCarouselObject carObject;
+    DFCarouselObject carObject;
 
     private final DSInfo is_stopped = getInfo(DFHelpers.IS_STOPPED);
     boolean isNodeStopped() {
@@ -27,11 +27,6 @@ public abstract class DFAbstractNode extends DSNode {
     }
     private final DSInfo status = getInfo(DFHelpers.STATUS);
     boolean isNodeConnected() { return status.getValue().equals(DSString.valueOf(DFStatus.CONNECTED)); }
-
-    //Carousel Management Methods
-    abstract public boolean createConnection();
-    abstract public boolean ping();
-    abstract public void closeConnection();
 
     @Override
     protected void declareDefaults() {
@@ -83,18 +78,8 @@ public abstract class DFAbstractNode extends DSNode {
         put(DFHelpers.STOP,makeStartStopAction());
     }
 
-    public void stopCarObject() {
-        if (carObject != null) {
-            carObject.close();
-            carObject = null;
-        }
-    }
-
-    public void startCarObject() {
-        if (carObject == null) {
-            carObject = new DFBranchCarouselObject(this);
-        }
-    }
+    public abstract void stopCarObject();
+    public abstract void startCarObject();
 
     public void restartNode() {
         setNodeStopped();

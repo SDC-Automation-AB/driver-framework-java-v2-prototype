@@ -115,30 +115,6 @@ public class TestPointNode extends DFPointNode implements DSIValue {
     public DSIValue valueOf(DSElement element) {
         return value.getValue().valueOf(element);
     }
-
-    @Override
-    public boolean poll() {
-        try {
-            Map<String, TestPointNode> polledPoints = new HashMap<String, TestPointNode>();
-            TestPointNode sibling = this;
-            while(sibling != null) {
-                polledPoints.put(sibling.getPointID(), sibling);
-                sibling = (TestPointNode) sibling.nextSibling;
-            }
-            
-            Set<String> batch = polledPoints.keySet();
-            Map<String, String> results = getParentNode().getParentNode().connObj.batchRead(getParentNode().devObj, batch);
-            
-            for (Entry<String, String> entry: results.entrySet()) {
-                TestPointNode point = polledPoints.get(entry.getKey());
-                point.updateValue(entry.getValue());
-            }
-
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
     
     void updateValue(String value) {
         put(value, DSString.valueOf(value));

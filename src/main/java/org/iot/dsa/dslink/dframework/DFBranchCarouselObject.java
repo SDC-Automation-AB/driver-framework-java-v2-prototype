@@ -9,10 +9,10 @@ import org.iot.dsa.node.DSInfo;
 
 public class DFBranchCarouselObject extends DFCarouselObject{
 
-    private DFAbstractNode homeNode;
+    private DFBranchNode homeNode;
     private boolean connected = false;
     
-    public DFBranchCarouselObject(DFAbstractNode home) {
+    public DFBranchCarouselObject(DFBranchNode home) {
         homeNode = home;
         this.refresh = home.getRefresh();
         this.connStrat = home.getConnStrat();

@@ -9,4 +9,5 @@ public abstract class DFCarouselObject implements Runnable {
     protected DFRefChangeStrat refChangeStrat;
     protected boolean running = true;
 
+    abstract public void close();
 }

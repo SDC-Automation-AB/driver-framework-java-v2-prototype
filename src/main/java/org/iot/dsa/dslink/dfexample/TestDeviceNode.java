@@ -1,6 +1,7 @@
 package org.iot.dsa.dslink.dfexample;
 
 import org.iot.dsa.dslink.dframework.DFDeviceNode;
+import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.dslink.dftest.TestingDevice;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
@@ -13,6 +14,10 @@ import org.iot.dsa.node.DSValueType;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class TestDeviceNode extends DFDeviceNode {
     
@@ -137,6 +142,30 @@ public class TestDeviceNode extends DFDeviceNode {
             return (TestConnectionNode) parent;
         } else {
             throw new RuntimeException("Wrong parent class");
+        }
+    }
+
+    @Override
+    public boolean batchPoll(Map<String, DFPointNode> points) {
+        try {
+            Map<String, TestPointNode> polledPoints = new HashMap<String, TestPointNode>();
+            TestPointNode sibling = this;
+            while(sibling != null) {
+                polledPoints.put(sibling.getPointID(), sibling);
+                sibling = (TestPointNode) sibling.nextSibling;
+            }
+
+            Set<String> batch = polledPoints.keySet();
+            Map<String, String> results = getParentNode().getParentNode().connObj.batchRead(getParentNode().devObj, batch);
+
+            for (Map.Entry<String, String> entry: results.entrySet()) {
+                TestPointNode point = polledPoints.get(entry.getKey());
+                point.updateValue(entry.getValue());
+            }
+
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 

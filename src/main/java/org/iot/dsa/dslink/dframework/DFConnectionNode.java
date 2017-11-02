@@ -4,7 +4,7 @@ package org.iot.dsa.dslink.dframework;
  * @author James (Juris) Puchin
  * Created on 10/25/2017
  */
-public abstract class DFConnectionNode extends DFAbstractNode {
+public abstract class DFConnectionNode extends DFBranchNode {
 
     public static long REFRESH_DEF = 5000;
     public static DFHelpers.DFConnStrat CONN_STRAT_DEF = DFHelpers.DFConnStrat.LAZY;
