@@ -2,8 +2,6 @@ package org.iot.dsa.dslink.dframework;
 
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSRootNode;
-import org.iot.dsa.dslink.dframework.DFHelpers.DFConnStrat;
-import org.iot.dsa.dslink.dframework.DFHelpers.DFRefChangeStrat;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSInfo;
 

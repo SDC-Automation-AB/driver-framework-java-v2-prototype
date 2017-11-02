@@ -1,6 +1,5 @@
 package org.iot.dsa.dslink.dframework;
 
-import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -13,8 +12,6 @@ public abstract class DFPointNode extends DFAbstractNode {
     protected static DFHelpers.DFConnStrat CONN_STRAT_DEF = DFHelpers.DFConnStrat.LAZY;
     protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.CONSTANT;
     
-    public DFPointNode nextSibling;
-    public DFPointNode prevSibling;
 
     @Override
     public void stopCarObject() {

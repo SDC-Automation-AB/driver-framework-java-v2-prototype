@@ -1,15 +1,9 @@
 package org.iot.dsa.dslink.dframework;
 
-import java.util.Map;
 import java.util.Set;
 
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSRootNode;
-import org.iot.dsa.dslink.dframework.DFHelpers.DFConnStrat;
-import org.iot.dsa.dslink.dframework.DFHelpers.DFRefChangeStrat;
-import org.iot.dsa.node.DSIObject;
-import org.iot.dsa.node.DSIValue;
-import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSNode;
 
 public class DFLeafCarouselObject extends DFCarouselObject {
@@ -27,7 +21,7 @@ public class DFLeafCarouselObject extends DFCarouselObject {
     }
 
     private DFDeviceNode getADeviceNode() {
-        return (DFDeviceNode) homeNodes.iterator().next().getParent();
+        return (DFDeviceNode) getAHomeNode().getParent();
     }
 
     private boolean iAmAnOrphan() {
@@ -65,7 +59,7 @@ public class DFLeafCarouselObject extends DFCarouselObject {
         //Can add redundant check for isNodeStopped here
         boolean success;
 
-        DSNode dev = getAHomeNode().getParent();
+        DSNode dev = getADeviceNode();
         if (dev instanceof DFDeviceNode) {
             success = ((DFDeviceNode) dev).batchPoll(homeNodes);
         } else {

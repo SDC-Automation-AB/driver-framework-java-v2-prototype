@@ -146,17 +146,16 @@ public class TestDeviceNode extends DFDeviceNode {
     }
 
     @Override
-    public boolean batchPoll(Map<String, DFPointNode> points) {
+    public boolean batchPoll(Set<DFPointNode> points) {
         try {
             Map<String, TestPointNode> polledPoints = new HashMap<String, TestPointNode>();
-            TestPointNode sibling = this;
-            while(sibling != null) {
-                polledPoints.put(sibling.getPointID(), sibling);
-                sibling = (TestPointNode) sibling.nextSibling;
+            for (DFPointNode p: points) {
+                TestPointNode point = (TestPointNode) p;
+                polledPoints.put(point.getPointID(), point);
             }
 
             Set<String> batch = polledPoints.keySet();
-            Map<String, String> results = getParentNode().getParentNode().connObj.batchRead(getParentNode().devObj, batch);
+            Map<String, String> results = getParentNode().connObj.batchRead(devObj, batch);
 
             for (Map.Entry<String, String> entry: results.entrySet()) {
                 TestPointNode point = polledPoints.get(entry.getKey());

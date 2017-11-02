@@ -1,11 +1,5 @@
 package org.iot.dsa.dslink.dfexample;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
@@ -13,7 +7,6 @@ import org.iot.dsa.node.DSIValue;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
-import org.iot.dsa.node.DSNode;
 import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.DSValueType;
 import org.iot.dsa.node.action.ActionInvocation;
@@ -54,10 +47,6 @@ public class TestPointNode extends DFPointNode implements DSIValue {
     protected void onStable() {
         put("Edit", makeEditAction());
         super.onStable();
-    }
-
-    @Override
-    public void closeConnection() {
     }
     
     @Override
@@ -121,17 +110,17 @@ public class TestPointNode extends DFPointNode implements DSIValue {
         getParent().childChanged(getInfo());
     }
     
-    private String getPointID() {
+    String getPointID() {
         return parameters.getString("ID");
     }
     
-    private TestDeviceNode getParentNode() {
-        DSNode parent =  getParent();
-        if (parent instanceof TestDeviceNode) {
-            return (TestDeviceNode) getParent();
-        } else {
-            throw new RuntimeException("Wrong parent class");
-        }
-    }
+//    private TestDeviceNode getParentNode() {
+//        DSNode parent =  getParent();
+//        if (parent instanceof TestDeviceNode) {
+//            return (TestDeviceNode) getParent();
+//        } else {
+//            throw new RuntimeException("Wrong parent class");
+//        }
+//    }
 
 }

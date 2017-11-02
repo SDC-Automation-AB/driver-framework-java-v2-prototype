@@ -1,6 +1,5 @@
 package org.iot.dsa.dslink.dframework;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
