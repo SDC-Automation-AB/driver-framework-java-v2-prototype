@@ -10,10 +10,11 @@ import org.iot.dsa.node.DSNode;
 public class DFLeafCarouselObject extends DFCarouselObject {
     Set<DFPointNode> homeNodes = new HashSet<DFPointNode>();
     
-    public DFLeafCarouselObject(DFAbstractNode home) {
+    public DFLeafCarouselObject(DFPointNode home) {
         this.refresh = home.getRefresh();
         this.connStrat = home.getConnStrat();
         this.refChangeStrat = home.getRefreshChangeStrat();
+        homeNodes.add(home);
         DSRuntime.run(this);
     }
     
