@@ -39,7 +39,10 @@ public class TestingConnection {
     }
     
     public boolean isConnected() {
-        return running && shouldSucceed; 
+        if (!shouldSucceed) {
+            close();
+        }
+        return running; 
     }
     
     public TestingDevice getDevice(String deviceString) throws TestingException {
