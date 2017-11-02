@@ -1,5 +1,6 @@
 package org.iot.dsa.dslink.dframework;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import org.iot.dsa.DSRuntime;
@@ -7,7 +8,7 @@ import org.iot.dsa.dslink.DSRootNode;
 import org.iot.dsa.node.DSNode;
 
 public class DFLeafCarouselObject extends DFCarouselObject {
-    Set<DFPointNode> homeNodes;
+    Set<DFPointNode> homeNodes = new HashSet<DFPointNode>();
     
     public DFLeafCarouselObject(DFAbstractNode home) {
         this.refresh = home.getRefresh();

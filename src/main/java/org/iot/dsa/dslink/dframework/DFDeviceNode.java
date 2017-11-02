@@ -1,5 +1,6 @@
 package org.iot.dsa.dslink.dframework;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -19,5 +20,5 @@ public abstract class DFDeviceNode extends DFBranchNode {
     abstract public void closeConnection();
 
     abstract public boolean batchPoll(Set<DFPointNode> points);
-    public Set<DFLeafCarouselObject>batches;
+    public Set<DFLeafCarouselObject> batches = new HashSet<DFLeafCarouselObject>();
 }
