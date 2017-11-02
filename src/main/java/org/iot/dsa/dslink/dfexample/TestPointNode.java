@@ -105,8 +105,8 @@ public class TestPointNode extends DFPointNode implements DSIValue {
         return value.getValue().valueOf(element);
     }
     
-    void updateValue(String value) {
-        put(value, DSString.valueOf(value));
+    void updateValue(String val) {
+        put(value, DSString.valueOf(val));
         getParent().childChanged(getInfo());
     }
     
