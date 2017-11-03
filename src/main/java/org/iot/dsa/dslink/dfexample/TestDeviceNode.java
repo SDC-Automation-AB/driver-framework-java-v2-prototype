@@ -134,7 +134,7 @@ public class TestDeviceNode extends DFDeviceNode {
         String name = pointParameters.getString("Name");
         TestPointNode point = new TestPointNode(pointParameters);
         put(name, point);
-        point.startCarObject();
+//        point.startCarObject();
     }
     
     TestConnectionNode getParentNode() {
