@@ -9,21 +9,20 @@ import org.iot.dsa.node.DSNode;
 
 public class DFLeafCarouselObject extends DFCarouselObject {
     Set<DFPointNode> homeNodes = new HashSet<DFPointNode>();
+    DFDeviceNode homeDevice;
     
-    public DFLeafCarouselObject(DFPointNode home) {
-        this.refresh = home.getRefresh();
-        this.connStrat = home.getConnStrat();
-        this.refChangeStrat = home.getRefreshChangeStrat();
-        homeNodes.add(home);
+    public DFLeafCarouselObject(DFPointNode homePoint, DFDeviceNode homeDev) {
+        this.refresh = homePoint.getRefresh();
+        this.connStrat = homePoint.getConnStrat();
+        this.refChangeStrat = homePoint.getRefreshChangeStrat();
+        homeNodes.add(homePoint);
+        homeDevice = homeDev;
+        homeDevice.addPollBatch(this);
         DSRuntime.run(this);
     }
     
     private DFPointNode getAHomeNode() {
         return homeNodes.iterator().next();
-    }
-
-    private DFDeviceNode getADeviceNode() {
-        return (DFDeviceNode) getAHomeNode().getParent();
     }
 
     private boolean iAmAnOrphan() {
@@ -40,10 +39,14 @@ public class DFLeafCarouselObject extends DFCarouselObject {
         return 5000;
     }
     
-    public void close() {
-        running = false;
-        for (DFPointNode n: homeNodes) {
-            n.onDfStopped();
+    public void close(DFPointNode node) {
+        node.onDfStopped();
+        if (!homeNodes.remove(node)) {
+            System.out.println("Node is missing!");
+        }
+        if (homeNodes.isEmpty()) {
+            running = false;
+            homeDevice.removePollBatch(this);
         }
     }
     
@@ -52,21 +55,16 @@ public class DFLeafCarouselObject extends DFCarouselObject {
         if (!running) {
             return;
         }
+
         if (iAmAnOrphan()) {
             for (DFPointNode n: homeNodes) {
                 n.stopCarObject();
             }
             return;
         }
-        //Can add redundant check for isNodeStopped here
-        boolean success;
 
-        DSNode dev = getADeviceNode();
-        if (dev instanceof DFDeviceNode) {
-            success = ((DFDeviceNode) dev).batchPoll(homeNodes);
-        } else {
-            throw new RuntimeException("Wrong parent class, no device found.");
-        }
+        //Can add redundant check for isNodeStopped here
+        boolean success = homeDevice.batchPoll(homeNodes);
 
         if (!success) {
             for (DFPointNode n: homeNodes) {

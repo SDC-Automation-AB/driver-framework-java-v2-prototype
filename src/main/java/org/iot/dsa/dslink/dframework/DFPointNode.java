@@ -12,17 +12,12 @@ public abstract class DFPointNode extends DFAbstractNode {
     protected static DFHelpers.DFConnStrat CONN_STRAT_DEF = DFHelpers.DFConnStrat.LAZY;
     protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.CONSTANT;
 
+    DFLeafCarouselObject carObject;
 
     @Override
     public void stopCarObject() {
         if (carObject != null) {
-            Set<DFPointNode> set = ((DFLeafCarouselObject) carObject).homeNodes;
-            set.remove(this);
-            if (set.isEmpty()) {
-               Set<DFLeafCarouselObject> b = ((DFDeviceNode) getParent()).batches;
-               b.remove(carObject);
-               carObject.close();
-            }
+            carObject.close(this);
             carObject = null;
         }
     }
@@ -31,13 +26,11 @@ public abstract class DFPointNode extends DFAbstractNode {
     @Override
     public void startCarObject() {
         if (carObject == null) {
-            Set<DFLeafCarouselObject> b = ((DFDeviceNode) getParent()).batches;
-            if (b.isEmpty()) {
-                carObject = new DFLeafCarouselObject(this); //TODO fix consturtor
-                b.add((DFLeafCarouselObject) carObject);
+            DFDeviceNode dev = (DFDeviceNode) getParent();
+            if (dev.noPollBatches()) {
+                carObject = new DFLeafCarouselObject(this, dev);
             } else {
-                carObject = b.iterator().next();
-                ((DFLeafCarouselObject) carObject).homeNodes.add(this);
+                carObject = dev.getPollBatch();
             }
         }
     }
@@ -50,13 +43,13 @@ public abstract class DFPointNode extends DFAbstractNode {
     //TODO: Make sure only one node gets subscribed/unsubscribed
     @Override
     protected void onSubscribed() {
-        setNodeRunning();
+        startCarObject();
         System.out.println("Started Node: " + get("Value"));
     }
 
     @Override
     protected void onUnsubscribed() {
-        setNodeStopped();
+        stopCarObject();
         System.out.println("Stopped Node: " + get("Value"));
     }
 
