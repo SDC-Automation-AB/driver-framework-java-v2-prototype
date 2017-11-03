@@ -11,7 +11,7 @@ public abstract class DFPointNode extends DFAbstractNode {
     protected static long REFRESH_DEF = 5000;
     protected static DFHelpers.DFConnStrat CONN_STRAT_DEF = DFHelpers.DFConnStrat.LAZY;
     protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.CONSTANT;
-    
+
 
     @Override
     public void stopCarObject() {
@@ -19,6 +19,8 @@ public abstract class DFPointNode extends DFAbstractNode {
             Set<DFPointNode> set = ((DFLeafCarouselObject) carObject).homeNodes;
             set.remove(this);
             if (set.isEmpty()) {
+               Set<DFLeafCarouselObject> b = ((DFDeviceNode) getParent()).batches;
+               b.remove(carObject);
                carObject.close();
             }
             carObject = null;
@@ -48,12 +50,14 @@ public abstract class DFPointNode extends DFAbstractNode {
     //TODO: Make sure only one node gets subscribed/unsubscribed
     @Override
     protected void onSubscribed() {
-        startCarObject();
+        setNodeRunning();
+        System.out.println("Started Node: " + get("Value"));
     }
-    
+
     @Override
     protected void onUnsubscribed() {
-        stopCarObject();
+        setNodeStopped();
+        System.out.println("Stopped Node: " + get("Value"));
     }
 
 }
