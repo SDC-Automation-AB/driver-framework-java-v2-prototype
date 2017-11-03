@@ -72,6 +72,10 @@ public class DFLeafCarouselObject extends DFCarouselObject {
             for (DFPointNode n: homeNodes) {
                 n.onFailed();
             }
+        } else {
+            for (DFPointNode n: homeNodes) {
+                n.onConnected();
+            }
         }
         DSRuntime.runDelayed(this, getDelay());
     }

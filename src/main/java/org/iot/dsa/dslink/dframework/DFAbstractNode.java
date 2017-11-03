@@ -25,6 +25,7 @@ public abstract class DFAbstractNode extends DSNode {
     boolean isNodeStopped() {
         return is_stopped.getValue().equals(DSBool.TRUE);
     }
+
     private final DSInfo status = getInfo(DFHelpers.STATUS);
     boolean isNodeConnected() { return status.getValue().equals(DSString.valueOf(DFStatus.CONNECTED)); }
 
