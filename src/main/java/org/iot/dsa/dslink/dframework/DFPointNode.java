@@ -37,7 +37,7 @@ public abstract class DFPointNode extends DFAbstractNode {
 
     @Override
     boolean isNodeStopped() {
-        return isSubscribed();
+        return !isSubscribed();
     }
 
     //TODO: Make sure only one node gets subscribed/unsubscribed
