@@ -22,7 +22,6 @@ public abstract class DFPointNode extends DFAbstractNode {
         }
     }
 
-    //TODO: Make sure all the nodes get added to the carObject not just one
     @Override
     public void startCarObject() {
         if (carObject == null) {
@@ -31,6 +30,7 @@ public abstract class DFPointNode extends DFAbstractNode {
                 carObject = new DFLeafCarouselObject(this, dev);
             } else {
                 carObject = dev.getPollBatch();
+                carObject.homeNodes.add(this);
             }
         }
     }
