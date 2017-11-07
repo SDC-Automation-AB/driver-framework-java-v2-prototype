@@ -22,19 +22,23 @@ public abstract class DFDeviceNode extends DFBranchNode {
     abstract public boolean batchPoll(Set<DFPointNode> points);
     private Set<DFLeafCarouselObject> batches = new HashSet<DFLeafCarouselObject>();
     public boolean noPollBatches() {
-        return batches.isEmpty();
+        synchronized (this) {
+            return batches.isEmpty();
+        }
     }
     public void addPollBatch(DFLeafCarouselObject batch) {
-        batches.add(batch);
+        synchronized (this) { batches.add(batch); }
     }
     public void removePollBatch(DFLeafCarouselObject batch) {
-        batches.remove(batch);
+        synchronized (this) { batches.remove(batch); }
     }
     public DFLeafCarouselObject getPollBatch() {
-        if (!noPollBatches()) {
-            return batches.iterator().next();
-        } else {
-            throw new RuntimeException("Tried to get a batch from a Device Node with no Poll Batches.");
+        synchronized (this) {
+            if (!noPollBatches()) {
+                return batches.iterator().next();
+            } else {
+                throw new RuntimeException("Tried to get a batch from a Device Node with no Poll Batches.");
+            }
         }
     }
 }
