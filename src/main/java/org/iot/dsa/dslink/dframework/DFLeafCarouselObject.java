@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSRootNode;
-import org.iot.dsa.node.DSNode;
 
 public class DFLeafCarouselObject extends DFCarouselObject {
     Set<DFPointNode> homeNodes = new HashSet<DFPointNode>();

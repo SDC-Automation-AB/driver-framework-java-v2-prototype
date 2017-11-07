@@ -14,15 +14,19 @@ public abstract class DFBranchNode extends DFAbstractNode {
     abstract public void closeConnection();
 
     public void stopCarObject() {
-        if (carObject != null) {
-            carObject.close();
-            carObject = null;
+        synchronized(this) {
+            if (carObject != null) {
+                carObject.close();
+                carObject = null;
+            }
         }
     }
 
     public void startCarObject() {
-        if (carObject == null) {
-            carObject = new DFBranchCarouselObject(this);
+        synchronized(this) {
+            if (carObject == null) {
+                carObject = new DFBranchCarouselObject(this);
+            }
         }
     }
 

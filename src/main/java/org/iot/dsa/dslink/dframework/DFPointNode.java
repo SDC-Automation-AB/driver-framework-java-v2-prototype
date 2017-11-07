@@ -1,7 +1,5 @@
 package org.iot.dsa.dslink.dframework;
 
-import java.util.Set;
-
 /**
  * @author James (Juris) Puchin
  * Created on 10/25/2017
@@ -16,21 +14,25 @@ public abstract class DFPointNode extends DFAbstractNode {
 
     @Override
     public void stopCarObject() {
-        if (carObject != null) {
-            carObject.close(this);
-            carObject = null;
+        synchronized(this) {
+            if (carObject != null) {
+                carObject.close(this);
+                carObject = null;
+            }
         }
     }
 
     @Override
     public void startCarObject() {
-        if (carObject == null) {
-            DFDeviceNode dev = (DFDeviceNode) getParent();
-            if (dev.noPollBatches()) {
-                carObject = new DFLeafCarouselObject(this, dev);
-            } else {
-                carObject = dev.getPollBatch();
-                carObject.homeNodes.add(this);
+        synchronized(this) {
+            if (carObject == null) {
+                DFDeviceNode dev = (DFDeviceNode) getParent();
+                if (dev.noPollBatches()) {
+                    carObject = new DFLeafCarouselObject(this, dev);
+                } else {
+                    carObject = dev.getPollBatch();
+                    carObject.homeNodes.add(this);
+                }
             }
         }
     }
