@@ -14,14 +14,16 @@ public class DFLeafCarouselObject extends DFCarouselObject {
         this.refresh = homePoint.getRefresh();
         this.connStrat = homePoint.getConnStrat();
         this.refChangeStrat = homePoint.getRefreshChangeStrat();
-        homeNodes.add(homePoint);
+        synchronized (this) {
+            homeNodes.add(homePoint);
+        }
         homeDevice = homeDev;
         homeDevice.addPollBatch(this);
         DSRuntime.run(this);
     }
     
     private DFPointNode getAHomeNode() {
-        return homeNodes.iterator().next();
+        synchronized (this) {return homeNodes.iterator().next();}
     }
 
     private boolean iAmAnOrphan() {
@@ -40,12 +42,14 @@ public class DFLeafCarouselObject extends DFCarouselObject {
     
     public void close(DFPointNode node) {
         node.onDfStopped();
-        if (!homeNodes.remove(node)) {
-            System.out.println("Node is missing!");
-        }
-        if (homeNodes.isEmpty()) {
-            running = false;
-            homeDevice.removePollBatch(this);
+        synchronized (this) {
+            if (!homeNodes.remove(node)) {
+                System.out.println("Node is missing!");
+            }
+            if (homeNodes.isEmpty()) {
+                running = false;
+                homeDevice.removePollBatch(this);
+            }
         }
     }
     
