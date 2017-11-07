@@ -1,7 +1,8 @@
 package org.iot.dsa.dslink.dframework;
 
-import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author James (Juris) Puchin
@@ -20,14 +21,14 @@ public abstract class DFDeviceNode extends DFBranchNode {
     abstract public void closeConnection();
 
     abstract public boolean batchPoll(Set<DFPointNode> points);
-    private Set<DFLeafCarouselObject> batches = new HashSet<DFLeafCarouselObject>();
+    private Map<DFLeafCarouselObject, Boolean> batches = new ConcurrentHashMap<DFLeafCarouselObject, Boolean>();
     public boolean noPollBatches() {
         synchronized (this) {
             return batches.isEmpty();
         }
     }
     public void addPollBatch(DFLeafCarouselObject batch) {
-        synchronized (this) { batches.add(batch); }
+        synchronized (this) { batches.put(batch, false); }
     }
     public void removePollBatch(DFLeafCarouselObject batch) {
         synchronized (this) { batches.remove(batch); }
@@ -35,7 +36,7 @@ public abstract class DFDeviceNode extends DFBranchNode {
     public DFLeafCarouselObject getPollBatch() {
         synchronized (this) {
             if (!noPollBatches()) {
-                return batches.iterator().next();
+                return batches.keySet().iterator().next();
             } else {
                 throw new RuntimeException("Tried to get a batch from a Device Node with no Poll Batches.");
             }
