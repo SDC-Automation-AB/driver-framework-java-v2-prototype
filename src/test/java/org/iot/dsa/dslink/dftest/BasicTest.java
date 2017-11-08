@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class BasicTest {
     
-    @Test
+    //@Test
     public void teeeeeessst() {
         preInit();
         
