@@ -1,84 +1,91 @@
 package org.iot.dsa.dslink.dframework;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSRootNode;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class DFLeafCarouselObject extends DFCarouselObject {
     private Set<DFPointNode> homeNodes = new HashSet<DFPointNode>();
-    private DFDeviceNode homeDevice;
-    
-    public DFLeafCarouselObject(DFPointNode homePoint, DFDeviceNode homeDev) {
+    private final DFDeviceNode homeDevice;
+
+    DFLeafCarouselObject(DFPointNode homePoint, DFDeviceNode homeDev) {
+        homeDevice = homeDev;
         this.refresh = homePoint.getRefresh();
         this.connStrat = homePoint.getConnStrat();
         this.refChangeStrat = homePoint.getRefreshChangeStrat();
-        synchronized (this) {
+        synchronized (homeDevice) {
             homeNodes.add(homePoint);
         }
-        homeDevice = homeDev;
         homeDevice.addPollBatch(this);
         DSRuntime.run(this);
     }
-    
+
+    void addHomeNode(DFPointNode node) {
+        synchronized (homeDevice) {
+            homeNodes.add(node);
+        }
+    }
+
     private DFPointNode getAHomeNode() {
-        synchronized (this) {return homeNodes.iterator().next();}
+        return homeNodes.iterator().next();
     }
 
     private boolean iAmAnOrphan() {
         DFPointNode homeNode = getAHomeNode();
-        if (homeNode.getParent() instanceof  DFDeviceNode) {
+        if (homeNode.getParent() instanceof DFDeviceNode) {
             DFDeviceNode par = (DFDeviceNode) homeNode.getParent();
             return !par.isNodeConnected();
+        } else if (homeNode.getParent() instanceof DSRootNode) {
+            return false;
+        } else {
+            throw new RuntimeException("Wrong parent class");
         }
-        else if (homeNode.getParent() instanceof DSRootNode) { return false; }
-        else { throw new RuntimeException("Wrong parent class"); }
     }
-    
+
     private long getDelay() {
         return 5000;
     }
-    
-    public void close(DFPointNode node) {
+
+    void close(DFPointNode node) {
         node.onDfStopped();
-        synchronized (this) {
-            if (!homeNodes.remove(node)) {
-                System.out.println("Node is missing!");
-            }
-            if (homeNodes.isEmpty()) {
-                running = false;
-                homeDevice.removePollBatch(this);
-            }
+        if (!homeNodes.remove(node)) {
+            System.out.println("Node is missing!");
+        }
+        if (homeNodes.isEmpty()) {
+            running = false;
+            homeDevice.removePollBatch(this);
         }
     }
-    
+
     @Override
     public void run() {
-        if (!running) {
-            return;
-        }
-
-        if (iAmAnOrphan()) {
-            for (DFPointNode n: homeNodes) {
-                n.stopCarObject();
+        synchronized (homeDevice) {
+            if (!running) {
+                return;
             }
-            return;
-        }
 
-        //Can add redundant check for isNodeStopped here
-        boolean success = homeDevice.batchPoll(homeNodes);
+            if (iAmAnOrphan()) {
+                for (DFPointNode n : homeNodes) {
+                    n.stopCarObject();
+                }
+                return;
+            }
 
-        if (!success) {
-            for (DFPointNode n: homeNodes) {
-                n.onFailed();
+            //Can add redundant check for isNodeStopped here
+            boolean success = homeDevice.batchPoll(homeNodes);
+
+            if (!success) {
+                for (DFPointNode n : homeNodes) {
+                    n.onFailed();
+                }
+            } else {
+                for (DFPointNode n : homeNodes) {
+                    n.onConnected();
+                }
             }
-        } else {
-            for (DFPointNode n: homeNodes) {
-                n.onConnected();
-            }
+            DSRuntime.runDelayed(this, getDelay());
         }
-        DSRuntime.runDelayed(this, getDelay());
     }
-
 }

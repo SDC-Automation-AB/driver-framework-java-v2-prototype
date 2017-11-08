@@ -6,28 +6,24 @@ package org.iot.dsa.dslink.dframework;
  */
 public abstract class DFBranchNode extends DFAbstractNode {
 
-    DFBranchCarouselObject carObject;
+    private DFBranchCarouselObject carObject;
 
     //Carousel Management Methods
     abstract public boolean createConnection();
     abstract public boolean ping();
     abstract public void closeConnection();
 
-    public void stopCarObject() {
-        synchronized(this) {
+    public synchronized void stopCarObject() {
             if (carObject != null) {
                 carObject.close();
                 carObject = null;
             }
-        }
     }
 
-    public void startCarObject() {
-        synchronized(this) {
+    public synchronized void startCarObject() {
             if (carObject == null) {
                 carObject = new DFBranchCarouselObject(this);
             }
-        }
     }
 
     @Override

@@ -4,6 +4,7 @@ package org.iot.dsa.dslink.dframework;
  * @author James (Juris) Puchin
  * Created on 10/25/2017
  */
+@SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
 public abstract class DFPointNode extends DFAbstractNode {
 
     protected static long REFRESH_DEF = 5000;
@@ -11,10 +12,19 @@ public abstract class DFPointNode extends DFAbstractNode {
     protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.CONSTANT;
 
     private DFLeafCarouselObject carObject;
+    private DFDeviceNode parDevice;
+
+    private DFDeviceNode getParentDev() {
+        if (parDevice == null) {
+            parDevice = (DFDeviceNode) getParent();
+        }
+        return parDevice;
+    }
 
     @Override
     public void stopCarObject() {
-        synchronized(this) {
+        DFDeviceNode dev = getParentDev();
+        synchronized (dev) {
             if (carObject != null) {
                 carObject.close(this);
                 carObject = null;
@@ -24,14 +34,14 @@ public abstract class DFPointNode extends DFAbstractNode {
 
     @Override
     public void startCarObject() {
-        synchronized(this) {
+        DFDeviceNode dev = getParentDev();
+        synchronized (dev) {
             if (carObject == null) {
-                DFDeviceNode dev = (DFDeviceNode) getParent();
                 if (dev.noPollBatches()) {
                     carObject = new DFLeafCarouselObject(this, dev);
                 } else {
                     carObject = dev.getPollBatch();
-                    carObject.homeNodes.add(this);
+                    carObject.addHomeNode(this);
                 }
             }
         }
@@ -42,7 +52,6 @@ public abstract class DFPointNode extends DFAbstractNode {
         return !isSubscribed();
     }
 
-    //TODO: Make sure only one node gets subscribed/unsubscribed
     @Override
     protected void onSubscribed() {
         startCarObject();

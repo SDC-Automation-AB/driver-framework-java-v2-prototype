@@ -7,10 +7,10 @@ import org.iot.dsa.node.DSInfo;
 
 public class DFBranchCarouselObject extends DFCarouselObject{
 
-    private DFBranchNode homeNode;
+    private final DFBranchNode homeNode;
     private boolean connected = false;
     
-    public DFBranchCarouselObject(DFBranchNode home) {
+    DFBranchCarouselObject(DFBranchNode home) {
         homeNode = home;
         this.refresh = home.getRefresh();
         this.connStrat = home.getConnStrat();
@@ -46,7 +46,7 @@ public class DFBranchCarouselObject extends DFCarouselObject{
         return 5000;
     }
     
-    public void close() {
+    void close() {
         running = false;
         killOrSpawnChildren(true);
         homeNode.closeConnection();
@@ -55,30 +55,32 @@ public class DFBranchCarouselObject extends DFCarouselObject{
     
     @Override
     public void run() {
-        if (!running) {
-            return;
-        }
-        if (iAmAnOrphan()) {
-            homeNode.stopCarObject();
-            return;
-        }
-        //Can add redundant check for isNodeStopped here
-        if (connected) {
-            connected = homeNode.ping();
-            if (!connected) {
-                homeNode.onFailed();
-                killOrSpawnChildren(true);
+        synchronized (homeNode) {
+            if (!running) {
+                return;
             }
-        } else {
-            connected = homeNode.createConnection();
+            if (iAmAnOrphan()) {
+                homeNode.stopCarObject();
+                return;
+            }
+            //Can add redundant check for isNodeStopped here
             if (connected) {
-                homeNode.onConnected();
-                killOrSpawnChildren(false);
+                connected = homeNode.ping();
+                if (!connected) {
+                    homeNode.onFailed();
+                    killOrSpawnChildren(true);
+                }
             } else {
-                homeNode.onFailed();
-                killOrSpawnChildren(true);
+                connected = homeNode.createConnection();
+                if (connected) {
+                    homeNode.onConnected();
+                    killOrSpawnChildren(false);
+                } else {
+                    homeNode.onFailed();
+                    killOrSpawnChildren(true);
+                }
             }
+            DSRuntime.runDelayed(this, getDelay());
         }
-        DSRuntime.runDelayed(this, getDelay());
     }
 }

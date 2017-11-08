@@ -9,13 +9,15 @@ public abstract class DFCarouselObject implements Runnable {
     private static AtomicLong s_id = new AtomicLong(0);
     private long id = DFCarouselObject.s_id.addAndGet(1);
 
-    protected long refresh;
-    protected DFConnStrat connStrat;
-    protected DFRefChangeStrat refChangeStrat;
-    protected boolean running = true;
+    long refresh;
+    DFConnStrat connStrat;
+    DFRefChangeStrat refChangeStrat;
+    boolean running = true;
 
+    //TODO: Figure out if overwriting hash code is OK
     @Override
     public int hashCode() {return Long.valueOf(id).hashCode();}
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o) {
         if (this == o) {return true;}
