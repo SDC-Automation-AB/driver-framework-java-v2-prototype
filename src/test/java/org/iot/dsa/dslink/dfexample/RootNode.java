@@ -1,13 +1,15 @@
 package org.iot.dsa.dslink.dfexample;
 
 import org.iot.dsa.dslink.DSRootNode;
-import org.iot.dsa.node.DSInfo;
-import org.iot.dsa.node.DSLong;
-import org.iot.dsa.node.DSMap;
-import org.iot.dsa.node.DSValueType;
+import org.iot.dsa.dslink.dframework.DFConnectionNode;
+import org.iot.dsa.dslink.dframework.DFDeviceNode;
+import org.iot.dsa.dslink.dframework.DFPointNode;
+import org.iot.dsa.node.*;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
+
+import java.util.LinkedList;
 
 
 public class RootNode extends DSRootNode {
@@ -36,6 +38,4 @@ public class RootNode extends DSRootNode {
         String name = parameters.getString("Name");
         put(name, new TestConnectionNode(parameters));
     }
-    
-
 }

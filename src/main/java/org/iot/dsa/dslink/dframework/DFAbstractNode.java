@@ -38,6 +38,7 @@ public abstract class DFAbstractNode extends DSNode {
         //TODO: add full timestamp reporting
         declareDefault(DFHelpers.RESTART, makeRestartAction());
         declareDefault(DFHelpers.REMOVE, makeRemoveAction());
+        declareDefault(DFHelpers.PRINT, makePrintAction());
 
         declareDefault(DFHelpers.IS_STOPPED, DSBool.FALSE).setReadOnly(true).setHidden(true);
     }
@@ -59,7 +60,7 @@ public abstract class DFAbstractNode extends DSNode {
         return act;
     }
 
-    public void setNodeStopped() {
+    private void setNodeStopped() {
         put(DFHelpers.IS_STOPPED, DSBool.TRUE);
         put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED));
         stopCarObject();
@@ -67,7 +68,7 @@ public abstract class DFAbstractNode extends DSNode {
         put(DFHelpers.START,makeStartStopAction());
     }
 
-    public void setNodeRunning() {
+    private void setNodeRunning() {
         put(DFHelpers.IS_STOPPED, DSBool.FALSE);
         startCarObject();
         remove(DFHelpers.START);
@@ -77,12 +78,12 @@ public abstract class DFAbstractNode extends DSNode {
     public abstract void stopCarObject();
     public abstract void startCarObject();
 
-    public void restartNode() {
+    protected void restartNode() {
         setNodeStopped();
         setNodeRunning();
     }
 
-    DSAction makeRestartAction() {
+    private DSAction makeRestartAction() {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
@@ -93,7 +94,7 @@ public abstract class DFAbstractNode extends DSNode {
         return act;
     }
     
-    DSAction makeRemoveAction() {
+    private DSAction makeRemoveAction() {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
@@ -103,8 +104,19 @@ public abstract class DFAbstractNode extends DSNode {
         };
         return act;
     }
+
+    private DSAction makePrintAction() {
+        DSAction act = new DSAction() {
+            @Override
+            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
+                System.out.println(DFHelpers.getTestingString(info.getParent()));
+                return null;
+            }
+        };
+        return act;
+    }
     
-    void removeConnection() {
+    private void removeConnection() {
         stopCarObject();
         getParent().remove(getInfo());
     }
