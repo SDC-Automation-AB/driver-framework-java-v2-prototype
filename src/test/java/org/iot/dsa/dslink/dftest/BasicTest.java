@@ -1,19 +1,17 @@
 package org.iot.dsa.dslink.dftest;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSIRequester;
 import org.iot.dsa.dslink.DSLink;
 import org.iot.dsa.dslink.dfexample.RootNode;
+import org.iot.dsa.dslink.dframework.DFHelpers;
+import org.iot.dsa.dslink.requester.AbstractInvokeHandler;
+import org.iot.dsa.dslink.requester.AbstractSubscribeHandler;
 import org.iot.dsa.dslink.requester.OutboundInvokeHandler;
-import org.iot.dsa.dslink.requester.OutboundListHandler;
 import org.iot.dsa.dslink.requester.OutboundStream;
-import org.iot.dsa.dslink.requester.OutboundSubscribeHandler;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSList;
 import org.iot.dsa.node.DSMap;
-import org.iot.dsa.node.DSMap.Entry;
 import org.iot.dsa.node.DSStatus;
 import org.iot.dsa.time.DSDateTime;
 import org.junit.Test;
@@ -35,24 +33,40 @@ public class BasicTest {
             assert(false);
         }
         
-        //e.g.
-        MirrorNode mirrorRoot = new MirrorNode("/");
-        list(requester, mirrorRoot);
-
         
     }
     
-    private void list(DSIRequester requester, MirrorNode mnode) {
-        requester.list(mnode.path, mnode);
+    private static String performCommand(DSIRequester requester, RootNode root, String command) {
+        
+        
+        return DFHelpers.getTestingString(root);
     }
     
-    private void subscribe(DSIRequester requester, MirrorNode mnode) {
-        requester.subscribe(mnode.path, 0, mnode);
+    
+    
+    private static void invoke(DSIRequester requester, String action, DSMap params) {
+        requester.invoke("/" + action, params, new InvokeHandlerImpl());
     }
     
-    private void invoke(DSIRequester requester, MirrorNode mnode, DSMap params) {
-        requester.invoke(mnode.path, params, new MirrorInvokeHandler());
+    private static void invoke(DSIRequester requester, String c, String action, DSMap params) {
+        requester.invoke("/" + c + "/" + action, params, new InvokeHandlerImpl());
     }
+    
+    private static void invoke(DSIRequester requester, String c, String d, String action, DSMap params) {
+        requester.invoke("/" + c + "/" + d + "/" + action, params, new InvokeHandlerImpl());
+    }
+    
+    private static void invoke(DSIRequester requester, String c, String d, String p, String action, DSMap params) {
+        requester.invoke("/" + c + "/" + d + "/" + p + "/" + action, params, new InvokeHandlerImpl());
+    }
+    
+    private static SubscribeHandlerImpl subscribe(DSIRequester requester, String c, String d, String p) {
+        SubscribeHandlerImpl handle = new SubscribeHandlerImpl();
+        requester.subscribe("/" + c + "/" + d + "/" + p, 0, handle);
+        return handle;
+    }
+    
+    
     
     private static void preInit() {
         TestingConnection daniel = new TestingConnection();
@@ -134,35 +148,15 @@ public class BasicTest {
         }
     }
     
-    public static class MirrorNode implements OutboundSubscribeHandler, OutboundListHandler{
-        String path;
-        Map<String, MirrorNode> children = new HashMap<String, MirrorNode>();
-        Map<String, DSElement> metadata = new HashMap<String, DSElement>();
-        DSElement value;
-        
-        
-        OutboundStream subStream;
-        OutboundStream listStream;
-        
-        MirrorNode(String path) {
-            this.path = path;
+    
+    private static class SubscribeHandlerImpl extends AbstractSubscribeHandler {
+
+        @Override
+        public void onUpdate(DSDateTime dateTime, DSElement value, DSStatus status) {
+            // TODO Auto-generated method stub
+            
         }
-        
-        MirrorNode addChild(String name) {
-            String childPath = path + name + "/";
-            MirrorNode ret = new MirrorNode(childPath);
-            children.put(name, new MirrorNode(childPath));
-            return ret;
-        }
-        
-        void closeSub() {
-            subStream.closeStream();
-        }
-        
-        void closeList() {
-            listStream.closeStream();
-        }
-        
+
         @Override
         public void onClose() {
             // TODO Auto-generated method stub
@@ -171,77 +165,17 @@ public class BasicTest {
 
         @Override
         public void onError(String type, String msg, String detail) {
-            assert(false);
-        }
-
-        @Override
-        public void onInit(String path, OutboundStream stream) {
-            this.listStream = stream;
-        }
-
-        @Override
-        public void onInitialized() {
             // TODO Auto-generated method stub
             
-        }
-
-        @Override
-        public void onRemove(String name) {
-            if (name.startsWith("@") || name.startsWith("$")) {
-                metadata.remove(name);
-            } else {
-                children.remove(name);
-            }   
-        }
-
-        @Override
-        public void onUpdate(String name, DSElement value) {
-            if (value.isMap()) {
-                MirrorNode child = addChild(name);
-                DSMap map = value.toMap();
-                for (int i=0; i<map.size(); i++) {
-                    Entry entry = map.getEntry(i);
-                    child.onUpdate(entry.getKey(), entry.getValue());
-                }
-            } else if (name.startsWith("$") || name.startsWith("@")){
-                metadata.put(name, value);
-            }
-        }
-
-        @Override
-        public void onInit(String path, int qos, OutboundStream stream) {
-            this.subStream = stream;
-        }
-
-        @Override
-        public void onUpdate(DSDateTime dateTime, DSElement value, DSStatus status) {
-            this.value = value;
         }
         
     }
     
-    private static class MirrorInvokeHandler implements OutboundInvokeHandler {
-
-        @Override
-        public void onClose() {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public void onError(String type, String msg, String detail) {
-            // TODO Auto-generated method stub
-            
-        }
-
+    
+    private static class InvokeHandlerImpl extends AbstractInvokeHandler {
+        
         @Override
         public void onColumns(DSList list) {
-            // TODO Auto-generated method stub
-            
-        }
-
-        @Override
-        public void onInit(String path, DSMap params, OutboundStream stream) {
             // TODO Auto-generated method stub
             
         }
@@ -275,7 +209,18 @@ public class BasicTest {
             // TODO Auto-generated method stub
             
         }
-        
+
+        @Override
+        public void onClose() {
+            // TODO Auto-generated method stub
+            
+        }
+
+        @Override
+        public void onError(String type, String msg, String detail) {
+            // TODO Auto-generated method stub
+            
+        }
     }
 
 }
