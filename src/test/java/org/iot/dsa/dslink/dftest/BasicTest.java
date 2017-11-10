@@ -214,17 +214,38 @@ public class BasicTest {
     
     private static String getConnStringToAdd(DSNode parent, Random random) {
         Set<String> nodes = getDFNodeNameSet(parent, DFConnectionNode.class);
-        //choose a connection that exists and has not yet been added or a nonexistant connection
+        int choice = random.nextInt(TestingConnection.connections.size());
+        String name = (String) TestingConnection.connections.keySet().toArray()[choice];
+        if (nodes.contains(name)) {
+            return generateConnString(random);
+        } else {
+            return name;
+        }
     }
     
     private static String getDevStringToAdd(DSNode parent, Random random) {
         Set<String> nodes = getDFNodeNameSet(parent, DFDeviceNode.class);
-        //choose a device that exists and has not yet been added or a nonexistant device
+        TestingConnection conn = TestingConnection.connections.get(parent.getName());
+        int choice = random.nextInt(conn.devices.size());
+        String name = (String) conn.devices.keySet().toArray()[choice];
+        if (nodes.contains(name)) {
+            return generateDevString(random, conn);
+        } else {
+            return name;
+        }
     }
     
     private static String getPointStringToAdd(DSNode parent, Random random) {
         Set<String> nodes = getDFNodeNameSet(parent, DFPointNode.class);
-        //choose a point that exists and has not yet been added or a nonexistant point
+        TestingConnection conn = TestingConnection.connections.get(parent.getParent().getName());
+        TestingDevice dev = conn.devices.get(parent.getName());
+        int choice = random.nextInt(dev.points.size());
+        String name = (String) dev.points.keySet().toArray()[choice];
+        if (nodes.contains(name)) {
+            return generatePointString(random, dev);
+        } else {
+            return name;
+        }
     }
     
     private static boolean notUnique(String name) {
