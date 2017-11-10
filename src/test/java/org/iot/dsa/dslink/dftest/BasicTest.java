@@ -51,7 +51,7 @@ public class BasicTest {
         
     }
     
-    private String doAThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
+    private static String doAThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
         String thingDone;
         if (random.nextInt(2) < 1) {
             thingDone = createOrModifyDevice(random);
@@ -68,7 +68,7 @@ public class BasicTest {
         return thingDone + "\n" + DFHelpers.getTestingString(root);
     }
     
-    private String createOrModifyDevice(Random random) {
+    private static String createOrModifyDevice(Random random) {
         int connCount = TestingConnection.connections.size();
         int rrand = random.nextInt(connCount + 1);
         if (rrand >= connCount) {
