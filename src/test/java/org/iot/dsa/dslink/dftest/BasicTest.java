@@ -1,13 +1,7 @@
 package org.iot.dsa.dslink.dftest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.HashSet;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
-import java.util.Set;
 
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSIRequester;
@@ -16,8 +10,7 @@ import org.iot.dsa.dslink.dfexample.RootNode;
 import org.iot.dsa.dslink.dfexample.TestConnectionNode;
 import org.iot.dsa.dslink.dfexample.TestDeviceNode;
 import org.iot.dsa.dslink.dfexample.TestPointNode;
-import org.iot.dsa.dslink.dframework.DFAbstractNode;
-import org.iot.dsa.dslink.dframework.DFHelpers;
+import org.iot.dsa.dslink.dframework.*;
 import org.iot.dsa.dslink.requester.AbstractInvokeHandler;
 import org.iot.dsa.dslink.requester.AbstractSubscribeHandler;
 import org.iot.dsa.node.DSElement;
@@ -200,16 +193,31 @@ public class BasicTest {
     private static long getPingRate() {
         return 5000;
     }
+
+    private static List<DSInfo> getCandidateList(DSNode parent, Class<? extends DFAbstractNode> className) {
+        LinkedList<DSInfo> nodes = new LinkedList<DSInfo>();
+        for (DSInfo info : parent) {
+            if (info.isNode()) {
+                if (info.getNode().getClass().isAssignableFrom(className)) {
+                    nodes.add(info);
+                }
+            }
+        }
+        return nodes;
+    }
     
     private static String getConnStringToAdd(DSNode parent, Random random) {
+        List<DSInfo> nodes = getCandidateList(parent, DFConnectionNode.class);
         //choose a connection that exists and has not yet been added or a nonexistant connection
     }
     
     private static String getDevStringToAdd(DSNode parent, Random random) {
+        List<DSInfo> nodes = getCandidateList(parent, DFDeviceNode.class);
         //choose a device that exists and has not yet been added or a nonexistant device
     }
     
     private static String getPointStringToAdd(DSNode parent, Random random) {
+        List<DSInfo> nodes = getCandidateList(parent, DFPointNode.class);
         //choose a point that exists and has not yet been added or a nonexistant point
     }
     
