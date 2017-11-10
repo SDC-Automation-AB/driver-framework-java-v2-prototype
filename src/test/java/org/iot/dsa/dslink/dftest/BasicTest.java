@@ -1,16 +1,22 @@
 package org.iot.dsa.dslink.dftest;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSIRequester;
 import org.iot.dsa.dslink.DSLink;
 import org.iot.dsa.dslink.dfexample.RootNode;
+import org.iot.dsa.dslink.dfexample.TestConnectionNode;
+import org.iot.dsa.dslink.dfexample.TestDeviceNode;
+import org.iot.dsa.dslink.dfexample.TestPointNode;
+import org.iot.dsa.dslink.dframework.DFAbstractNode;
 import org.iot.dsa.dslink.dframework.DFHelpers;
 import org.iot.dsa.dslink.requester.AbstractInvokeHandler;
 import org.iot.dsa.dslink.requester.AbstractSubscribeHandler;
-import org.iot.dsa.dslink.requester.OutboundInvokeHandler;
-import org.iot.dsa.dslink.requester.OutboundStream;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSList;
@@ -31,6 +37,7 @@ public class BasicTest {
         DSRuntime.run(link);
         
         DSIRequester requester = link.getConnection().getRequester();
+        Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -40,12 +47,12 @@ public class BasicTest {
         
     }
     
-    private static String doAThing(DSIRequester requester, RootNode root, Random random) {
+    private static String doAThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
         String thingDone;
         if (random.nextInt(2) < 1) {
             thingDone = doASetupThing(random);
         } else {
-            thingDone = doARequesterThing(requester, root, random);
+            thingDone = doARequesterThing(requester, root, random, subscriptions);
         }
         
         try {
@@ -107,9 +114,98 @@ public class BasicTest {
         }
     }
     
-    private static String doARequesterThing(DSIRequester requester, RootNode root, Random random) {
-        
-        return null;
+    private static String doARequesterThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
+        DSInfo rinfo = pickAChild(root, random);
+        if (rinfo.isAction()) {
+            return invokeAction(requester, rinfo, random);
+        } else {
+            assert rinfo.getObject() instanceof TestConnectionNode;
+            DSInfo cinfo = pickAChild(rinfo.getNode(), random);
+            if (cinfo.isAction()) {
+                return invokeAction(requester, cinfo, random);
+            } else {
+                assert cinfo.getObject() instanceof TestDeviceNode;
+                DSInfo dinfo = pickAChild(cinfo.getNode(), random);
+                if (dinfo.isAction()) {
+                    return invokeAction(requester, dinfo, random);
+                } else {
+                    assert dinfo.getObject() instanceof TestPointNode;
+                    int choice = random.nextInt(10);
+                    if (choice == 0) {
+                        return invokeAction(requester, dinfo.getNode().getInfo("Remove"), random);
+                    } else if (choice == 1) {
+                        return invokeAction(requester, dinfo.getNode().getInfo("Edit"), random);
+                    } else {
+                        String path = dinfo.getNode().getPath();
+                        SubscribeHandlerImpl subHandle = subscriptions.remove(dinfo);
+                        if (subHandle == null) {
+                            subHandle = new SubscribeHandlerImpl();
+                            requester.subscribe(path, 0, subHandle);
+                            subscriptions.put(dinfo, subHandle);
+                            return "Subscribing to " + path;
+                        } else {
+                            subHandle.getStream().closeStream();
+                            return "Unsubscribing from " + path;
+                        }
+                        
+                    }
+                 }
+            }
+        }
+    }
+    
+    private static String invokeAction(DSIRequester requester, DSInfo actionInfo, Random random) {
+        String name = actionInfo.getName();
+        DSNode parent = actionInfo.getParent();
+        String path = parent.getPath();
+        path = path.endsWith("/") ? path + name : path + "/" + name;
+        DSMap params = new DSMap();
+        if (name.equals("Edit")) {
+            return "Edit action not yet supported!";
+        } else if (name.equals("Add Connection")) {
+            String c = getConnStringToAdd(parent, random);
+            params.put("Name", c).put("Connection String", c).put("Ping Rate", getPingRate());
+        } else if (name.equals("Add Device")) {
+            String d = getDevStringToAdd(parent, random);
+            params.put("Name", d).put("Device String", d).put("Ping Rate", getPingRate());
+        } else if (name.equals("Add Point")) {
+            String p = getPointStringToAdd(parent, random);
+            params.put("Name", p).put("ID", p).put("Poll Rate", getPingRate());
+        }
+        requester.invoke(path, params, new InvokeHandlerImpl());
+        return "Invoking " + path + " with parameters " + params;
+    }
+    
+    private static DSInfo pickAChild(DSNode node, Random random) {
+        List<DSInfo> childs = new ArrayList<DSInfo>();
+        for (DSInfo info: node) {
+            if (info.isAction() && !"Print".equals(info.getName())) {
+                childs.add(info);
+            } else if (info.isNode()) {
+                DSNode n = info.getNode();
+                if (n instanceof DFAbstractNode) {
+                    childs.add(info);
+                }
+            }
+        }
+        int choice = random.nextInt(childs.size());
+        return childs.get(choice);
+    }
+    
+    private static long getPingRate() {
+        return 5000;
+    }
+    
+    private static String getConnStringToAdd(DSNode parent, Random random) {
+        //choose a connection that exists and has not yet been added or a nonexistant connection
+    }
+    
+    private static String getDevStringToAdd(DSNode parent, Random random) {
+        //choose a device that exists and has not yet been added or a nonexistant device
+    }
+    
+    private static String getPointStringToAdd(DSNode parent, Random random) {
+        //choose a point that exists and has not yet been added or a nonexistant point
     }
     
     
@@ -130,21 +226,21 @@ public class BasicTest {
     }
     
     
-    private static void invoke(DSIRequester requester, String action, DSMap params) {
-        requester.invoke("/" + action, params, new InvokeHandlerImpl());
-    }
-    
-    private static void invoke(DSIRequester requester, String c, String action, DSMap params) {
-        requester.invoke("/" + c + "/" + action, params, new InvokeHandlerImpl());
-    }
-    
-    private static void invoke(DSIRequester requester, String c, String d, String action, DSMap params) {
-        requester.invoke("/" + c + "/" + d + "/" + action, params, new InvokeHandlerImpl());
-    }
-    
-    private static void invoke(DSIRequester requester, String c, String d, String p, String action, DSMap params) {
-        requester.invoke("/" + c + "/" + d + "/" + p + "/" + action, params, new InvokeHandlerImpl());
-    }
+//    private static void invoke(DSIRequester requester, String action, DSMap params) {
+//        requester.invoke("/" + action, params, new InvokeHandlerImpl());
+//    }
+//    
+//    private static void invoke(DSIRequester requester, String c, String action, DSMap params) {
+//        requester.invoke("/" + c + "/" + action, params, new InvokeHandlerImpl());
+//    }
+//    
+//    private static void invoke(DSIRequester requester, String c, String d, String action, DSMap params) {
+//        requester.invoke("/" + c + "/" + d + "/" + action, params, new InvokeHandlerImpl());
+//    }
+//    
+//    private static void invoke(DSIRequester requester, String c, String d, String p, String action, DSMap params) {
+//        requester.invoke("/" + c + "/" + d + "/" + p + "/" + action, params, new InvokeHandlerImpl());
+//    }
     
     private static SubscribeHandlerImpl subscribe(DSIRequester requester, String c, String d, String p) {
         SubscribeHandlerImpl handle = new SubscribeHandlerImpl();
