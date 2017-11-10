@@ -122,26 +122,27 @@ public class BasicTest {
         }
     }
 
-    private String pickAName(String[] mods, String[] names, Random rand) {
+    private String pickAName(String[] mods, String[] names, Random rand, boolean camel) {
         String str;
         do {
             String one = mods[rand.nextInt(mods.length)];
             String two = names[rand.nextInt(names.length)];
-            str = one + two;
+            if (camel) str = one + two;
+            else str = one + "_" + two;
         } while (notUnique(str));
         return str;
     }
 
     private String generateConnString(Random random) {
-        return pickAName(DFHelpers.colors, DFHelpers.places, random);
+        return pickAName(DFHelpers.colors, DFHelpers.places, random, true);
     }
     
     private String generateDevString(Random random, TestingConnection conn) {
-        return pickAName(DFHelpers.colors, DFHelpers.animals, random);
+        return pickAName(DFHelpers.colors, DFHelpers.animals, random, true);
     }
     
     private String generatePointString(Random random, TestingDevice dev) {
-        return pickAName(DFHelpers.colors, DFHelpers.parts, random);
+        return pickAName(DFHelpers.colors, DFHelpers.parts, random, false);
     }
     
     private String generatePointValue(Random random) {
