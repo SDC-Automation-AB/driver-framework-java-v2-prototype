@@ -39,14 +39,13 @@ public class BasicTest {
         DSRuntime.run(link);
         
         Random random = new Random(seed);
-        DSIRequester requester = link.getConnection().getRequester();
         Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             assert(false);
         }
-        
+        DSIRequester requester = link.getConnection().getRequester();
         PrintWriter writer = null;
         try {
             writer = new PrintWriter("testing-output.txt", "UTF-8");
@@ -302,24 +301,7 @@ public class BasicTest {
     }
   
     private static void preInit() {
-        TestingConnection daniel = addConn("Daniel");
         
-        TestingDevice teapot = addDev(daniel, "Teapot");
-        TestingDevice toaster = addDev(daniel, "Toaster");
-        TestingDevice trebuchet = addDev(daniel, "Trebuchet");
-        
-        teapot.points.put("Temperature", "178");
-        teapot.points.put("Target", "212");
-        teapot.points.put("WaterLevel", "6");
-        
-        toaster.points.put("Setting", "Bagel");
-        toaster.points.put("MinutesRemaining", "0");
-        toaster.points.put("Color", "Red");
-        
-        trebuchet.points.put("Loaded", "True");
-        trebuchet.points.put("LaunchAngle", "45");
-        trebuchet.points.put("LaunchDirection", "North-East");
-        trebuchet.points.put("Projectile", "Rock");
     }
     
     private static TestingConnection addConn(String c) {
