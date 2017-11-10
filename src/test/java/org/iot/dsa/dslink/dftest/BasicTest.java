@@ -31,6 +31,7 @@ import org.junit.Test;
 
 public class BasicTest {
 
+    private final long seed = 420;
     private static Set<String> unique_names = new HashSet<String>();
     
     @Test
@@ -41,12 +42,17 @@ public class BasicTest {
         DSLink link = new TestLink(root);
         DSRuntime.run(link);
         
+        Random random = new Random(seed);
         DSIRequester requester = link.getConnection().getRequester();
         Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             assert(false);
+        }
+        
+        while(true) {
+            doAThing(requester, root, random, subscriptions);
         }
         
         
@@ -248,32 +254,7 @@ public class BasicTest {
     private String generatePointValue(Random random) {
         return DFHelpers.adjectives[random.nextInt(DFHelpers.adjectives.length)];
     }
-    
-    
-//    private static void invoke(DSIRequester requester, String action, DSMap params) {
-//        requester.invoke("/" + action, params, new InvokeHandlerImpl());
-//    }
-//    
-//    private static void invoke(DSIRequester requester, String c, String action, DSMap params) {
-//        requester.invoke("/" + c + "/" + action, params, new InvokeHandlerImpl());
-//    }
-//    
-//    private static void invoke(DSIRequester requester, String c, String d, String action, DSMap params) {
-//        requester.invoke("/" + c + "/" + d + "/" + action, params, new InvokeHandlerImpl());
-//    }
-//    
-//    private static void invoke(DSIRequester requester, String c, String d, String p, String action, DSMap params) {
-//        requester.invoke("/" + c + "/" + d + "/" + p + "/" + action, params, new InvokeHandlerImpl());
-//    }
-    
-    private static SubscribeHandlerImpl subscribe(DSIRequester requester, String c, String d, String p) {
-        SubscribeHandlerImpl handle = new SubscribeHandlerImpl();
-        requester.subscribe("/" + c + "/" + d + "/" + p, 0, handle);
-        return handle;
-    }
-    
-    
-    
+  
     private static void preInit() {
         TestingConnection daniel = addConn("Daniel");
         
