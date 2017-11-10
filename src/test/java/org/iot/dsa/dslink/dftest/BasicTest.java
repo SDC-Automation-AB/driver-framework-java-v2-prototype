@@ -230,6 +230,9 @@ public class BasicTest {
     
     private static String getConnStringToAdd(DSNode parent, Random random) {
         Set<String> nodes = getDFNodeNameSet(parent, DFConnectionNode.class);
+        if (TestingConnection.connections.isEmpty()) {
+            return generateConnString(random);
+        }
         int choice = random.nextInt(TestingConnection.connections.size());
         String name = (String) TestingConnection.connections.keySet().toArray()[choice];
         if (nodes.contains(name)) {
@@ -242,6 +245,9 @@ public class BasicTest {
     private static String getDevStringToAdd(DSNode parent, Random random) {
         Set<String> nodes = getDFNodeNameSet(parent, DFDeviceNode.class);
         TestingConnection conn = TestingConnection.connections.get(parent.getName());
+        if (conn.devices.isEmpty()) {
+            return generateDevString(random, conn);
+        }
         int choice = random.nextInt(conn.devices.size());
         String name = (String) conn.devices.keySet().toArray()[choice];
         if (nodes.contains(name)) {
@@ -255,6 +261,9 @@ public class BasicTest {
         Set<String> nodes = getDFNodeNameSet(parent, DFPointNode.class);
         TestingConnection conn = TestingConnection.connections.get(parent.getParent().getName());
         TestingDevice dev = conn.devices.get(parent.getName());
+        if (dev.points.isEmpty()) {
+            return generatePointString(random, dev);
+        }
         int choice = random.nextInt(dev.points.size());
         String name = (String) dev.points.keySet().toArray()[choice];
         if (nodes.contains(name)) {
