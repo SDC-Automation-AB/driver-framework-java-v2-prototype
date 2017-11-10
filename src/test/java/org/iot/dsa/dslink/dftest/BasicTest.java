@@ -200,7 +200,7 @@ public class BasicTest {
         return 5000;
     }
 
-    private static List<DSInfo> getCandidateList(DSNode parent, Class<? extends DFAbstractNode> className) {
+    private static List<DSInfo> getDFNodeList(DSNode parent, Class<? extends DFAbstractNode> className) {
         LinkedList<DSInfo> nodes = new LinkedList<DSInfo>();
         for (DSInfo info : parent) {
             if (info.isNode()) {
@@ -213,17 +213,17 @@ public class BasicTest {
     }
     
     private static String getConnStringToAdd(DSNode parent, Random random) {
-        List<DSInfo> nodes = getCandidateList(parent, DFConnectionNode.class);
+        List<DSInfo> nodes = getDFNodeList(parent, DFConnectionNode.class);
         //choose a connection that exists and has not yet been added or a nonexistant connection
     }
     
     private static String getDevStringToAdd(DSNode parent, Random random) {
-        List<DSInfo> nodes = getCandidateList(parent, DFDeviceNode.class);
+        List<DSInfo> nodes = getDFNodeList(parent, DFDeviceNode.class);
         //choose a device that exists and has not yet been added or a nonexistant device
     }
     
     private static String getPointStringToAdd(DSNode parent, Random random) {
-        List<DSInfo> nodes = getCandidateList(parent, DFPointNode.class);
+        List<DSInfo> nodes = getDFNodeList(parent, DFPointNode.class);
         //choose a point that exists and has not yet been added or a nonexistant point
     }
     
