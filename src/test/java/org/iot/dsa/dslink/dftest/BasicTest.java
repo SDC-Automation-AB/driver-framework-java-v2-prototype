@@ -1,5 +1,8 @@
 package org.iot.dsa.dslink.dftest;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -44,9 +47,23 @@ public class BasicTest {
             assert(false);
         }
         
-        while(true) {
-            doAThing(requester, root, random, subscriptions);
+        PrintWriter writer = null;
+        try {
+            writer = new PrintWriter("testing-output.txt", "UTF-8");
+        } catch (FileNotFoundException e) {
+            assert(false);
+        } catch (UnsupportedEncodingException e) {
+            assert(false);
         }
+        if (writer == null) {
+            return;
+        }       
+        
+        for(int i = 0; i < 100; i++) {
+            writer.println(doAThing(requester, root, random, subscriptions));
+        }
+        
+        writer.close();
         
         
     }
@@ -60,7 +77,7 @@ public class BasicTest {
         }
         
         try {
-            Thread.sleep(5000);
+            Thread.sleep(getPingRate() * 2);
         } catch (InterruptedException e) {
             assert(false);
         }
@@ -197,7 +214,7 @@ public class BasicTest {
     }
     
     private static long getPingRate() {
-        return 5000;
+        return 1000;
     }
 
     private static Set<String> getDFNodeNameSet(DSNode parent, Class<? extends DFAbstractNode> className) {
