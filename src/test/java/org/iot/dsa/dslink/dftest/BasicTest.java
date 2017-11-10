@@ -227,7 +227,7 @@ public class BasicTest {
         //choose a point that exists and has not yet been added or a nonexistant point
     }
     
-    private boolean notUnique(String name) {
+    private static boolean notUnique(String name) {
         if (unique_names.contains(name)) {
             return true;
         } else {
@@ -236,7 +236,7 @@ public class BasicTest {
         }
     }
 
-    private String pickAName(String[] mods, String[] names, Random rand, boolean camel) {
+    private static String pickAName(String[] mods, String[] names, Random rand, boolean camel) {
         String str;
         do {
             String one = mods[rand.nextInt(mods.length)];
@@ -247,19 +247,19 @@ public class BasicTest {
         return str;
     }
 
-    private String generateConnString(Random random) {
+    private static String generateConnString(Random random) {
         return pickAName(DFHelpers.colors, DFHelpers.places, random, true);
     }
     
-    private String generateDevString(Random random, TestingConnection conn) {
+    private static String generateDevString(Random random, TestingConnection conn) {
         return pickAName(DFHelpers.colors, DFHelpers.animals, random, true);
     }
     
-    private String generatePointString(Random random, TestingDevice dev) {
+    private static String generatePointString(Random random, TestingDevice dev) {
         return pickAName(DFHelpers.colors, DFHelpers.parts, random, false);
     }
     
-    private String generatePointValue(Random random) {
+    private static String generatePointValue(Random random) {
         return DFHelpers.adjectives[random.nextInt(DFHelpers.adjectives.length)];
     }
   
