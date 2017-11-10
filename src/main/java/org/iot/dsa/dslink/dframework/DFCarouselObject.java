@@ -15,6 +15,7 @@ public abstract class DFCarouselObject implements Runnable {
     boolean running = true;
 
     //TODO: Figure out if overwriting hash code is OK
+    //It's ok, maybe we should revert to Java's default hash code
     @Override
     public int hashCode() {return Long.valueOf(id).hashCode();}
     @SuppressWarnings("SimplifiableIfStatement")
