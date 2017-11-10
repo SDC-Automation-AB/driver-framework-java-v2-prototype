@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
+
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSIRequester;
 import org.iot.dsa.dslink.DSLink;
@@ -27,6 +30,8 @@ import org.iot.dsa.time.DSDateTime;
 import org.junit.Test;
 
 public class BasicTest {
+
+    private static Set<String> unique_names = new HashSet<String>();
     
     @Test
     public void teeeeeessst() {
@@ -47,12 +52,12 @@ public class BasicTest {
         
     }
     
-    private static String doAThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
+    private String doAThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
         String thingDone;
         if (random.nextInt(2) < 1) {
-            thingDone = doASetupThing(random);
+            thingDone = createOrModifyDevice(random);
         } else {
-            thingDone = doARequesterThing(requester, root, random, subscriptions);
+            thingDone = subscribeOrDoAnAction(requester, root, random, subscriptions);
         }
         
         try {
@@ -64,7 +69,7 @@ public class BasicTest {
         return thingDone + "\n" + DFHelpers.getTestingString(root);
     }
     
-    private static String doASetupThing(Random random) {
+    private String createOrModifyDevice(Random random) {
         int connCount = TestingConnection.connections.size();
         int rrand = random.nextInt(connCount + 1);
         if (rrand >= connCount) {
@@ -114,7 +119,7 @@ public class BasicTest {
         }
     }
     
-    private static String doARequesterThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
+    private static String subscribeOrDoAnAction(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
         DSInfo rinfo = pickAChild(root, random);
         if (rinfo.isAction()) {
             return invokeAction(requester, rinfo, random);
@@ -208,21 +213,39 @@ public class BasicTest {
         //choose a point that exists and has not yet been added or a nonexistant point
     }
     
-    
-    private static String generateConnString(Random random) {
-        
+    private boolean notUnique(String name) {
+        if (unique_names.contains(name)) {
+            return true;
+        } else {
+            unique_names.add(name);
+            return false;
+        }
+    }
+
+    private String pickAName(String[] mods, String[] names, Random rand) {
+        String str;
+        do {
+            String one = mods[rand.nextInt(mods.length)];
+            String two = names[rand.nextInt(names.length)];
+            str = one + two;
+        } while (notUnique(str));
+        return str;
+    }
+
+    private String generateConnString(Random random) {
+        return pickAName(DFHelpers.colors, DFHelpers.places, random);
     }
     
-    private static String generateDevString(Random random, TestingConnection conn) {
-        
+    private String generateDevString(Random random, TestingConnection conn) {
+        return pickAName(DFHelpers.colors, DFHelpers.animals, random);
     }
     
-    private static String generatePointString(Random random, TestingDevice dev) {
-        
+    private String generatePointString(Random random, TestingDevice dev) {
+        return pickAName(DFHelpers.colors, DFHelpers.parts, random);
     }
     
-    private static String generatePointValue(Random random) {
-        
+    private String generatePointValue(Random random) {
+        return DFHelpers.adjectives[random.nextInt(DFHelpers.adjectives.length)];
     }
     
     
