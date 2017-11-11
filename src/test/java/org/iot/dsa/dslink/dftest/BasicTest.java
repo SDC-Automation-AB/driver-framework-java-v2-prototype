@@ -27,6 +27,7 @@ import org.junit.Test;
 
 public class BasicTest {
 
+    private final long TEST_STEPS = 1000;
     private final long seed = 420;
     private static Set<String> unique_names = new HashSet<String>();
     
@@ -58,7 +59,7 @@ public class BasicTest {
             return;
         }       
         
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < TEST_STEPS; i++) {
             writer.println(doAThing(requester, root, random, subscriptions));
             writer.flush();
         }
