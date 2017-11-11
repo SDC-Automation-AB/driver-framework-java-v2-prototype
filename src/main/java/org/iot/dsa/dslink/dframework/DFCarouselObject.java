@@ -25,4 +25,8 @@ public abstract class DFCarouselObject implements Runnable {
         if (o instanceof DFCarouselObject) { return this.id == ((DFCarouselObject) o).id;}
         return false;
     }
+
+    public static long getDelay() {
+        return 100;
+    }
 }

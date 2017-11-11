@@ -44,10 +44,6 @@ public class DFLeafCarouselObject extends DFCarouselObject {
         }
     }
 
-    private long getDelay() {
-        return 5000;
-    }
-
     void close(DFPointNode node) {
         node.onDfStopped();
         if (!homeNodes.remove(node)) {

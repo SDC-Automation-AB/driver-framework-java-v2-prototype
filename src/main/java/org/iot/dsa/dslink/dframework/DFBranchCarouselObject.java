@@ -24,7 +24,7 @@ public class DFBranchCarouselObject extends DFCarouselObject{
             return !par.isNodeConnected();
         }
         else if (homeNode.getParent() instanceof DSRootNode) { return false; }
-        else { throw new RuntimeException("Wrong parent class"); }
+        else { throw new RuntimeException("Wrong parent class: " + homeNode.getParent().getName() + "-" + homeNode.getParent().getClass()); }
     }
 
     private void killOrSpawnChildren(boolean kill) {
@@ -40,10 +40,6 @@ public class DFBranchCarouselObject extends DFCarouselObject{
                     }
             }
         }
-    }
-    
-    private long getDelay() {
-        return 5000;
     }
     
     void close() {

@@ -75,7 +75,7 @@ public class BasicTest {
         }
         
         try {
-            Thread.sleep(getPingRate() * 2);
+            Thread.sleep(DFCarouselObject.getDelay() * 2);
         } catch (InterruptedException e) {
             assert(false);
         }
@@ -183,13 +183,13 @@ public class BasicTest {
             return "Edit action not yet supported!";
         } else if (name.equals("Add Connection")) {
             String c = getConnStringToAdd(parent, random);
-            params.put("Name", c).put("Connection String", c).put("Ping Rate", getPingRate());
+            params.put("Name", c).put("Connection String", c).put("Ping Rate", DFCarouselObject.getDelay());
         } else if (name.equals("Add Device")) {
             String d = getDevStringToAdd(parent, random);
-            params.put("Name", d).put("Device String", d).put("Ping Rate", getPingRate());
+            params.put("Name", d).put("Device String", d).put("Ping Rate", DFCarouselObject.getDelay());
         } else if (name.equals("Add Point")) {
             String p = getPointStringToAdd(parent, random);
-            params.put("Name", p).put("ID", p).put("Poll Rate", getPingRate());
+            params.put("Name", p).put("ID", p).put("Poll Rate", DFCarouselObject.getDelay());
         }
         requester.invoke(path, params, new InvokeHandlerImpl());
         return "Invoking " + path + " with parameters " + params;
@@ -210,16 +210,12 @@ public class BasicTest {
         int choice = random.nextInt(childs.size());
         return childs.get(choice);
     }
-    
-    private static long getPingRate() {
-        return 100;
-    }
 
     private static Set<String> getDFNodeNameSet(DSNode parent, Class<? extends DFAbstractNode> className) {
         HashSet<String> nodes = new HashSet<String>();
         for (DSInfo info : parent) {
             if (info.isNode()) {
-                if (info.getNode().getClass().isAssignableFrom(className)) {
+                if (className.isAssignableFrom(info.getNode().getClass())) {
                     nodes.add(info.getName());
                 }
             }

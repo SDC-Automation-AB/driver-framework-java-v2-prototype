@@ -13,17 +13,21 @@ public abstract class DFBranchNode extends DFAbstractNode {
     abstract public boolean ping();
     abstract public void closeConnection();
 
-    public synchronized void stopCarObject() {
+    public void stopCarObject() {
+        synchronized (this) {
             if (carObject != null) {
                 carObject.close();
                 carObject = null;
             }
+        }
     }
 
-    public synchronized void startCarObject() {
+    public void startCarObject() {
+        synchronized (this) {
             if (carObject == null) {
                 carObject = new DFBranchCarouselObject(this);
             }
+        }
     }
 
     @Override
