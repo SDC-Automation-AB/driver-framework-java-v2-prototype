@@ -58,7 +58,7 @@ public class BasicTest {
             return;
         }       
         
-        for(int i = 0; i < 10; i++) {
+        for(int i = 0; i < 100; i++) {
             writer.println(doAThing(requester, root, random, subscriptions));
             writer.flush();
         }
@@ -212,7 +212,7 @@ public class BasicTest {
     }
     
     private static long getPingRate() {
-        return 1000;
+        return 100;
     }
 
     private static Set<String> getDFNodeNameSet(DSNode parent, Class<? extends DFAbstractNode> className) {
