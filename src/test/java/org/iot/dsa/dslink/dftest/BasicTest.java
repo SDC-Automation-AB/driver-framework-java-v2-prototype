@@ -245,7 +245,7 @@ public class BasicTest {
     private static String getDevStringToAdd(DSNode parent, Random random) {
         Set<String> nodes = getDFNodeNameSet(parent, DFDeviceNode.class);
         TestingConnection conn = TestingConnection.connections.get(parent.getName());
-        if (conn.devices.isEmpty()) {
+        if (conn == null || conn.devices.isEmpty()) {
             return generateDevString(random, conn);
         }
         int choice = random.nextInt(conn.devices.size());
@@ -260,8 +260,8 @@ public class BasicTest {
     private static String getPointStringToAdd(DSNode parent, Random random) {
         Set<String> nodes = getDFNodeNameSet(parent, DFPointNode.class);
         TestingConnection conn = TestingConnection.connections.get(parent.getParent().getName());
-        TestingDevice dev = conn.devices.get(parent.getName());
-        if (dev.points.isEmpty()) {
+        TestingDevice dev = conn != null ? conn.devices.get(parent.getName()) : null;
+        if (dev == null || dev.points.isEmpty()) {
             return generatePointString(random, dev);
         }
         int choice = random.nextInt(dev.points.size());
