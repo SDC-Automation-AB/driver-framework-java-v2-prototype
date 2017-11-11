@@ -159,7 +159,7 @@ public class BasicTest {
                         SubscribeHandlerImpl subHandle = subscriptions.remove(dinfo);
                         if (subHandle == null) {
                             subHandle = new SubscribeHandlerImpl();
-                            requester.subscribe("/Nodes" + path, 0, subHandle);
+                            requester.subscribe(path, 0, subHandle);
                             subscriptions.put(dinfo, subHandle);
                             return "Subscribing to " + path;
                         } else {
@@ -191,7 +191,7 @@ public class BasicTest {
             String p = getPointStringToAdd(parent, random);
             params.put("Name", p).put("ID", p).put("Poll Rate", getPingRate());
         }
-        requester.invoke("/Nodes" + path, params, new InvokeHandlerImpl());
+        requester.invoke(path, params, new InvokeHandlerImpl());
         return "Invoking " + path + " with parameters " + params;
     }
     
