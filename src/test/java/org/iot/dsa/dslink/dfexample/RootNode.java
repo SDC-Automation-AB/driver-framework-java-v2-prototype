@@ -1,15 +1,10 @@
 package org.iot.dsa.dslink.dfexample;
 
 import org.iot.dsa.dslink.DSRootNode;
-import org.iot.dsa.dslink.dframework.DFConnectionNode;
-import org.iot.dsa.dslink.dframework.DFDeviceNode;
-import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.node.*;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
-
-import java.util.LinkedList;
 
 
 public class RootNode extends DSRootNode {
