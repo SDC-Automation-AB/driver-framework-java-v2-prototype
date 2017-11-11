@@ -96,7 +96,9 @@ public class TestConnectionNode extends DFConnectionNode {
 
     @Override
     public void closeConnection() {
-        connObj.close();
+        if (connObj != null) {
+            connObj.close();
+        }
         connObj = null;
     }
     
