@@ -52,11 +52,11 @@ public class DFHelpers {
         if (node instanceof DSRootNode) {
             nodeType = "Root";
         } else if (node instanceof DFConnectionNode) {
-            nodeType = "Conn";
+            nodeType = "Conn " + node.getName();
         } else if (node instanceof DFDeviceNode) {
-            nodeType = "Device";
+            nodeType = "Dev " + node.getName();
         } else if (node instanceof DFPointNode) {
-            nodeType = "Point";
+            nodeType = "Point " + node.getName();
         }
 
         StringBuilder str = new StringBuilder(nodeType);

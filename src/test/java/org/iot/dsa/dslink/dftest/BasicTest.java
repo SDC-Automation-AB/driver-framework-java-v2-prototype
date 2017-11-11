@@ -58,13 +58,12 @@ public class BasicTest {
             return;
         }       
         
-        for(int i = 0; i < 100; i++) {
+        for(int i = 0; i < 10; i++) {
             writer.println(doAThing(requester, root, random, subscriptions));
+            writer.flush();
         }
         
         writer.close();
-        
-        
     }
     
     private static String doAThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
