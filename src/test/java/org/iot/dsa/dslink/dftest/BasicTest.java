@@ -80,7 +80,7 @@ public class BasicTest {
             assert(false);
         }
         
-        return thingDone + "\n" + DFHelpers.getTestingString(root);
+        return thingDone + "\n" + DFHelpers.getTestingString(root, false);
     }
     
     private static String createOrModifyDevice(Random random) {
