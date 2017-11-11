@@ -47,16 +47,19 @@ public class DFHelpers {
         }
     }
 
-    public static String getTestingString(DSNode node) {
+    public static String getTestingString(DSNode node, boolean inline) {
         String nodeType = "Unknown";
         if (node instanceof DSRootNode) {
             nodeType = "Root";
         } else if (node instanceof DFConnectionNode) {
-            nodeType = "Conn";
+            String tabs = (inline) ? "" : "\t";
+            nodeType = tabs + "Conn " + node.getName();
         } else if (node instanceof DFDeviceNode) {
-            nodeType = "Device";
+            String tabs = (inline) ? "" : "\t\t";
+            nodeType = tabs + "Dev " + node.getName();
         } else if (node instanceof DFPointNode) {
-            nodeType = "Point";
+            String tabs = (inline) ? "" : "\t\t\t";
+            nodeType = tabs + "Point " + node.getName();
         }
 
         StringBuilder str = new StringBuilder(nodeType);
@@ -87,8 +90,9 @@ public class DFHelpers {
             first = false;
         }
         for (DSInfo info : nodes) {
-            str.append(" - ");
-            str.append(getTestingString(info.getNode()));
+            if (inline) str.append(" - ");
+            else str.append("\n");
+            str.append(getTestingString(info.getNode(), inline));
         }
         return str.toString();
     }

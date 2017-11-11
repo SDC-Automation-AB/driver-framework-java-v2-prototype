@@ -60,11 +60,10 @@ public class BasicTest {
         
         for(int i = 0; i < 100; i++) {
             writer.println(doAThing(requester, root, random, subscriptions));
+            writer.flush();
         }
         
         writer.close();
-        
-        
     }
     
     private static String doAThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
@@ -81,7 +80,7 @@ public class BasicTest {
             assert(false);
         }
         
-        return thingDone + "\n" + DFHelpers.getTestingString(root);
+        return thingDone + "\n" + DFHelpers.getTestingString(root, false);
     }
     
     private static String createOrModifyDevice(Random random) {
@@ -213,7 +212,7 @@ public class BasicTest {
     }
     
     private static long getPingRate() {
-        return 1000;
+        return 100;
     }
 
     private static Set<String> getDFNodeNameSet(DSNode parent, Class<? extends DFAbstractNode> className) {
