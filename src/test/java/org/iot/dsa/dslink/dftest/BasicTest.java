@@ -31,6 +31,7 @@ public class BasicTest {
     private static final boolean FLAT_TREE = false;
     private static final long seed = 420;
     private static Set<String> unique_names = new HashSet<String>();
+    private static long step_counter = 0;
     
     @Test
     public void teeeeeessst() {
@@ -60,9 +61,10 @@ public class BasicTest {
             return;
         }       
         
-        for(int i = 0; i < TEST_STEPS; i++) {
+        while (step_counter < TEST_STEPS) {
             writer.println(doAThing(requester, root, random, subscriptions));
             writer.flush();
+            step_counter++;
         }
         
         writer.close();
@@ -70,7 +72,7 @@ public class BasicTest {
     
     private static String doAThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
         String thingDone;
-        if (random.nextInt(2) < 1) {
+        if (random.nextInt(2) < 1 || step_counter < 100) {
             thingDone = createOrModifyDevice(random);
         } else {
             thingDone = subscribeOrDoAnAction(requester, root, random, subscriptions);
