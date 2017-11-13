@@ -33,6 +33,7 @@ public class BasicTest {
     private static final long seed = 420;
     private static Set<String> unique_names = new HashSet<String>();
     private static long step_counter = 0;
+    private static final String DELIM = "\n\n=================================================================================";
     
     @Test
     public void teeeeeessst() {
@@ -85,7 +86,7 @@ public class BasicTest {
             assert(false);
         }
         
-        return thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(root, FLAT_TREE);
+        return thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(root, FLAT_TREE) + DELIM;
     }
     
     private static String createOrModifyDevice(Random random) {
