@@ -3,6 +3,7 @@ package org.iot.dsa.dslink.dftest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 public class TestingConnection {
     
@@ -91,5 +92,33 @@ public class TestingConnection {
         public TestingException(String message) {
             super(message);
         }
+    }
+    
+    public static String getPrintout() {
+        StringBuilder sb = new StringBuilder();
+        for (Entry<String, TestingConnection> entry: connections.entrySet()) {
+            TestingConnection c = entry.getValue();
+            sb.append(entry.getKey());
+            sb.append(" : ");
+            sb.append(c.shouldSucceed); 
+            sb.append('\n');
+            for (Entry<String, TestingDevice> dentry: c.devices.entrySet()) {
+                TestingDevice d = dentry.getValue();
+                sb.append('\t');
+                sb.append(dentry.getKey());
+                sb.append(" : ");
+                sb.append(d.active);
+                sb.append('\n');
+                for (Entry<String, String> pentry: d.points.entrySet()) {
+                    sb.append('\t');
+                    sb.append('\t');
+                    sb.append(pentry.getKey());
+                    sb.append(" : ");
+                    sb.append(pentry.getValue());
+                    sb.append('\n');
+                }
+            }
+        }
+        return sb.toString();
     }
 }

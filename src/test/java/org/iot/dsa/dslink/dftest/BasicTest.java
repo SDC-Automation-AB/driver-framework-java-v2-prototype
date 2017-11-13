@@ -85,7 +85,7 @@ public class BasicTest {
             assert(false);
         }
         
-        return thingDone + "\n" + DFHelpers.getTestingString(root, FLAT_TREE);
+        return thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(root, FLAT_TREE);
     }
     
     private static String createOrModifyDevice(Random random) {

@@ -46,33 +46,7 @@ public class ManualTest implements Runnable {
     }
     
     private static String getPrintOut() {
-        StringBuilder sb = new StringBuilder();
-        for (Entry<String, TestingConnection> entry: TestingConnection.connections.entrySet()) {
-            TestingConnection c = entry.getValue();
-            sb.append(entry.getKey());
-            sb.append(" : ");
-            sb.append(c.shouldSucceed); 
-            sb.append('\n');
-            for (Entry<String, TestingDevice> dentry: c.devices.entrySet()) {
-                TestingDevice d = dentry.getValue();
-                sb.append('\t');
-                sb.append(dentry.getKey());
-                sb.append(" : ");
-                sb.append(d.active);
-                sb.append('\n');
-                for (Entry<String, String> pentry: d.points.entrySet()) {
-                    sb.append('\t');
-                    sb.append('\t');
-                    sb.append(pentry.getKey());
-                    sb.append(" : ");
-                    sb.append(pentry.getValue());
-                    sb.append('\n');
-                }
-            }
-        }
-        return sb.toString();
-        
-        
+        return TestingConnection.getPrintout();  
     }
 
     @Override
