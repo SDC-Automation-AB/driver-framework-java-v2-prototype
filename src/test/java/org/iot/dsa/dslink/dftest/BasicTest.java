@@ -27,8 +27,9 @@ import org.junit.Test;
 
 public class BasicTest {
 
-    private final long TEST_STEPS = 1000;
-    private final long seed = 420;
+    private static final long TEST_STEPS = 5000;
+    private static final boolean FLAT_TREE = false;
+    private static final long seed = 420;
     private static Set<String> unique_names = new HashSet<String>();
     
     @Test
@@ -81,7 +82,7 @@ public class BasicTest {
             assert(false);
         }
         
-        return thingDone + "\n" + DFHelpers.getTestingString(root, false);
+        return thingDone + "\n" + DFHelpers.getTestingString(root, FLAT_TREE);
     }
     
     private static String createOrModifyDevice(Random random) {
@@ -135,17 +136,17 @@ public class BasicTest {
     }
     
     private static String subscribeOrDoAnAction(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
-        DSInfo rinfo = pickAChild(root, random);
+        DSInfo rinfo = pickAChild(root, random, 1);
         if (rinfo.isAction()) {
             return invokeAction(requester, rinfo, random);
         } else {
             assert rinfo.getObject() instanceof TestConnectionNode;
-            DSInfo cinfo = pickAChild(rinfo.getNode(), random);
+            DSInfo cinfo = pickAChild(rinfo.getNode(), random, 2);
             if (cinfo.isAction()) {
                 return invokeAction(requester, cinfo, random);
             } else {
                 assert cinfo.getObject() instanceof TestDeviceNode;
-                DSInfo dinfo = pickAChild(cinfo.getNode(), random);
+                DSInfo dinfo = pickAChild(cinfo.getNode(), random, 3);
                 if (dinfo.isAction()) {
                     return invokeAction(requester, dinfo, random);
                 } else {
@@ -196,11 +197,12 @@ public class BasicTest {
         return "Invoking " + path + " with parameters " + params;
     }
     
-    private static DSInfo pickAChild(DSNode node, Random random) {
+    private static DSInfo pickAChild(DSNode node, Random random, int level) {
+        List<DSInfo> actions = new ArrayList<DSInfo>();
         List<DSInfo> childs = new ArrayList<DSInfo>();
         for (DSInfo info: node) {
             if (info.isAction() && !"Print".equals(info.getName())) {
-                childs.add(info);
+                actions.add(info);
             } else if (info.isNode()) {
                 DSNode n = info.getNode();
                 if (n instanceof DFAbstractNode) {
@@ -208,8 +210,28 @@ public class BasicTest {
                 }
             }
         }
-        int choice = random.nextInt(childs.size());
-        return childs.get(choice);
+        boolean chooseChild = true;
+        if (childs.isEmpty()) {
+            chooseChild = false;
+        } else if (actions.isEmpty()) {
+            chooseChild = true;
+        } else {
+            int choice = random.nextInt(12);
+            if (level == 1) {
+                if (choice > 8) chooseChild = false;
+            } else if (level == 2) {
+                if (choice > 7) chooseChild = false;
+            } else if (level == 3) {
+                if (choice > 5) chooseChild = false;
+            }
+        }
+        if (chooseChild) {
+            int choice = random.nextInt(childs.size());
+            return childs.get(choice);
+        } else {
+            int choice = random.nextInt(actions.size());
+            return actions.get(choice);
+        }
     }
 
     private static Set<String> getDFNodeNameSet(DSNode parent, Class<? extends DFAbstractNode> className) {

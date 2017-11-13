@@ -27,6 +27,6 @@ public abstract class DFCarouselObject implements Runnable {
     }
 
     public static long getDelay() {
-        return 100;
+        return 50;
     }
 }
