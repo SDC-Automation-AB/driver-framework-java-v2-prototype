@@ -24,6 +24,7 @@ import org.iot.dsa.node.DSNode;
 import org.iot.dsa.node.DSStatus;
 import org.iot.dsa.time.DSDateTime;
 import org.junit.Test;
+import com.acuity.iot.dsa.dslink.test.TestLink;
 
 public class BasicTest {
 
