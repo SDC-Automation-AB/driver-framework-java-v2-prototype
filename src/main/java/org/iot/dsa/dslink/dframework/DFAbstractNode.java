@@ -9,15 +9,11 @@ import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 /**
  * @author James (Juris) Puchin
  * Created on 10/25/2017
  */
 public abstract class DFAbstractNode extends DSNode {
-    private static AtomicLong s_id = new AtomicLong(0);
-    private long id = DFAbstractNode.s_id.addAndGet(1);
 
     protected static long REFRESH_DEF;
     protected static DFHelpers.DFConnStrat CONN_STRAT_DEF;
@@ -146,14 +142,5 @@ public abstract class DFAbstractNode extends DSNode {
             put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED_BYP));
         else
             put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED));
-    }
-
-    @Override
-    public int hashCode() {return Long.valueOf(id).hashCode();}
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {return true;}
-        if (o instanceof DFAbstractNode ) { return this.id == ((DFAbstractNode) o).id;}
-        return false;
     }
 }

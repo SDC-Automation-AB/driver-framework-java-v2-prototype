@@ -28,7 +28,7 @@ import com.acuity.iot.dsa.dslink.test.TestLink;
 
 public class BasicTest {
 
-    private static final long TEST_STEPS = 5000;
+    private static final long TEST_STEPS = 1000;
     private static final boolean FLAT_TREE = false;
     private static final long seed = 420;
     private static Set<String> unique_names = new HashSet<String>();
