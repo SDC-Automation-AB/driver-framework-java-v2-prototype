@@ -34,7 +34,7 @@ public class BasicTest {
     private static Set<String> unique_names = new HashSet<String>();
     private static long step_counter = 0;
     private static final String DELIM = "\n\n=================================================================================";
-    
+
     @Test
     public void teeeeeessst() {
         preInit();
@@ -85,8 +85,10 @@ public class BasicTest {
         } catch (InterruptedException e) {
             assert(false);
         }
-        
-        return thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(root, FLAT_TREE) + DELIM;
+
+        String result = thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(root, FLAT_TREE) + DELIM;
+        System.out.println(result); //TODO: Remove debug
+        return result;
     }
     
     private static String createOrModifyDevice(Random random) {
