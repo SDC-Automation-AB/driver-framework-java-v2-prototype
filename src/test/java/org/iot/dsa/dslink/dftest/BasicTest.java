@@ -250,11 +250,17 @@ public class BasicTest {
             params.put("Name", p).put("ID", p).put("Poll Rate", DFCarouselObject.getDelay());
             pnt_node_counter++;
         } else if (name.equals("Remove")) {
-            if (actionInfo.getParent() instanceof DFConnectionNode) {
+            if (parent instanceof DFConnectionNode) {
                 conn_node_counter--;
+                for (String devName : getDFNodeNameSet(parent, DFDeviceNode.class)) {
+                    dev_node_counter--;
+                    pnt_node_counter -= getDFNodeNameSet(parent.getNode(devName), DFPointNode.class).size();
+                }
+                
             } else if (actionInfo.getParent() instanceof DFDeviceNode) {
                 dev_node_counter--;
-            } else if (actionInfo.getParent() instanceof DFDeviceNode) {
+                pnt_node_counter -= getDFNodeNameSet(parent, DFPointNode.class).size();
+            } else if (actionInfo.getParent() instanceof DFPointNode) {
                 pnt_node_counter--;
             } else {
                 throw new RuntimeException("Trying to remove a non DFNode: " + actionInfo.getParent().getName());
