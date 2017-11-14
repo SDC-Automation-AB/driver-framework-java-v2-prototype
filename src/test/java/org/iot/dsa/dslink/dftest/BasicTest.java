@@ -93,9 +93,23 @@ public class BasicTest {
         writer.close();
     }
 
+    private static boolean setupIncomplete() {
+        boolean complete = true;
+        if (step_counter < SETUP_STEPS) {
+            complete = false;
+        } else if (conn_dev_counter < MIN_CON) {
+            complete = false;
+        } else if (dev_dev_counter < MIN_DEV) {
+            complete = false;
+        } else if (pnt_dev_counter < MIN_PNT) {
+            complete = false;
+        }
+        return complete;
+    }
+
     private static String doAThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
         String thingDone;
-        if (random.nextInt(2) < 1 || step_counter < SETUP_STEPS) {
+        if (random.nextInt(2) < 1 || setupIncomplete()) {
             thingDone = createOrModifyDevice(random);
         } else {
             thingDone = subscribeOrDoAnAction(requester, root, random, subscriptions);
@@ -237,7 +251,7 @@ public class BasicTest {
             if (actionInfo.getParent() instanceof DFConnectionNode) {
                 conn_node_counter--;
             } else if (actionInfo.getParent() instanceof DFDeviceNode) {
-                 dev_node_counter--;
+                dev_node_counter--;
             } else if (actionInfo.getParent() instanceof DFDeviceNode) {
                 pnt_node_counter--;
             } else {
@@ -279,7 +293,7 @@ public class BasicTest {
                 else if (pnt_node_counter >= pnt_dev_counter) tooMany = true;
                 break;
         }
-        
+
         if (actions.isEmpty()) {
             chooseChild = true;
         } else if (tooMany) {
