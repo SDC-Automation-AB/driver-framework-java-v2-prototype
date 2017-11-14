@@ -24,16 +24,16 @@ import java.util.Map.Entry;
 public class BasicTest {
 
     private static final long TEST_STEPS = 1000;
-    private static final long SETUP_STEPS = 100;
+    private static final long SETUP_STEPS = 10;
     private static final boolean FLAT_TREE = false;
     private static final long seed = 420;
 
-    private static final long MIN_CON = 10;
-    private static final long MAX_CON = 50;
-    private static final long MIN_DEV = 30;
-    private static final long MAX_DEV = 150;
-    private static final long MIN_PNT = 300;
-    private static final long MAX_PNT = 3000;
+    private static final long MIN_CON = 3;
+    private static final long MAX_CON = 8;
+    private static final long MIN_DEV = 6;
+    private static final long MAX_DEV = 16;
+    private static final long MIN_PNT = 12;
+    private static final long MAX_PNT = 24;
 
     private static final double PROB_ROOT = .1;
     private static final double PROB_CON = .2;
@@ -94,15 +94,15 @@ public class BasicTest {
     }
 
     private static boolean setupIncomplete() {
-        boolean complete = true;
+        boolean complete = false;
         if (step_counter < SETUP_STEPS) {
-            complete = false;
+            complete = true;
         } else if (conn_dev_counter < MIN_CON) {
-            complete = false;
+            complete = true;
         } else if (dev_dev_counter < MIN_DEV) {
-            complete = false;
+            complete = true;
         } else if (pnt_dev_counter < MIN_PNT) {
-            complete = false;
+            complete = true;
         }
         return complete;
     }
