@@ -268,26 +268,19 @@ public class BasicTest {
         switch (level) {
             case (1):
                 if (conn_node_counter < MIN_CON) tooFew = true;
-                else if (conn_node_counter > MAX_CON) tooMany = true;
+                else if (conn_node_counter >= conn_dev_counter) tooMany = true;
                 break;
             case (2):
                 if (dev_node_counter < MIN_DEV) tooFew = true;
-                else if (dev_node_counter > MAX_DEV) tooMany = true;
+                else if (dev_node_counter >= dev_dev_counter) tooMany = true;
                 break;
             case (3):
                 if (pnt_node_counter < MIN_PNT) tooFew = true;
-                else if (pnt_node_counter > MAX_PNT) tooMany = true;
+                else if (pnt_node_counter >= pnt_dev_counter) tooMany = true;
                 break;
         }
-
-        if (childs.isEmpty() || tooFew) {
-            for (DSInfo info : actions) {
-                if (info.getName().startsWith("Add")) {
-                    return info;
-                }
-            }
-            chooseChild = false;
-        } else if (actions.isEmpty()) {
+        
+        if (actions.isEmpty()) {
             chooseChild = true;
         } else if (tooMany) {
             for (DSInfo info : actions) {
@@ -295,6 +288,13 @@ public class BasicTest {
                     return info;
                 }
             }
+        } else if (childs.isEmpty() || tooFew) {
+            for (DSInfo info : actions) {
+                if (info.getName().startsWith("Add")) {
+                    return info;
+                }
+            }
+            chooseChild = false;
         } else {
             double choice = random.nextDouble();
             if (level == 1) {
