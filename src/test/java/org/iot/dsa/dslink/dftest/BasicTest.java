@@ -221,13 +221,13 @@ public class BasicTest {
         } else if (actions.isEmpty()) {
             chooseChild = true;
         } else {
-            int choice = random.nextInt(12);
+            int choice = random.nextInt(110);
             if (level == 1) {
-                if (choice > 8) chooseChild = false;
+                if (choice < 10) chooseChild = false;
             } else if (level == 2) {
-                if (choice > 7) chooseChild = false;
+                if (choice < 22) chooseChild = false;
             } else if (level == 3) {
-                if (choice > 5) chooseChild = false;
+                if (choice < 55) chooseChild = false;
             }
         }
         if (chooseChild) {
