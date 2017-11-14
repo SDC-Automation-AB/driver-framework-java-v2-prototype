@@ -44,15 +44,18 @@ public class BasicTest {
     private static final double PROB_DEV = .3;
     private static final double PROB_PNT = .4;
 
-    private static final double CHANCE_OF_BAD_CONFIG = 0.01;
+    private static final double CHANCE_OF_BAD_CONFIG = 0.01; //TODO: Implement this
 
     private static Set<String> unique_names = new HashSet<String>();
     private static long step_counter = 0;
+    private static long conn_counter = 0;
+    private static long dev_counter = 0;
+    private static long pnt_counter = 0;
     private static final String DELIM = "\n\n=================================================================================";
 
     @Test
     public void teeeeeessst() {
-        assert(1 == PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT);
+        //assert(1 == PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT);
         preInit();
         
         RootNode root = new RootNode();
@@ -106,7 +109,8 @@ public class BasicTest {
         System.out.println(result); //TODO: Remove debug
         return result;
     }
-    
+
+    //TODO: implement probability adjustment
     private static String createOrModifyDevice(Random random) {
         int connCount = TestingConnection.connections.size();
         int rrand = random.nextInt(connCount + 1);
@@ -208,12 +212,15 @@ public class BasicTest {
         } else if (name.equals("Add Connection")) {
             String c = getConnStringToAdd(parent, random);
             params.put("Name", c).put("Connection String", c).put("Ping Rate", DFCarouselObject.getDelay());
+            conn_counter++;
         } else if (name.equals("Add Device")) {
             String d = getDevStringToAdd(parent, random);
             params.put("Name", d).put("Device String", d).put("Ping Rate", DFCarouselObject.getDelay());
+            dev_counter++;
         } else if (name.equals("Add Point")) {
             String p = getPointStringToAdd(parent, random);
             params.put("Name", p).put("ID", p).put("Poll Rate", DFCarouselObject.getDelay());
+            pnt_counter++;
         }
         requester.invoke(path, params, new InvokeHandlerImpl());
         return "Invoking " + path + " with parameters " + params;
@@ -233,9 +240,27 @@ public class BasicTest {
             }
         }
         boolean chooseChild = true;
-        if (childs.isEmpty()) {
+        boolean tooMany = false;
+        boolean tooFew = false;
+
+        switch (level) {
+            case (1):
+                if (conn_counter < MIN_CON) tooFew = true;
+                else if (conn_counter > MAX_CON) tooMany = true;
+                break;
+            case (2):
+                if (dev_counter < MIN_DEV) tooFew = true;
+                else if (dev_counter > MAX_DEV) tooMany = true;
+                break;
+            case(3):
+                if (pnt_counter < MIN_PNT) tooFew = true;
+                else if (pnt_counter > MAX_PNT) tooMany = true;
+                break;
+        }
+
+        if (childs.isEmpty() || tooFew) {
             chooseChild = false;
-        } else if (actions.isEmpty()) {
+        } else if (actions.isEmpty() || tooMany) {
             chooseChild = true;
         } else {
             double choice = random.nextDouble();
