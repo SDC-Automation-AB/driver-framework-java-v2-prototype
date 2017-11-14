@@ -233,6 +233,16 @@ public class BasicTest {
             String p = getPointStringToAdd(parent, random);
             params.put("Name", p).put("ID", p).put("Poll Rate", DFCarouselObject.getDelay());
             pnt_node_counter++;
+        } else if (name.equals("Remove")) {
+            if (actionInfo.getParent() instanceof DFConnectionNode) {
+                conn_node_counter--;
+            } else if (actionInfo.getParent() instanceof DFDeviceNode) {
+                 dev_node_counter--;
+            } else if (actionInfo.getParent() instanceof DFDeviceNode) {
+                pnt_node_counter--;
+            } else {
+                throw new RuntimeException("Trying to remove a non DFNode: " + actionInfo.getParent().getName());
+            }
         }
         requester.invoke(path, params, new InvokeHandlerImpl());
         return "Invoking " + path + " with parameters " + params;
@@ -277,8 +287,14 @@ public class BasicTest {
                 }
             }
             chooseChild = false;
-        } else if (actions.isEmpty() || tooMany) {
+        } else if (actions.isEmpty()) {
             chooseChild = true;
+        } else if (tooMany) {
+            for (DSInfo info : actions) {
+                if (info.getName().startsWith("Remove")) {
+                    return info;
+                }
+            }
         } else {
             double choice = random.nextDouble();
             if (level == 1) {
