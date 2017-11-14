@@ -29,6 +29,7 @@ import com.acuity.iot.dsa.dslink.test.TestLink;
 public class BasicTest {
 
     private static final long TEST_STEPS = 1000;
+    private static final long SETUP_STEPS = 100;
     private static final boolean FLAT_TREE = false;
     private static final long seed = 420;
 
@@ -54,7 +55,7 @@ public class BasicTest {
     private static final String DELIM = "\n\n=================================================================================";
 
     @Test
-    public void teeeeeessst() {
+    public void testyMcTester() {
         //assert(1 == PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT);
         preInit();
         
@@ -93,7 +94,7 @@ public class BasicTest {
     
     private static String doAThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
         String thingDone;
-        if (random.nextInt(2) < 1 || step_counter < 100) {
+        if (random.nextInt(2) < 1 || step_counter < SETUP_STEPS) {
             thingDone = createOrModifyDevice(random);
         } else {
             thingDone = subscribeOrDoAnAction(requester, root, random, subscriptions);
