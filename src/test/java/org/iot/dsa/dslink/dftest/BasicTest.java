@@ -259,7 +259,7 @@ public class BasicTest {
         }
 
         if (childs.isEmpty() || tooFew) {
-            chooseChild = false;
+            chooseChild = false; //TODO: make sure tooFew always add a child
         } else if (actions.isEmpty() || tooMany) {
             chooseChild = true;
         } else {
