@@ -31,6 +31,15 @@ public class BasicTest {
     private static final long TEST_STEPS = 1000;
     private static final boolean FLAT_TREE = false;
     private static final long seed = 420;
+
+    private static final long MIN_CON = 10;
+    private static final long MAX_CON = 50;
+    private static final long MIN_DEV = 30;
+    private static final long MAX_DEV = 150;
+    private static final long MIN_PNT = 300;
+    private static final long MAX_PNT = 3000;
+    private static final double CHANCE_OF_BAD_CONFIG = 0.01;
+
     private static Set<String> unique_names = new HashSet<String>();
     private static long step_counter = 0;
     private static final String DELIM = "\n\n=================================================================================";
@@ -85,7 +94,8 @@ public class BasicTest {
         } catch (InterruptedException e) {
             assert(false);
         }
-        String result = step_counter + ") " + thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(root, FLAT_TREE) + DELIM;
+
+        String result = thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(root, FLAT_TREE) + DELIM;
         System.out.println(result); //TODO: Remove debug
         return result;
     }
@@ -221,13 +231,13 @@ public class BasicTest {
         } else if (actions.isEmpty()) {
             chooseChild = true;
         } else {
-            int choice = random.nextInt(110);
+            int choice = random.nextInt(12);
             if (level == 1) {
-                if (choice < 10) chooseChild = false;
+                if (choice > 8) chooseChild = false;
             } else if (level == 2) {
-                if (choice < 22) chooseChild = false;
+                if (choice > 7) chooseChild = false;
             } else if (level == 3) {
-                if (choice < 55) chooseChild = false;
+                if (choice > 5) chooseChild = false;
             }
         }
         if (chooseChild) {
