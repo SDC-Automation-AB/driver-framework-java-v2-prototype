@@ -43,7 +43,7 @@ public class BasicTest {
     private static final double PROB_SWAP_DEV_STATE = .5;
     private static final double PROB_REMOVE_PNT = .1;
 
-    private static final double PROB_OF_BAD_CONFIG = 0.01; //TODO: Implement this
+    private static final double PROB_OF_BAD_CONFIG = 0.01;
 
     private static Set<String> unique_names = new HashSet<String>();
     private static long step_counter = 0;
@@ -142,7 +142,7 @@ public class BasicTest {
             if (((rand < PROB_CON / (1 - PROB_ROOT)) || dev_dev_counter < MIN_DEV)) {
                 rand = random.nextDouble();
                 if ((rand >= PROB_SWAP_CON_STATE || dev_dev_counter < MIN_DEV) && dev_dev_counter < MAX_DEV) {
-                    String d = generateDevString(random, conn);
+                    String d = generateDevString(random);
                     addDev(conn, d);
                     dev_dev_counter++;
                     return "Creating device " + c + ":" + d;
@@ -159,7 +159,7 @@ public class BasicTest {
                 rand = random.nextDouble();
                 if (((rand < PROB_DEV / (1 - PROB_ROOT - PROB_CON)) || pnt_dev_counter < MIN_PNT)) {
                     if ((rand >= PROB_SWAP_DEV_STATE || pnt_dev_counter < MIN_PNT) && pnt_dev_counter < MAX_PNT) {
-                        String p = generatePointString(random, dev);
+                        String p = generatePointString(random);
                         String v = generatePointValue(random);
                         dev.points.put(p, v);
                         pnt_dev_counter++;
@@ -339,50 +339,49 @@ public class BasicTest {
         }
         return nodes;
     }
-
-    private static String getConnStringToAdd(DSNode parent, Random random) {
-        Set<String> nodes = getDFNodeNameSet(parent, DFConnectionNode.class);
-        int size = TestingConnection.connections.size();
+    
+    
+    private static String getChildNameStringHelper(String[] possibleNames, Set<String> nodes, Random random) {
+        int size = possibleNames.length;
         if (random.nextDouble() >= PROB_OF_BAD_CONFIG) {
             int choice = random.nextInt();
             for (int i = 0; i < size; i++) {
                 int nextIdx = (i + choice) % size;
-                String name = (String) TestingConnection.connections.keySet().toArray()[nextIdx];
+                String name = possibleNames[nextIdx];
                 if (!nodes.contains(name)) return name;
             }
         }
-        return generateConnString(random);
+        return null;
+    }
+
+    private static String getConnStringToAdd(DSNode parent, Random random) {
+        Set<String> nodes = getDFNodeNameSet(parent, DFConnectionNode.class);
+        String[] possibleNames = (String[]) TestingConnection.connections.keySet().toArray();
+        String name = getChildNameStringHelper(possibleNames, nodes, random);
+        return name != null ? name : generateConnString(random);
     }
 
     private static String getDevStringToAdd(DSNode parent, Random random) {
         Set<String> nodes = getDFNodeNameSet(parent, DFDeviceNode.class);
         TestingConnection conn = TestingConnection.connections.get(parent.getName());
-        if (conn == null || conn.devices.isEmpty()) {
-            return generateDevString(random, conn);
+        String name = null;
+        if (conn != null) {
+            String[] possibleNames = (String[]) conn.devices.keySet().toArray();
+            name = getChildNameStringHelper(possibleNames, nodes, random);
         }
-        int choice = random.nextInt(conn.devices.size());
-        String name = (String) conn.devices.keySet().toArray()[choice];
-        if (nodes.contains(name)) {
-            return generateDevString(random, conn);
-        } else {
-            return name;
-        }
+        return name != null ? name : generateDevString(random);
     }
 
     private static String getPointStringToAdd(DSNode parent, Random random) {
         Set<String> nodes = getDFNodeNameSet(parent, DFPointNode.class);
         TestingConnection conn = TestingConnection.connections.get(parent.getParent().getName());
         TestingDevice dev = conn != null ? conn.devices.get(parent.getName()) : null;
-        if (dev == null || dev.points.isEmpty()) {
-            return generatePointString(random, dev);
+        String name = null;
+        if (dev != null) {
+            String[] possibleNames = (String[]) dev.points.keySet().toArray();
+            name = getChildNameStringHelper(possibleNames, nodes, random);
         }
-        int choice = random.nextInt(dev.points.size());
-        String name = (String) dev.points.keySet().toArray()[choice];
-        if (nodes.contains(name)) {
-            return generatePointString(random, dev);
-        } else {
-            return name;
-        }
+        return name != null ? name : generatePointString(random);
     }
 
     private static boolean notUnique(String name) {
@@ -409,11 +408,11 @@ public class BasicTest {
         return pickAName(DFHelpers.colors, DFHelpers.places, random, true);
     }
 
-    private static String generateDevString(Random random, TestingConnection conn) {
+    private static String generateDevString(Random random) {
         return pickAName(DFHelpers.colors, DFHelpers.animals, random, true);
     }
 
-    private static String generatePointString(Random random, TestingDevice dev) {
+    private static String generatePointString(Random random) {
         return pickAName(DFHelpers.colors, DFHelpers.parts, random, false);
     }
 
