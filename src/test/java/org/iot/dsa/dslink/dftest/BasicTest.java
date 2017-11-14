@@ -259,7 +259,12 @@ public class BasicTest {
         }
 
         if (childs.isEmpty() || tooFew) {
-            chooseChild = false; //TODO: make sure tooFew always add a child
+            for (DSInfo info: actions) {
+                if (info.getName().startsWith("Add")) {
+                    return info;
+                }
+            }
+            chooseChild = false;
         } else if (actions.isEmpty() || tooMany) {
             chooseChild = true;
         } else {
