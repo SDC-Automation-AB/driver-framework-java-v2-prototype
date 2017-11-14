@@ -327,13 +327,13 @@ public class BasicTest {
     }
     
     
-    private static String getChildNameStringHelper(String[] possibleNames, Set<String> nodes, Random random) {
+    private static String getChildNameStringHelper(Object[] possibleNames, Set<String> nodes, Random random) {
         int size = possibleNames.length;
         if (random.nextDouble() >= PROB_OF_BAD_CONFIG) {
             int choice = random.nextInt();
             for (int i = 0; i < size; i++) {
                 int nextIdx = (i + choice) % size;
-                String name = possibleNames[nextIdx];
+                String name = (String) possibleNames[nextIdx];
                 if (!nodes.contains(name)) return name;
             }
         }
@@ -342,7 +342,7 @@ public class BasicTest {
 
     private static String getConnStringToAdd(DSNode parent, Random random) {
         Set<String> nodes = getDFNodeNameSet(parent, DFConnectionNode.class);
-        String[] possibleNames = (String[]) TestingConnection.connections.keySet().toArray();
+        Object[] possibleNames = TestingConnection.connections.keySet().toArray();
         String name = getChildNameStringHelper(possibleNames, nodes, random);
         return name != null ? name : generateConnString(random);
     }
@@ -352,7 +352,7 @@ public class BasicTest {
         TestingConnection conn = TestingConnection.connections.get(parent.getName());
         String name = null;
         if (conn != null) {
-            String[] possibleNames = (String[]) conn.devices.keySet().toArray();
+            Object[] possibleNames = conn.devices.keySet().toArray();
             name = getChildNameStringHelper(possibleNames, nodes, random);
         }
         return name != null ? name : generateDevString(random);
@@ -364,7 +364,7 @@ public class BasicTest {
         TestingDevice dev = conn != null ? conn.devices.get(parent.getName()) : null;
         String name = null;
         if (dev != null) {
-            String[] possibleNames = (String[]) dev.points.keySet().toArray();
+            Object[] possibleNames = dev.points.keySet().toArray();
             name = getChildNameStringHelper(possibleNames, nodes, random);
         }
         return name != null ? name : generatePointString(random);
