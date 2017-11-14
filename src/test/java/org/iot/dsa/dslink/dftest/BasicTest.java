@@ -152,6 +152,7 @@ public class BasicTest {
                 }
             } else {
                 int devCount = conn.devices.size();
+                if (devCount == 0) return createOrModifyDevice(random);
                 int crand = random.nextInt(devCount);
                 Entry<String, TestingDevice> dentry = (Entry<String, TestingDevice>) conn.devices.entrySet().toArray()[crand];
                 String d = dentry.getKey();
@@ -170,6 +171,7 @@ public class BasicTest {
                     }
                 } else {
                     int pointCount = dev.points.size();
+                    if (pointCount == 0) return createOrModifyDevice(random);
                     int drand = random.nextInt(pointCount);
                     String p = (String) dev.points.keySet().toArray()[drand];
                     rand = random.nextDouble();
