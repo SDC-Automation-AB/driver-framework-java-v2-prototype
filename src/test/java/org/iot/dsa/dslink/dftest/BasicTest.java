@@ -43,7 +43,7 @@ public class BasicTest {
     private static final double PROB_SWAP_DEV_STATE = .5;
     private static final double PROB_REMOVE_PNT = .1;
 
-    private static final double CHANCE_OF_BAD_CONFIG = 0.01; //TODO: Implement this
+    private static final double PROB_OF_BAD_CONFIG = 0.01; //TODO: Implement this
 
     private static Set<String> unique_names = new HashSet<String>();
     private static long step_counter = 0;
@@ -328,16 +328,16 @@ public class BasicTest {
 
     private static String getConnStringToAdd(DSNode parent, Random random) {
         Set<String> nodes = getDFNodeNameSet(parent, DFConnectionNode.class);
-        if (TestingConnection.connections.isEmpty()) {
-            return generateConnString(random);
+        int size = TestingConnection.connections.size();
+        if (random.nextDouble() >= PROB_OF_BAD_CONFIG) {
+            int choice = random.nextInt();
+            for (int i = 0; i < size; i++) {
+                int nextIdx = (i + choice) % size;
+                String name = (String) TestingConnection.connections.keySet().toArray()[nextIdx];
+                if (!nodes.contains(name)) return name;
+            }
         }
-        int choice = random.nextInt(TestingConnection.connections.size());
-        String name = (String) TestingConnection.connections.keySet().toArray()[choice];
-        if (nodes.contains(name)) {
-            return generateConnString(random);
-        } else {
-            return name;
-        }
+        return generateConnString(random);
     }
 
     private static String getDevStringToAdd(DSNode parent, Random random) {
