@@ -38,6 +38,12 @@ public class BasicTest {
     private static final long MAX_DEV = 150;
     private static final long MIN_PNT = 300;
     private static final long MAX_PNT = 3000;
+
+    private static final double PROB_ROOT = .1;
+    private static final double PROB_CON = .2;
+    private static final double PROB_DEV = .3;
+    private static final double PROB_PNT = .4;
+
     private static final double CHANCE_OF_BAD_CONFIG = 0.01;
 
     private static Set<String> unique_names = new HashSet<String>();
@@ -46,6 +52,7 @@ public class BasicTest {
 
     @Test
     public void teeeeeessst() {
+        assert(1 == PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT);
         preInit();
         
         RootNode root = new RootNode();
@@ -231,13 +238,13 @@ public class BasicTest {
         } else if (actions.isEmpty()) {
             chooseChild = true;
         } else {
-            int choice = random.nextInt(12);
+            double choice = random.nextDouble();
             if (level == 1) {
-                if (choice > 8) chooseChild = false;
+                if (choice < PROB_ROOT) chooseChild = false;
             } else if (level == 2) {
-                if (choice > 7) chooseChild = false;
+                if (choice < PROB_CON / (1 - PROB_ROOT)) chooseChild = false;
             } else if (level == 3) {
-                if (choice > 5) chooseChild = false;
+                if (choice < PROB_DEV / (1 - PROB_ROOT - PROB_CON)) chooseChild = false;
             }
         }
         if (chooseChild) {
