@@ -4,6 +4,7 @@ import com.acuity.iot.dsa.dslink.test.TestLink;
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSIRequester;
 import org.iot.dsa.dslink.DSLink;
+import org.iot.dsa.dslink.DSRootNode;
 import org.iot.dsa.dslink.dfexample.RootNode;
 import org.iot.dsa.dslink.dfexample.TestConnectionNode;
 import org.iot.dsa.dslink.dfexample.TestDeviceNode;
@@ -302,20 +303,9 @@ public class BasicTest {
                 break;
         }
 
-        if (actions.isEmpty()) {
+        if (actions.isEmpty() || (node instanceof DSRootNode && tooMany)) {
             chooseChild = true;
-        } else if (tooMany) {
-            for (DSInfo info : actions) {
-                if (info.getName().startsWith("Remove")) {
-                    return info;
-                }
-            }
-        } else if (childs.isEmpty() || tooFew) {
-            for (DSInfo info : actions) {
-                if (info.getName().startsWith("Add")) {
-                    return info;
-                }
-            }
+        } else if (childs.isEmpty()) {
             chooseChild = false;
         } else {
             double choice = random.nextDouble();
@@ -331,9 +321,22 @@ public class BasicTest {
             int choice = random.nextInt(childs.size());
             return childs.get(choice);
         } else {
-            int choice = random.nextInt(actions.size());
-            return actions.get(choice);
+            DSInfo action;
+            do {
+                int choice = random.nextInt(actions.size());
+                action = actions.get(choice);
+            } while (!actionIsProper(action, tooFew, tooMany));
+            return action;
         }
+    }
+
+    private static boolean actionIsProper(DSInfo action, boolean few, boolean many) {
+        if (few && action.getName().startsWith("Remove")) {
+            return false;
+        } else if (many && action.getName().startsWith("Add")) {
+            return false;
+        }
+        return true;
     }
 
     private static Set<String> getDFNodeNameSet(DSNode parent, Class<? extends DFAbstractNode> className) {
