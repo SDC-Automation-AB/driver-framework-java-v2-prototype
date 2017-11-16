@@ -45,4 +45,8 @@ public abstract class DFDeviceNode extends DFBranchNode {
             throw new RuntimeException("Tried to get a batch from a Device Node with no Poll Batches.");
         }
     }
+
+    public DFDelayCalculator getBatchDelayCalculator(DFLeafCarouselObject carObject) {
+        return new DFConstantDelayCalculator(this, carObject);
+    }
 }

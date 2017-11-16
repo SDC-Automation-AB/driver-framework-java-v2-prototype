@@ -45,6 +45,8 @@ public class BasicTest {
     private static final double PROB_REMOVE_PNT = .1;
 
     private static final double PROB_OF_BAD_CONFIG = 0.01;
+    
+    private static final long PING_POLL_RATE = 50;
 
     private static Set<String> unique_names = new HashSet<String>();
     private static long step_counter = 0;
@@ -117,7 +119,7 @@ public class BasicTest {
         }
 
         try {
-            Thread.sleep(DFCarouselObject.getDelay() * 2);
+            Thread.sleep(PING_POLL_RATE * 2);
         } catch (InterruptedException e) {
             assert (false);
         }
@@ -240,15 +242,15 @@ public class BasicTest {
             return "Edit action not yet supported!";
         } else if (name.equals("Add Connection")) {
             String c = getConnStringToAdd(parent, random);
-            params.put("Name", c).put("Connection String", c).put("Ping Rate", DFCarouselObject.getDelay());
+            params.put("Name", c).put("Connection String", c).put("Ping Rate", PING_POLL_RATE);
             conn_node_counter++;
         } else if (name.equals("Add Device")) {
             String d = getDevStringToAdd(parent, random);
-            params.put("Name", d).put("Device String", d).put("Ping Rate", DFCarouselObject.getDelay());
+            params.put("Name", d).put("Device String", d).put("Ping Rate", PING_POLL_RATE);
             dev_node_counter++;
         } else if (name.equals("Add Point")) {
             String p = getPointStringToAdd(parent, random);
-            params.put("Name", p).put("ID", p).put("Poll Rate", DFCarouselObject.getDelay());
+            params.put("Name", p).put("ID", p).put("Poll Rate", PING_POLL_RATE);
             pnt_node_counter++;
         } else if (name.equals("Remove")) {
             if (parent instanceof DFConnectionNode) {

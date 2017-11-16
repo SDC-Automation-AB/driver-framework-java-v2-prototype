@@ -5,7 +5,9 @@ package org.iot.dsa.dslink.dframework;
  * Created on 11/1/2017
  */
 public abstract class DFBranchNode extends DFAbstractNode {
-
+    protected static long DEFAULT_PING_RATE = 5000;
+    
+    
     private DFBranchCarouselObject carObject;
 
     //Carousel Management Methods
@@ -35,5 +37,13 @@ public abstract class DFBranchNode extends DFAbstractNode {
         super.onStable();
         if (isNodeStopped()) put(DFHelpers.START, makeStartStopAction());
         else put(DFHelpers.STOP, makeStartStopAction());
+    }
+    
+    public DFDelayCalculator getDelayCalculator(DFBranchCarouselObject carObject) {
+        return new DFConstantDelayCalculator(this, carObject);
+    }
+    
+    public long getPingRate() {
+        return DEFAULT_PING_RATE;
     }
 }

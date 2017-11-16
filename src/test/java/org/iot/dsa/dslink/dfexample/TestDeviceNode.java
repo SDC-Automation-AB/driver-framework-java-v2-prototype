@@ -86,12 +86,12 @@ public class TestDeviceNode extends DFDeviceNode {
     }
     
     @Override
-    public long getRefresh() {
+    public long getPingRate() {
         DSElement rate = parameters.get("Ping Rate");
         if (rate != null && rate.isNumber()) {
             return rate.toLong();
         }
-        return super.getRefresh();
+        return super.getPingRate();
     }
     
     private DSAction makeEditAction() {

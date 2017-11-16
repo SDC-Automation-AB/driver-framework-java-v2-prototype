@@ -15,11 +15,6 @@ import org.iot.dsa.node.action.DSAction;
  */
 public abstract class DFAbstractNode extends DSNode {
 
-    protected static long REFRESH_DEF;
-    protected static DFHelpers.DFConnStrat CONN_STRAT_DEF;
-    protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF;
-    private DFDelayCalculator calculator;
-
     private final DSInfo is_stopped = getInfo(DFHelpers.IS_STOPPED);
     boolean isNodeStopped() {
         return is_stopped.getValue().equals(DSBool.TRUE);
@@ -118,18 +113,6 @@ public abstract class DFAbstractNode extends DSNode {
         getParent().remove(getInfo());
     }
 
-    public long getRefresh() {
-        return REFRESH_DEF;
-    }
-
-    public DFHelpers.DFConnStrat getConnStrat() {
-        return CONN_STRAT_DEF;
-    }
-
-    public DFHelpers.DFRefChangeStrat getRefreshChangeStrat() {
-        return REFRESH_CHANGE_STRAT_DEF;
-    }
-
     public void onConnected() {
         put(DFHelpers.STATUS, DSString.valueOf(DFStatus.CONNECTED));
     }
@@ -143,9 +126,5 @@ public abstract class DFAbstractNode extends DSNode {
             put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED_BYP));
         else
             put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED));
-    }
-
-    public long getDelay(long curDelay) {
-        return calculator.getNextDelay(curDelay);
     }
 }

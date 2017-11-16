@@ -1,13 +1,10 @@
 package org.iot.dsa.dslink.dframework;
 
-import org.iot.dsa.dslink.dframework.DFHelpers.DFConnStrat;
-import org.iot.dsa.dslink.dframework.DFHelpers.DFRefChangeStrat;
-
 public abstract class DFCarouselObject implements Runnable {
-    long refresh;
-    DFConnStrat connStrat;
-    DFRefChangeStrat refChangeStrat;
     boolean running = true;
+    protected DFDelayCalculator calculator;
 
-    public abstract long getDelay();
+    public long getDelay() {
+        return calculator.getDelay();
+    }
 }

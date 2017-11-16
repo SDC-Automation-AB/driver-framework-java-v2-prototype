@@ -12,9 +12,7 @@ public class DFBranchCarouselObject extends DFCarouselObject{
     
     DFBranchCarouselObject(DFBranchNode home) {
         homeNode = home;
-        this.refresh = home.getRefresh();
-        this.connStrat = home.getConnStrat();
-        this.refChangeStrat = home.getRefreshChangeStrat();
+        this.calculator = homeNode.getDelayCalculator(this);
         DSRuntime.run(this);
     }
 
@@ -78,9 +76,5 @@ public class DFBranchCarouselObject extends DFCarouselObject{
             }
             DSRuntime.runDelayed(this, getDelay());
         }
-    }
-    @Override
-    public long getDelay() {
-        homeNode.getDelay(refresh);
     }
 }

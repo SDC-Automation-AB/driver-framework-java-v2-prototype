@@ -12,9 +12,7 @@ public class DFLeafCarouselObject extends DFCarouselObject {
 
     DFLeafCarouselObject(DFPointNode homePoint, DFDeviceNode homeDev) {
         homeDevice = homeDev;
-        this.refresh = homePoint.getRefresh();
-        this.connStrat = homePoint.getConnStrat();
-        this.refChangeStrat = homePoint.getRefreshChangeStrat();
+        this.calculator = homeDevice.getBatchDelayCalculator(this);
         synchronized (homeDevice) {
             homeNodes.add(homePoint);
         }
@@ -83,10 +81,5 @@ public class DFLeafCarouselObject extends DFCarouselObject {
             }
             DSRuntime.runDelayed(this, getDelay());
         }
-    }
-
-    @Override
-    public long getDelay() {
-        homeDevice.getDelay(refresh);
     }
 }

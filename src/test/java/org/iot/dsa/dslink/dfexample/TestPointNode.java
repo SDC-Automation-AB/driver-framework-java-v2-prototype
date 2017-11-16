@@ -49,14 +49,14 @@ public class TestPointNode extends DFPointNode implements DSIValue {
         super.onStable();
     }
     
-    @Override
-    public long getRefresh() {
-        DSElement rate = parameters.get("Poll Rate");
-        if (rate != null && rate.isNumber()) {
-            return rate.toLong();
-        }
-        return super.getRefresh();
-    }
+//    @Override
+//    public long getRefresh() {
+//        DSElement rate = parameters.get("Poll Rate");
+//        if (rate != null && rate.isNumber()) {
+//            return rate.toLong();
+//        }
+//        return super.getRefresh();
+//    }
     
     private DSAction makeEditAction() {
         DSAction act = new DSAction() {
