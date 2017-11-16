@@ -84,4 +84,9 @@ public class DFLeafCarouselObject extends DFCarouselObject {
             DSRuntime.runDelayed(this, getDelay());
         }
     }
+
+    @Override
+    public long getDelay() {
+        homeDevice.getDelay(refresh);
+    }
 }

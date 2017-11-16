@@ -79,4 +79,8 @@ public class DFBranchCarouselObject extends DFCarouselObject{
             DSRuntime.runDelayed(this, getDelay());
         }
     }
+    @Override
+    public long getDelay() {
+        homeNode.getDelay(refresh);
+    }
 }

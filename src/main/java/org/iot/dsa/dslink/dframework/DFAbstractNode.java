@@ -18,6 +18,7 @@ public abstract class DFAbstractNode extends DSNode {
     protected static long REFRESH_DEF;
     protected static DFHelpers.DFConnStrat CONN_STRAT_DEF;
     protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF;
+    private DFDelayCalculator calculator;
 
     private final DSInfo is_stopped = getInfo(DFHelpers.IS_STOPPED);
     boolean isNodeStopped() {
@@ -142,5 +143,9 @@ public abstract class DFAbstractNode extends DSNode {
             put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED_BYP));
         else
             put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED));
+    }
+
+    public long getDelay(long curDelay) {
+        return calculator.getNextDelay(curDelay);
     }
 }

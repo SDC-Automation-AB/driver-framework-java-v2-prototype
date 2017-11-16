@@ -9,7 +9,5 @@ public abstract class DFCarouselObject implements Runnable {
     DFRefChangeStrat refChangeStrat;
     boolean running = true;
 
-    public static long getDelay() {
-        return 50;
-    }
+    public abstract long getDelay();
 }
