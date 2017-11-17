@@ -43,7 +43,7 @@ public class TestConnectionNode extends DFConnectionNode {
         };
         act.addParameter("Name", DSValueType.STRING, null);
         act.addParameter("Device String", DSValueType.STRING, null);
-        act.addDefaultParameter("Ping Rate", DSLong.valueOf(TestConnectionNode.REFRESH_DEF), null);
+        act.addDefaultParameter("Ping Rate", DSLong.valueOf(TestConnectionNode.DEFAULT_PING_RATE), null);
         return act;
     }
 
@@ -122,7 +122,7 @@ public class TestConnectionNode extends DFConnectionNode {
         DSElement defStr = parameters.get("Connection String");
         DSElement defPingRate = parameters.get("Ping Rate");
         act.addDefaultParameter("Connection String", defStr != null ? defStr : DSString.EMPTY, null);
-        act.addDefaultParameter("Ping Rate", defPingRate != null ? defPingRate : DSLong.valueOf(REFRESH_DEF), null);
+        act.addDefaultParameter("Ping Rate", defPingRate != null ? defPingRate : DSLong.valueOf(TestDeviceNode.DEFAULT_PING_RATE), null);
         return act;
     }
     

@@ -49,14 +49,14 @@ public class TestPointNode extends DFPointNode implements DSIValue {
         super.onStable();
     }
     
-//    @Override
-//    public long getRefresh() {
-//        DSElement rate = parameters.get("Poll Rate");
-//        if (rate != null && rate.isNumber()) {
-//            return rate.toLong();
-//        }
-//        return super.getRefresh();
-//    }
+    @Override
+    public long getPollRate() {
+        DSElement rate = parameters.get("Poll Rate");
+        if (rate != null && rate.isNumber()) {
+            return rate.toLong();
+        }
+        return super.getPollRate();
+    }
     
     private DSAction makeEditAction() {
         DSAction act = new DSAction() {
@@ -69,7 +69,7 @@ public class TestPointNode extends DFPointNode implements DSIValue {
         DSElement defID = parameters.get("ID");
         DSElement defPingRate = parameters.get("Ping Rate");
         act.addDefaultParameter("ID", defID != null ? defID : DSString.EMPTY, null);
-        act.addDefaultParameter("Poll Rate", defPingRate != null ? defPingRate : DSLong.valueOf(REFRESH_DEF), null);
+        act.addDefaultParameter("Poll Rate", defPingRate != null ? defPingRate : DSLong.valueOf(TestDeviceNode.DEFAULT_PING_RATE), null);
         return act;
     }
     

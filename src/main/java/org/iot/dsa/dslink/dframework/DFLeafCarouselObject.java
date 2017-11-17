@@ -17,7 +17,7 @@ public class DFLeafCarouselObject extends DFCarouselObject {
         synchronized (homeDevice) {
             homeNodes.add(homePoint);
         }
-        homeDevice.addPollBatch(this);
+        homeDevice.addPollBatch(this, homePoint.getPollRate());
         DSRuntime.run(this);
     }
 
@@ -27,7 +27,7 @@ public class DFLeafCarouselObject extends DFCarouselObject {
         }
     }
 
-    private DFPointNode getAHomeNode() {
+    DFPointNode getAHomeNode() {
         return homeNodes.iterator().next();
     }
 
@@ -83,4 +83,5 @@ public class DFLeafCarouselObject extends DFCarouselObject {
             DSRuntime.runDelayed(this, calculator.getDelay());
         }
     }
+    
 }

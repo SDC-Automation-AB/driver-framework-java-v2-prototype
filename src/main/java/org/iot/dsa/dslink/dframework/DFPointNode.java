@@ -7,9 +7,9 @@ package org.iot.dsa.dslink.dframework;
 @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
 public abstract class DFPointNode extends DFAbstractNode {
 
-    protected static long REFRESH_DEF = DFHelpers.DEFAULT_PING_DELAY;
-    protected static DFHelpers.DFConnStrat CONN_STRAT_DEF = DFHelpers.DFConnStrat.LAZY;
-    protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.CONSTANT;
+    //protected static long REFRESH_DEF = DFHelpers.DEFAULT_PING_DELAY;
+    //protected static DFHelpers.DFConnStrat CONN_STRAT_DEF = DFHelpers.DFConnStrat.LAZY;
+    //protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.CONSTANT;
 
     private DFLeafCarouselObject carObject;
     private DFDeviceNode parDevice;
@@ -37,12 +37,13 @@ public abstract class DFPointNode extends DFAbstractNode {
         DFDeviceNode dev = getParentDev();
         synchronized (dev) {
             if (carObject == null) {
-                if (dev.noPollBatches()) {
-                    carObject = new DFLeafCarouselObject(this, dev);
-                } else {
-                    carObject = dev.getPollBatch();
-                    carObject.addHomeNode(this);
-                }
+                carObject = dev.getPollBatch(this);
+//                if (dev.noPollBatches()) {
+//                    carObject = new DFLeafCarouselObject(this, dev);
+//                } else {
+//                    carObject = dev.getPollBatch();
+//                    carObject.addHomeNode(this);
+//                }
             }
         }
     }
@@ -62,6 +63,10 @@ public abstract class DFPointNode extends DFAbstractNode {
     protected void onUnsubscribed() {
         stopCarObject();
         System.out.println("Stopped Node: " + get("Value"));
+    }
+    
+    public long getPollRate() {
+        return getParentDev().getPingRate();
     }
 
 }

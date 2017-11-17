@@ -94,15 +94,6 @@ public class TestDeviceNode extends DFDeviceNode {
         return super.getPingRate();
     }
     
-    @Override
-    public long getPollRate() {
-        DSElement rate = parameters.get("Ping Rate");
-        if (rate != null && rate.isNumber()) {
-            return rate.toLong();
-        }
-        return super.getPollRate();
-    }
-    
     private DSAction makeEditAction() {
         DSAction act = new DSAction() {
             @Override
@@ -114,7 +105,7 @@ public class TestDeviceNode extends DFDeviceNode {
         DSElement defStr = parameters.get("Device String");
         DSElement defPingRate = parameters.get("Ping Rate");
         act.addDefaultParameter("Device String", defStr != null ? defStr : DSString.EMPTY, null);
-        act.addDefaultParameter("Ping Rate", defPingRate != null ? defPingRate : DSLong.valueOf(REFRESH_DEF), null);
+        act.addDefaultParameter("Ping Rate", defPingRate != null ? defPingRate : DSLong.valueOf(DEFAULT_PING_RATE), null);
         return act;
     }
     
@@ -135,7 +126,7 @@ public class TestDeviceNode extends DFDeviceNode {
         };
         act.addParameter("Name", DSValueType.STRING, null);
         act.addParameter("ID", DSValueType.STRING, null);
-        act.addDefaultParameter("Poll Rate", DSLong.valueOf(TestConnectionNode.REFRESH_DEF), null);
+        act.addDefaultParameter("Poll Rate", DSLong.valueOf(DEFAULT_PING_RATE), null);
         return act;
     }
 

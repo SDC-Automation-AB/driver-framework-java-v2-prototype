@@ -17,7 +17,7 @@ public class DFBranchDelayCalculator extends DFDelayCalculator {
             reconnectRate = homeNode.getPingRate();;
             return homeNode.getPingRate();
         } else {
-            reconnectRate += 2000; //TODO make configurable
+            reconnectRate *= 1.25; //TODO put in DFHelpers
             return reconnectRate;
         }
     }

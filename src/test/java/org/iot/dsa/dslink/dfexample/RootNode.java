@@ -25,7 +25,7 @@ public class RootNode extends DSRootNode {
         };
         act.addParameter("Name", DSValueType.STRING, null);
         act.addParameter("Connection String", DSValueType.STRING, null);
-        act.addDefaultParameter("Ping Rate", DSLong.valueOf(TestConnectionNode.REFRESH_DEF), null);
+        act.addDefaultParameter("Ping Rate", DSLong.valueOf(TestConnectionNode.DEFAULT_PING_RATE), null);
         declareDefault("Add Connection", act);
     }
 

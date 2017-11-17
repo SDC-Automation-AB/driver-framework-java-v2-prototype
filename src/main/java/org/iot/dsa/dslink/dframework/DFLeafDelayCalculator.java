@@ -13,7 +13,7 @@ public class DFLeafDelayCalculator extends DFDelayCalculator {
 
     @Override
     public long getDelay() {
-        return homeNode.getPollRate();
+        return carObject.getAHomeNode().getPollRate();
     }
 
 }

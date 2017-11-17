@@ -10,11 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class DFDeviceNode extends DFBranchNode {
 
-    protected static long REFRESH_DEF = DFHelpers.DEFAULT_PING_DELAY;
-    protected static long DEFAULT_POLL_RATE = DFHelpers.DEFAULT_PING_DELAY;
-    private Map<DFLeafCarouselObject, Boolean> batches = new ConcurrentHashMap<DFLeafCarouselObject, Boolean>();
-
-
+    //protected static long REFRESH_DEF = DFHelpers.DEFAULT_PING_DELAY;
+    //protected static long DEFAULT_POLL_RATE = DFHelpers.DEFAULT_PING_DELAY;
+    //private Map<DFLeafCarouselObject, Boolean> batches = new ConcurrentHashMap<DFLeafCarouselObject, Boolean>();
+    private Map<Long, DFLeafCarouselObject> batches = new ConcurrentHashMap<Long, DFLeafCarouselObject>();
+    
     //Carousel Management Methods
     abstract public boolean createConnection();
 
@@ -28,27 +28,26 @@ public abstract class DFDeviceNode extends DFBranchNode {
         return batches.isEmpty();
     }
 
-    synchronized void addPollBatch(DFLeafCarouselObject batch) {
-        batches.put(batch, false);
+    synchronized void addPollBatch(DFLeafCarouselObject batch, Long pollRate) {
+        batches.put(pollRate, batch);
     }
 
     synchronized void removePollBatch(DFLeafCarouselObject batch) {
         batches.remove(batch);
     }
 
-    synchronized DFLeafCarouselObject getPollBatch() {
-        if (!noPollBatches()) {
-            return batches.keySet().iterator().next();
-        } else {
-            throw new RuntimeException("Tried to get a batch from a Device Node with no Poll Batches.");
-        }
+    synchronized DFLeafCarouselObject getPollBatch(DFPointNode point) {
+            DFLeafCarouselObject batch;
+            if (noPollBatches()) {
+                batch = new DFLeafCarouselObject(point, this);
+            } else {
+                batch = batches.values().iterator().next();
+                batch.addHomeNode(point);
+            }
+            return batch;
     }
 
     public DFLeafDelayCalculator getPollCalculator(DFLeafCarouselObject carObject) {
         return new DFLeafDelayCalculator(this, carObject);
-    }
-    
-    public long getPollRate() {
-        return DEFAULT_POLL_RATE;
     }
 }

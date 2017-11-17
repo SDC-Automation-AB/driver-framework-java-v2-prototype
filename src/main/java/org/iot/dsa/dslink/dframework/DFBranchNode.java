@@ -5,7 +5,7 @@ package org.iot.dsa.dslink.dframework;
  * Created on 11/1/2017
  */
 public abstract class DFBranchNode extends DFAbstractNode {
-    protected static long DEFAULT_PING_RATE = DFHelpers.DEFAULT_PING_DELAY;
+    public static long DEFAULT_PING_RATE = DFHelpers.DEFAULT_PING_DELAY;
     
     
     private DFBranchCarouselObject carObject;
