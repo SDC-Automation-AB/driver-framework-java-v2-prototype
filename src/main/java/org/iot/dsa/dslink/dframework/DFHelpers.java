@@ -8,6 +8,9 @@ import java.util.LinkedList;
 import java.util.Set;
 
 public class DFHelpers {
+    //Knobs
+    public static final long DEFAULT_PING_DELAY = 5000;
+
     static final String STATUS = "Status";
     static final String RESTART = "Restart";
     static final String STOP = "Stop";

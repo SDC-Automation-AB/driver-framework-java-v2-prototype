@@ -1,6 +1,7 @@
 package org.iot.dsa.dslink.dfexample;
 
 import org.iot.dsa.dslink.dframework.DFDeviceNode;
+import org.iot.dsa.dslink.dframework.DFHelpers;
 import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.dslink.dftest.TestingDevice;
 import org.iot.dsa.node.DSElement;
@@ -105,7 +106,7 @@ public class TestDeviceNode extends DFDeviceNode {
         DSElement defStr = parameters.get("Device String");
         DSElement defPingRate = parameters.get("Ping Rate");
         act.addDefaultParameter("Device String", defStr != null ? defStr : DSString.EMPTY, null);
-        act.addDefaultParameter("Ping Rate", defPingRate != null ? defPingRate : DSLong.valueOf(REFRESH_DEF), null);
+        act.addDefaultParameter("Ping Rate", defPingRate != null ? defPingRate : DSLong.valueOf(DFHelpers.DEFAULT_PING_DELAY), null);
         return act;
     }
     
@@ -126,7 +127,7 @@ public class TestDeviceNode extends DFDeviceNode {
         };
         act.addParameter("Name", DSValueType.STRING, null);
         act.addParameter("ID", DSValueType.STRING, null);
-        act.addDefaultParameter("Poll Rate", DSLong.valueOf(TestConnectionNode.REFRESH_DEF), null);
+        act.addDefaultParameter("Poll Rate", DSLong.valueOf(DFHelpers.DEFAULT_PING_DELAY), null);
         return act;
     }
 

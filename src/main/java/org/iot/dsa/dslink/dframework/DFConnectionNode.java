@@ -6,10 +6,6 @@ package org.iot.dsa.dslink.dframework;
  */
 public abstract class DFConnectionNode extends DFBranchNode {
 
-    public static long REFRESH_DEF = 5000;
-    public static DFHelpers.DFConnStrat CONN_STRAT_DEF = DFHelpers.DFConnStrat.LAZY;
-    public static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.CONSTANT;
-
     @Override
     protected void onStable() {
         super.onStable();
