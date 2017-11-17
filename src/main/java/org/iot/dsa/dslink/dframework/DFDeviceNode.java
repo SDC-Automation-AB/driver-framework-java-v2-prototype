@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class DFDeviceNode extends DFBranchNode {
 
-    protected static long REFRESH_DEF = 5000;
+    protected static long REFRESH_DEF = DFHelpers.DEFAULT_PING_DELAY;
     protected static DFHelpers.DFConnStrat CONN_STRAT_DEF = DFHelpers.DFConnStrat.LAZY;
     protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.CONSTANT;
 
