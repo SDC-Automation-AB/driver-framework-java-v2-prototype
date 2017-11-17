@@ -1,6 +1,5 @@
 package org.iot.dsa.dslink.dfexample;
 
-import org.iot.dsa.dslink.dframework.DFHelpers;
 import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
@@ -70,7 +69,7 @@ public class TestPointNode extends DFPointNode implements DSIValue {
         DSElement defID = parameters.get("ID");
         DSElement defPingRate = parameters.get("Ping Rate");
         act.addDefaultParameter("ID", defID != null ? defID : DSString.EMPTY, null);
-        act.addDefaultParameter("Poll Rate", defPingRate != null ? defPingRate : DSLong.valueOf(DFHelpers.DEFAULT_PING_DELAY), null);
+        act.addDefaultParameter("Poll Rate", defPingRate != null ? defPingRate : DSLong.valueOf(REFRESH_DEF), null);
         return act;
     }
     

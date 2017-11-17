@@ -1,7 +1,6 @@
 package org.iot.dsa.dslink.dfexample;
 
 import org.iot.dsa.dslink.DSRootNode;
-import org.iot.dsa.dslink.dframework.DFHelpers;
 import org.iot.dsa.node.*;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
@@ -26,7 +25,7 @@ public class RootNode extends DSRootNode {
         };
         act.addParameter("Name", DSValueType.STRING, null);
         act.addParameter("Connection String", DSValueType.STRING, null);
-        act.addDefaultParameter("Ping Rate", DSLong.valueOf(DFHelpers.DEFAULT_PING_DELAY), null);
+        act.addDefaultParameter("Ping Rate", DSLong.valueOf(TestConnectionNode.REFRESH_DEF), null);
         declareDefault("Add Connection", act);
     }
 
