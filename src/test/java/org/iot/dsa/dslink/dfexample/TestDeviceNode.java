@@ -94,6 +94,15 @@ public class TestDeviceNode extends DFDeviceNode {
         return super.getPingRate();
     }
     
+    @Override
+    public long getPollRate() {
+        DSElement rate = parameters.get("Ping Rate");
+        if (rate != null && rate.isNumber()) {
+            return rate.toLong();
+        }
+        return super.getPollRate();
+    }
+    
     private DSAction makeEditAction() {
         DSAction act = new DSAction() {
             @Override

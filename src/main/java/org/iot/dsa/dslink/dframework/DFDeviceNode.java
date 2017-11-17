@@ -11,9 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class DFDeviceNode extends DFBranchNode {
 
     protected static long REFRESH_DEF = DFHelpers.DEFAULT_PING_DELAY;
-    protected static DFHelpers.DFConnStrat CONN_STRAT_DEF = DFHelpers.DFConnStrat.LAZY;
-    protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.CONSTANT;
-
+    protected static long DEFAULT_POLL_RATE = DFHelpers.DEFAULT_PING_DELAY;
     private Map<DFLeafCarouselObject, Boolean> batches = new ConcurrentHashMap<DFLeafCarouselObject, Boolean>();
 
 
@@ -46,7 +44,11 @@ public abstract class DFDeviceNode extends DFBranchNode {
         }
     }
 
-    public DFDelayCalculator getBatchDelayCalculator(DFLeafCarouselObject carObject) {
-        return new DFConstantDelayCalculator(this, carObject);
+    public DFLeafDelayCalculator getPollCalculator(DFLeafCarouselObject carObject) {
+        return new DFLeafDelayCalculator(this, carObject);
+    }
+    
+    public long getPollRate() {
+        return DEFAULT_POLL_RATE;
     }
 }

@@ -9,10 +9,11 @@ public class DFBranchCarouselObject extends DFCarouselObject{
 
     private final DFBranchNode homeNode;
     private boolean connected = false;
+    private DFBranchDelayCalculator calculator;
     
     DFBranchCarouselObject(DFBranchNode home) {
         homeNode = home;
-        this.calculator = homeNode.getDelayCalculator(this);
+        this.calculator = homeNode.getPingReconnectCalculator(this);
         DSRuntime.run(this);
     }
 
@@ -74,7 +75,11 @@ public class DFBranchCarouselObject extends DFCarouselObject{
                     killOrSpawnChildren(true);
                 }
             }
-            DSRuntime.runDelayed(this, getDelay());
+            DSRuntime.runDelayed(this, calculator.getDelay());
         }
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 }

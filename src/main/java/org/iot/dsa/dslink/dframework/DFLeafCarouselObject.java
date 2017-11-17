@@ -9,10 +9,11 @@ import java.util.Set;
 public class DFLeafCarouselObject extends DFCarouselObject {
     private Set<DFPointNode> homeNodes = new HashSet<DFPointNode>();
     private final DFDeviceNode homeDevice;
+    private DFLeafDelayCalculator calculator;
 
     DFLeafCarouselObject(DFPointNode homePoint, DFDeviceNode homeDev) {
         homeDevice = homeDev;
-        this.calculator = homeDevice.getBatchDelayCalculator(this);
+        this.calculator = homeDevice.getPollCalculator(this);
         synchronized (homeDevice) {
             homeNodes.add(homePoint);
         }
@@ -79,7 +80,7 @@ public class DFLeafCarouselObject extends DFCarouselObject {
                     n.onConnected();
                 }
             }
-            DSRuntime.runDelayed(this, getDelay());
+            DSRuntime.runDelayed(this, calculator.getDelay());
         }
     }
 }

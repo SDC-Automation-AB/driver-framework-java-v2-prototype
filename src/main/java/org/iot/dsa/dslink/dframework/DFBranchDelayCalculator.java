@@ -1,0 +1,25 @@
+package org.iot.dsa.dslink.dframework;
+
+public class DFBranchDelayCalculator extends DFDelayCalculator {
+    
+    protected DFBranchNode homeNode;
+    protected DFBranchCarouselObject carObject;
+    private long reconnectRate = homeNode.getPingRate();
+    
+    public DFBranchDelayCalculator(DFBranchNode homeNode, DFBranchCarouselObject carObject) {
+        this.homeNode = homeNode;
+        this.carObject = carObject;
+    }
+
+    @Override
+    public long getDelay() {
+        if (carObject.isConnected()) {
+            reconnectRate = homeNode.getPingRate();;
+            return homeNode.getPingRate();
+        } else {
+            reconnectRate += 2000; //TODO make configurable
+            return reconnectRate;
+        }
+    }
+
+}
