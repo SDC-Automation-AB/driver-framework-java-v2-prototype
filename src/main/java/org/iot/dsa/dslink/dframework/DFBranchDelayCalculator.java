@@ -4,7 +4,7 @@ public class DFBranchDelayCalculator extends DFDelayCalculator {
     
     protected DFBranchNode homeNode;
     protected DFBranchCarouselObject carObject;
-    private long reconnectRate = homeNode.getPingRate();
+    private long reconnectRate;
     
     public DFBranchDelayCalculator(DFBranchNode homeNode, DFBranchCarouselObject carObject) {
         this.homeNode = homeNode;
