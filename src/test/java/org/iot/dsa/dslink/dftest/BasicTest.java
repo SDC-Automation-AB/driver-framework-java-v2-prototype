@@ -22,12 +22,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.Map.Entry;
 
+import static org.junit.Assert.assertEquals;
+
 public class BasicTest {
 
     private static final long TEST_STEPS = 1000;
-    private static final long SETUP_STEPS = 10;
+    private static final long SETUP_STEPS = 60;
     private static final boolean FLAT_TREE = false;
-    private static final long seed = 420;
+    private static final long SEED = 420;
 
     private static final long MIN_CON = 3;
     private static final long MAX_CON = 8;
@@ -45,10 +47,15 @@ public class BasicTest {
     private static final double PROB_REMOVE_PNT = .1;
 
     private static final double PROB_OF_BAD_CONFIG = 0.01;
-    
-    private static final long PING_POLL_RATE = 50;
+
+    private static final long PING_POLL_RATE = 100;
 
     private static Set<String> unique_names = new HashSet<String>();
+    private static Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
+    private static final Random random = new Random(SEED);
+    private static RootNode staticRootNode = null;
+    private static DSIRequester requester = null;
+
     private static long step_counter = 0;
     private static long conn_node_counter = 0;
     private static long dev_node_counter = 0;
@@ -59,22 +66,34 @@ public class BasicTest {
     private static final String DELIM = "\n\n=================================================================================";
 
     @Test
-    public void testyMcTester() {
-        //assert(1 == PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT);
-        preInit();
-
-        RootNode root = new RootNode();
-        DSLink link = new TestLink(root);
+    public void testyMcTestface() {
+        assertEquals(1.0, PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT, .01);
+        staticRootNode = new RootNode();
+        DSLink link = new TestLink(staticRootNode);
         DSRuntime.run(link);
 
-        Random random = new Random(seed);
-        Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
+        //TODO: Sleep to let things set up, needs to be cleaned
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             assert (false);
         }
-        DSIRequester requester = link.getConnection().getRequester();
+
+        requester = link.getConnection().getRequester();
+        PrintWriter writer = getNewPrintWriter();
+
+        //Main loop
+        while (step_counter < TEST_STEPS) {
+            String result = doAThing();
+            waitAWhile();
+            printResult(result, writer);
+            step_counter++;
+        }
+
+        writer.close();
+    }
+
+    private static PrintWriter getNewPrintWriter() {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter("testing-output.txt", "UTF-8");
@@ -84,16 +103,26 @@ public class BasicTest {
             assert (false);
         }
         if (writer == null) {
-            return;
+            assert (false);
         }
+        return writer;
+    }
 
-        while (step_counter < TEST_STEPS) {
-            writer.println(doAThing(requester, root, random, subscriptions));
-            writer.flush();
-            step_counter++;
+    private static void waitAWhile() {
+        if (!setupIncomplete()) {
+            try {
+                Thread.sleep(PING_POLL_RATE * 2);
+            } catch (InterruptedException e) {
+                assert (false);
+            }
         }
+    }
 
-        writer.close();
+    private static void printResult(String thingDone, PrintWriter writer) {
+        String result = thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(staticRootNode, FLAT_TREE) + DELIM;
+        writer.println(result);
+        writer.flush();
+        System.out.println(result); //TODO: Remove debug
     }
 
     private static boolean setupIncomplete() {
@@ -110,29 +139,20 @@ public class BasicTest {
         return complete;
     }
 
-    private static String doAThing(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
+    private static String doAThing() {
         String thingDone;
         if (random.nextInt(2) < 1 || setupIncomplete()) {
-            thingDone = createOrModifyDevice(random);
+            thingDone = createOrModifyDevice();
         } else {
-            thingDone = subscribeOrDoAnAction(requester, root, random, subscriptions);
+            thingDone = subscribeOrDoAnAction();
         }
-
-        try {
-            Thread.sleep(PING_POLL_RATE * 2);
-        } catch (InterruptedException e) {
-            assert (false);
-        }
-
-        String result = thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(root, FLAT_TREE) + DELIM;
-        System.out.println(result); //TODO: Remove debug
-        return result;
+        return thingDone;
     }
 
-    private static String createOrModifyDevice(Random random) {
+    private static String createOrModifyDevice() {
         double rand = random.nextDouble();
         if ((rand < PROB_ROOT || conn_dev_counter < MIN_CON) && conn_dev_counter < MAX_CON) {
-            String c = generateConnString(random);
+            String c = generateConnString();
             addConn(c);
             conn_dev_counter++;
             return "Creating connection " + c;
@@ -145,7 +165,7 @@ public class BasicTest {
             if (((rand < PROB_CON / (1 - PROB_ROOT)) || dev_dev_counter < MIN_DEV)) {
                 rand = random.nextDouble();
                 if ((rand >= PROB_SWAP_CON_STATE || dev_dev_counter < MIN_DEV) && dev_dev_counter < MAX_DEV) {
-                    String d = generateDevString(random);
+                    String d = generateDevString();
                     addDev(conn, d);
                     dev_dev_counter++;
                     return "Creating device " + c + ":" + d;
@@ -155,7 +175,7 @@ public class BasicTest {
                 }
             } else {
                 int devCount = conn.devices.size();
-                if (devCount == 0) return createOrModifyDevice(random);
+                if (devCount == 0) return createOrModifyDevice();
                 int crand = random.nextInt(devCount);
                 Entry<String, TestingDevice> dentry = (Entry<String, TestingDevice>) conn.devices.entrySet().toArray()[crand];
                 String d = dentry.getKey();
@@ -163,8 +183,8 @@ public class BasicTest {
                 rand = random.nextDouble();
                 if (((rand < PROB_DEV / (1 - PROB_ROOT - PROB_CON)) || pnt_dev_counter < MIN_PNT)) {
                     if ((rand >= PROB_SWAP_DEV_STATE || pnt_dev_counter < MIN_PNT) && pnt_dev_counter < MAX_PNT) {
-                        String p = generatePointString(random);
-                        String v = generatePointValue(random);
+                        String p = generatePointString();
+                        String v = generatePointValue();
                         dev.points.put(p, v);
                         pnt_dev_counter++;
                         return "Creating new point " + c + ":" + d + ":" + p + " to " + v;
@@ -174,7 +194,7 @@ public class BasicTest {
                     }
                 } else {
                     int pointCount = dev.points.size();
-                    if (pointCount == 0) return createOrModifyDevice(random);
+                    if (pointCount == 0) return createOrModifyDevice();
                     int drand = random.nextInt(pointCount);
                     String p = (String) dev.points.keySet().toArray()[drand];
                     rand = random.nextDouble();
@@ -183,7 +203,7 @@ public class BasicTest {
                         pnt_dev_counter--;
                         return "Removing point " + c + ":" + d + ":" + p;
                     } else {
-                        String v = generatePointValue(random);
+                        String v = generatePointValue();
                         dev.points.put(p, v);
                         return "Setting point " + c + ":" + d + ":" + p + " to " + v;
                     }
@@ -192,47 +212,50 @@ public class BasicTest {
         }
     }
 
-    private static String subscribeOrDoAnAction(DSIRequester requester, RootNode root, Random random, Map<DSInfo, SubscribeHandlerImpl> subscriptions) {
-        DSInfo rinfo = pickAChild(root, random, 1);
+    private static String subscribeOrDoAnAction() {
+        DSInfo rinfo = pickAChild(staticRootNode, 1);
         if (rinfo.isAction()) {
-            return invokeAction(requester, rinfo, random);
+            return invokeAction(requester, rinfo);
         } else {
             assert rinfo.getObject() instanceof TestConnectionNode;
-            DSInfo cinfo = pickAChild(rinfo.getNode(), random, 2);
+            DSInfo cinfo = pickAChild(rinfo.getNode(), 2);
             if (cinfo.isAction()) {
-                return invokeAction(requester, cinfo, random);
+                return invokeAction(requester, cinfo);
             } else {
                 assert cinfo.getObject() instanceof TestDeviceNode;
-                DSInfo dinfo = pickAChild(cinfo.getNode(), random, 3);
+                DSInfo dinfo = pickAChild(cinfo.getNode(), 3);
                 if (dinfo.isAction()) {
-                    return invokeAction(requester, dinfo, random);
+                    return invokeAction(requester, dinfo);
                 } else {
                     assert dinfo.getObject() instanceof TestPointNode;
                     int choice = random.nextInt(10);
                     if (choice == 0) {
-                        return invokeAction(requester, dinfo.getNode().getInfo("Remove"), random);
+                        return invokeAction(requester, dinfo.getNode().getInfo("Remove"));
                     } else if (choice == 1) {
-                        return invokeAction(requester, dinfo.getNode().getInfo("Edit"), random);
+                        return invokeAction(requester, dinfo.getNode().getInfo("Edit"));
                     } else {
-                        String path = dinfo.getNode().getPath();
-                        SubscribeHandlerImpl subHandle = subscriptions.remove(dinfo);
-                        if (subHandle == null) {
-                            subHandle = new SubscribeHandlerImpl();
-                            requester.subscribe(path, 0, subHandle);
-                            subscriptions.put(dinfo, subHandle);
-                            return "Subscribing to " + path;
-                        } else {
-                            subHandle.getStream().closeStream();
-                            return "Unsubscribing from " + path;
-                        }
-
+                        return subscribeOrUnsubscribe(dinfo);
                     }
                 }
             }
         }
     }
 
-    private static String invokeAction(DSIRequester requester, DSInfo actionInfo, Random random) {
+    private static String subscribeOrUnsubscribe(DSInfo dsInfo) {
+        String path = dsInfo.getNode().getPath();
+        SubscribeHandlerImpl subHandle = subscriptions.remove(dsInfo);
+        if (subHandle == null) {
+            subHandle = new SubscribeHandlerImpl();
+            requester.subscribe(path, 0, subHandle);
+            subscriptions.put(dsInfo, subHandle);
+            return "Subscribing to " + path;
+        } else {
+            subHandle.getStream().closeStream();
+            return "Unsubscribing from " + path;
+        }
+    }
+
+    private static String invokeAction(DSIRequester requester, DSInfo actionInfo) {
         String name = actionInfo.getName();
         DSNode parent = actionInfo.getParent();
         String path = parent.getPath();
@@ -241,15 +264,15 @@ public class BasicTest {
         if (name.equals("Edit")) {
             return "Edit action not yet supported!";
         } else if (name.equals("Add Connection")) {
-            String c = getConnStringToAdd(parent, random);
+            String c = getConnStringToAdd(parent);
             params.put("Name", c).put("Connection String", c).put("Ping Rate", PING_POLL_RATE);
             conn_node_counter++;
         } else if (name.equals("Add Device")) {
-            String d = getDevStringToAdd(parent, random);
+            String d = getDevStringToAdd(parent);
             params.put("Name", d).put("Device String", d).put("Ping Rate", PING_POLL_RATE);
             dev_node_counter++;
         } else if (name.equals("Add Point")) {
-            String p = getPointStringToAdd(parent, random);
+            String p = getPointStringToAdd(parent);
             params.put("Name", p).put("ID", p).put("Poll Rate", PING_POLL_RATE);
             pnt_node_counter++;
         } else if (name.equals("Remove")) {
@@ -259,7 +282,6 @@ public class BasicTest {
                     dev_node_counter--;
                     pnt_node_counter -= getDFNodeNameSet(parent.getNode(devName), DFPointNode.class).size();
                 }
-                
             } else if (actionInfo.getParent() instanceof DFDeviceNode) {
                 dev_node_counter--;
                 pnt_node_counter -= getDFNodeNameSet(parent, DFPointNode.class).size();
@@ -273,7 +295,7 @@ public class BasicTest {
         return "Invoking " + path + " with parameters " + params;
     }
 
-    private static DSInfo pickAChild(DSNode node, Random random, int level) {
+    private static DSInfo pickAChild(DSNode node, int level) {
         List<DSInfo> actions = new ArrayList<DSInfo>();
         List<DSInfo> childs = new ArrayList<DSInfo>();
         for (DSInfo info : node) {
@@ -352,9 +374,8 @@ public class BasicTest {
         }
         return nodes;
     }
-    
-    
-    private static String getChildNameStringHelper(Object[] possibleNames, Set<String> nodes, Random random) {
+
+    private static String getChildNameStringHelper(Object[] possibleNames, Set<String> nodes) {
         int size = possibleNames.length;
         if (random.nextDouble() >= PROB_OF_BAD_CONFIG) {
             int choice = size > 0 ? random.nextInt(size) : 0;
@@ -367,34 +388,34 @@ public class BasicTest {
         return null;
     }
 
-    private static String getConnStringToAdd(DSNode parent, Random random) {
+    private static String getConnStringToAdd(DSNode parent) {
         Set<String> nodes = getDFNodeNameSet(parent, DFConnectionNode.class);
         Object[] possibleNames = TestingConnection.connections.keySet().toArray();
-        String name = getChildNameStringHelper(possibleNames, nodes, random);
-        return name != null ? name : generateConnString(random);
+        String name = getChildNameStringHelper(possibleNames, nodes);
+        return name != null ? name : generateConnString();
     }
 
-    private static String getDevStringToAdd(DSNode parent, Random random) {
+    private static String getDevStringToAdd(DSNode parent) {
         Set<String> nodes = getDFNodeNameSet(parent, DFDeviceNode.class);
         TestingConnection conn = TestingConnection.connections.get(parent.getName());
         String name = null;
         if (conn != null) {
             Object[] possibleNames = conn.devices.keySet().toArray();
-            name = getChildNameStringHelper(possibleNames, nodes, random);
+            name = getChildNameStringHelper(possibleNames, nodes);
         }
-        return name != null ? name : generateDevString(random);
+        return name != null ? name : generateDevString();
     }
 
-    private static String getPointStringToAdd(DSNode parent, Random random) {
+    private static String getPointStringToAdd(DSNode parent) {
         Set<String> nodes = getDFNodeNameSet(parent, DFPointNode.class);
         TestingConnection conn = TestingConnection.connections.get(parent.getParent().getName());
         TestingDevice dev = conn != null ? conn.devices.get(parent.getName()) : null;
         String name = null;
         if (dev != null) {
             Object[] possibleNames = dev.points.keySet().toArray();
-            name = getChildNameStringHelper(possibleNames, nodes, random);
+            name = getChildNameStringHelper(possibleNames, nodes);
         }
-        return name != null ? name : generatePointString(random);
+        return name != null ? name : generatePointString();
     }
 
     private static boolean notUnique(String name) {
@@ -406,35 +427,31 @@ public class BasicTest {
         }
     }
 
-    private static String pickAName(String[] mods, String[] names, Random rand, boolean camel) {
+    private static String pickAName(String[] mods, String[] names, boolean camel) {
         String str;
         do {
-            String one = mods[rand.nextInt(mods.length)];
-            String two = names[rand.nextInt(names.length)];
+            String one = mods[random.nextInt(mods.length)];
+            String two = names[random.nextInt(names.length)];
             if (camel) str = one + two;
             else str = one + "_" + two;
         } while (notUnique(str));
         return str;
     }
 
-    private static String generateConnString(Random random) {
-        return pickAName(DFHelpers.colors, DFHelpers.places, random, true);
+    private static String generateConnString() {
+        return pickAName(DFHelpers.colors, DFHelpers.places, true);
     }
 
-    private static String generateDevString(Random random) {
-        return pickAName(DFHelpers.colors, DFHelpers.animals, random, true);
+    private static String generateDevString() {
+        return pickAName(DFHelpers.colors, DFHelpers.animals, true);
     }
 
-    private static String generatePointString(Random random) {
-        return pickAName(DFHelpers.colors, DFHelpers.parts, random, false);
+    private static String generatePointString() {
+        return pickAName(DFHelpers.colors, DFHelpers.parts, false);
     }
 
-    private static String generatePointValue(Random random) {
+    private static String generatePointValue() {
         return DFHelpers.adjectives[random.nextInt(DFHelpers.adjectives.length)];
-    }
-
-    private static void preInit() {
-
     }
 
     private static TestingConnection addConn(String c) {
@@ -448,7 +465,6 @@ public class BasicTest {
         conn.devices.put(d, dev);
         return dev;
     }
-
 
     private static class SubscribeHandlerImpl extends AbstractSubscribeHandler {
 
@@ -471,7 +487,6 @@ public class BasicTest {
         }
 
     }
-
 
     private static class InvokeHandlerImpl extends AbstractInvokeHandler {
 
@@ -523,5 +538,4 @@ public class BasicTest {
 
         }
     }
-
 }

@@ -1,6 +1,7 @@
 package org.iot.dsa.dslink.dfexample;
 
 import org.iot.dsa.dslink.DSRootNode;
+import org.iot.dsa.dslink.dftest.DummyRunnable;
 import org.iot.dsa.node.*;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
@@ -32,5 +33,22 @@ public class RootNode extends DSRootNode {
     private void addConnection(DSMap parameters) {
         String name = parameters.getString("Name");
         put(name, new TestConnectionNode(parameters));
+    }
+
+//    @Override
+//    protected void declareDefaults() {
+//        super.declareDefaults();
+//        DSAction act = new DSAction() {
+//            @Override
+//            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
+//                ((RootNode) info.getParent()).startDummy(invocation.getParameters());
+//                return null;
+//            }
+//        };
+//        declareDefault("Start Dummy", act);
+//    }
+
+    private void startDummy(DSMap parameters) {
+        new DummyRunnable();
     }
 }

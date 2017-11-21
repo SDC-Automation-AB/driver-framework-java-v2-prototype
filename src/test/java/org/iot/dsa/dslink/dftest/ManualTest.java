@@ -7,7 +7,7 @@ import org.iot.dsa.dslink.DSLink;
 
 public class ManualTest implements Runnable {
     
-    static Object monitor = new Object();
+    static final Object monitor = new Object();
 
     public static void main(String[] args) {
         TestingConnection daniel = new TestingConnection();
