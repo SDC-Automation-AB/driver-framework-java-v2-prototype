@@ -31,11 +31,11 @@ public class BasicTest {
     private static final boolean FLAT_TREE = false;
     private static final long SEED = 420;
 
-    private static final long MIN_CON = 3;
-    private static final long MAX_CON = 8;
-    private static final long MIN_DEV = 6;
-    private static final long MAX_DEV = 16;
-    private static final long MIN_PNT = 12;
+    private static final long MIN_CON = 2;
+    private static final long MAX_CON = 4;
+    private static final long MIN_DEV = 4;
+    private static final long MAX_DEV = 8;
+    private static final long MIN_PNT = 16;
     private static final long MAX_PNT = 24;
 
     private static final double PROB_ROOT = .1;
@@ -55,6 +55,7 @@ public class BasicTest {
     private static final Random random = new Random(SEED);
     private static RootNode staticRootNode = null;
     private static DSIRequester requester = null;
+    private static DelayedActionOrSub queuedAction = null;
 
     private static long step_counter = 0;
     private static long conn_node_counter = 0;
@@ -141,7 +142,9 @@ public class BasicTest {
 
     private static String doAThing() {
         String thingDone;
-        if (random.nextInt(2) < 1 || setupIncomplete()) {
+        if (queuedAction != null) {
+            thingDone = queuedAction.act();
+        } else if (random.nextInt(2) < 1 || setupIncomplete()) {
             thingDone = createOrModifyDevice();
         } else {
             thingDone = subscribeOrDoAnAction();
@@ -215,24 +218,24 @@ public class BasicTest {
     private static String subscribeOrDoAnAction() {
         DSInfo rinfo = pickAChild(staticRootNode, 1);
         if (rinfo.isAction()) {
-            return invokeAction(requester, rinfo);
+            return invokeAction(rinfo);
         } else {
             assert rinfo.getObject() instanceof TestConnectionNode;
             DSInfo cinfo = pickAChild(rinfo.getNode(), 2);
             if (cinfo.isAction()) {
-                return invokeAction(requester, cinfo);
+                return invokeAction(cinfo);
             } else {
                 assert cinfo.getObject() instanceof TestDeviceNode;
                 DSInfo dinfo = pickAChild(cinfo.getNode(), 3);
                 if (dinfo.isAction()) {
-                    return invokeAction(requester, dinfo);
+                    return invokeAction(dinfo);
                 } else {
                     assert dinfo.getObject() instanceof TestPointNode;
                     int choice = random.nextInt(10);
                     if (choice == 0) {
-                        return invokeAction(requester, dinfo.getNode().getInfo("Remove"));
+                        return invokeAction(dinfo.getNode().getInfo("Remove"));
                     } else if (choice == 1) {
-                        return invokeAction(requester, dinfo.getNode().getInfo("Edit"));
+                        return invokeAction(dinfo.getNode().getInfo("Edit"));
                     } else {
                         return subscribeOrUnsubscribe(dinfo);
                     }
@@ -255,7 +258,7 @@ public class BasicTest {
         }
     }
 
-    private static String invokeAction(DSIRequester requester, DSInfo actionInfo) {
+    private static String invokeAction(DSInfo actionInfo) {
         String name = actionInfo.getName();
         DSNode parent = actionInfo.getParent();
         String path = parent.getPath();
@@ -536,6 +539,41 @@ public class BasicTest {
         public void onError(String type, String msg, String detail) {
             // TODO Auto-generated method stub
 
+        }
+    }
+
+    class DelayedActionOrSub {
+        String path = null;
+        DSMap params = null;
+        DSInfo info = null;
+
+        /**
+         * Constructor for doing an action
+         *
+         * @param path
+         * @param params
+         */
+        DelayedActionOrSub(String path, DSMap params) {
+            this.path = path;
+            this.params = params;
+        }
+
+        /**
+         * Constructor for subscribing or unsubscribing
+         *
+         * @param info
+         */
+        DelayedActionOrSub(DSInfo info) {
+            this.info = info;
+        }
+
+        String act() {
+            if (info != null) {
+                return subscribeOrUnsubscribe(info);
+            } else {
+                requester.invoke(path, params, new InvokeHandlerImpl());
+                return "Invoking Queued:" + path + " with parameters " + params;
+            }
         }
     }
 }
