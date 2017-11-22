@@ -1,7 +1,6 @@
 package org.iot.dsa.dslink.dfexample;
 
 import org.iot.dsa.dslink.DSRootNode;
-import org.iot.dsa.dslink.dftest.DummyRunnable;
 import org.iot.dsa.node.*;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
