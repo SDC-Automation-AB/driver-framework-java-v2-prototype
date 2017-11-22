@@ -1,6 +1,7 @@
 package org.iot.dsa.dslink.dftest;
 
 import com.acuity.iot.dsa.dslink.test.TestLink;
+import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSIRequester;
 import org.iot.dsa.dslink.DSLink;
@@ -144,6 +145,7 @@ public class BasicTest {
         String thingDone;
         if (queuedAction != null) {
             thingDone = queuedAction.act();
+            queuedAction = null;
         } else if (random.nextInt(2) < 1 || setupIncomplete()) {
             thingDone = createOrModifyDevice();
         } else {
@@ -277,6 +279,7 @@ public class BasicTest {
         } else if (name.equals("Add Point")) {
             String p = getPointStringToAdd(parent);
             params.put("Name", p).put("ID", p).put("Poll Rate", PING_POLL_RATE);
+            queuedAction = new DelayedActionOrSub(actionInfo.getParent(), p);
             pnt_node_counter++;
         } else if (name.equals("Remove")) {
             if (parent instanceof DFConnectionNode) {
@@ -542,16 +545,15 @@ public class BasicTest {
         }
     }
 
-    class DelayedActionOrSub {
+    static class DelayedActionOrSub {
         String path = null;
         DSMap params = null;
-        DSInfo info = null;
+        DSNode parent = null;
+        String pointName = null;
 
         /**
          * Constructor for doing an action
          *
-         * @param path
-         * @param params
          */
         DelayedActionOrSub(String path, DSMap params) {
             this.path = path;
@@ -561,17 +563,17 @@ public class BasicTest {
         /**
          * Constructor for subscribing or unsubscribing
          *
-         * @param info
          */
-        DelayedActionOrSub(DSInfo info) {
-            this.info = info;
+        DelayedActionOrSub(DSNode parent, String pointName) {
+            this.parent = parent;
+            this.pointName = pointName;
         }
 
         String act() {
-            if (info != null) {
-                return subscribeOrUnsubscribe(info);
+            if (parent != null) {
+                return BasicTest.subscribeOrUnsubscribe(parent.getInfo(pointName));
             } else {
-                requester.invoke(path, params, new InvokeHandlerImpl());
+                BasicTest.requester.invoke(path, params, new BasicTest.InvokeHandlerImpl());
                 return "Invoking Queued:" + path + " with parameters " + params;
             }
         }
