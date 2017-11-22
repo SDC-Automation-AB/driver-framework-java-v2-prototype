@@ -65,7 +65,7 @@ public class BasicTest {
     private static long conn_dev_counter = 0;
     private static long dev_dev_counter = 0;
     private static long pnt_dev_counter = 0;
-    private static final String DELIM = "\n\n=================================================================================";
+    private static final String DELIM = "\n\n== STEP ===============================================================================";
 
     @Test
     public void testyMcTestface() {
@@ -121,7 +121,7 @@ public class BasicTest {
     }
 
     private static void printResult(String thingDone, PrintWriter writer) {
-        String result = thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(staticRootNode, FLAT_TREE, VERBOSE) + DELIM;
+        String result = thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(staticRootNode, FLAT_TREE, VERBOSE) + DELIM.replaceFirst("STEP", Long.toString(step_counter + 1));
         writer.println(result);
         writer.flush();
         System.out.println(result); //TODO: Remove debug
