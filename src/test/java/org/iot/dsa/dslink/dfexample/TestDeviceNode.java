@@ -168,5 +168,4 @@ public class TestDeviceNode extends DFDeviceNode {
             return false;
         }
     }
-
 }
