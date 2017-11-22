@@ -101,7 +101,7 @@ public abstract class DFAbstractNode extends DSNode {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                System.out.println(DFHelpers.getTestingString(info.getParent(), false));
+                System.out.println(DFHelpers.getTestingString(info.getParent(), false, true));
                 return null;
             }
         };

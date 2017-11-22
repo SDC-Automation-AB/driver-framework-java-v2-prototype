@@ -1,7 +1,6 @@
 package org.iot.dsa.dslink.dftest;
 
 import com.acuity.iot.dsa.dslink.test.TestLink;
-import com.sun.xml.internal.ws.api.ha.StickyFeature;
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSIRequester;
 import org.iot.dsa.dslink.DSLink;
@@ -30,6 +29,7 @@ public class BasicTest {
     private static final long TEST_STEPS = 1000;
     private static final long SETUP_STEPS = 60;
     private static final boolean FLAT_TREE = false;
+    private static final boolean VERBOSE = false;
     private static final long SEED = 420;
 
     private static final long MIN_CON = 2;
@@ -121,7 +121,7 @@ public class BasicTest {
     }
 
     private static void printResult(String thingDone, PrintWriter writer) {
-        String result = thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(staticRootNode, FLAT_TREE) + DELIM;
+        String result = thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(staticRootNode, FLAT_TREE, VERBOSE) + DELIM;
         writer.println(result);
         writer.flush();
         System.out.println(result); //TODO: Remove debug

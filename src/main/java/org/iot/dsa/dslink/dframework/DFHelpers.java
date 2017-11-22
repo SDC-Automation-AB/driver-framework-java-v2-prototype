@@ -50,7 +50,7 @@ public class DFHelpers {
         }
     }
 
-    public static String getTestingString(DSNode node, boolean inline) {
+    public static String getTestingString(DSNode node, boolean inline, boolean verbose) {
         String nodeType = "Unknown";
         if (node instanceof DSRootNode) {
             nodeType = "Root";
@@ -71,12 +71,12 @@ public class DFHelpers {
         LinkedList<DSInfo> actions = new LinkedList<DSInfo>();
         LinkedList<DSInfo> values = new LinkedList<DSInfo>();
         for (DSInfo info : node) {
-            if (info.isAction()) {
+            if (info.isAction() && verbose) {
                 actions.add(info);
             } else if (info.isNode()) {
                 nodes.add(info);
             } else if (info.isValue()) {
-                values.add(info);
+                if (!info.getName().equals("parameters") || verbose) values.add(info);
             }
         }
         boolean first = true;
@@ -95,7 +95,7 @@ public class DFHelpers {
         for (DSInfo info : nodes) {
             if (inline) str.append(" - ");
             else str.append("\n");
-            str.append(getTestingString(info.getNode(), inline));
+            str.append(getTestingString(info.getNode(), inline, verbose));
         }
         return str.toString();
     }
