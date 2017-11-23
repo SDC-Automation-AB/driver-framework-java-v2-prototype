@@ -47,8 +47,4 @@ public abstract class DFDeviceNode extends DFBranchNode {
             }
             return batch;
     }
-
-    public DFLeafDelayCalculator getPollCalculator(DFLeafCarouselObject carObject) {
-        return new DFLeafDelayCalculator(this, carObject);
-    }
 }
