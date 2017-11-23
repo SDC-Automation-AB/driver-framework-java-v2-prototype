@@ -32,16 +32,17 @@ public abstract class DFDeviceNode extends DFBranchNode {
         batches.put(pollRate, batch);
     }
 
-    synchronized void removePollBatch(DFLeafCarouselObject batch) {
-        batches.remove(batch);
+    synchronized void removePollBatch(DFLeafCarouselObject batch, Long pollRate) {
+        if (!batches.remove(pollRate, batch)) {
+            throw new RuntimeException("Error removing batch from device");
+        };
     }
 
     synchronized DFLeafCarouselObject getPollBatch(DFPointNode point) {
-            DFLeafCarouselObject batch;
-            if (noPollBatches()) {
+            DFLeafCarouselObject batch = batches.get(point.getPollRate());
+            if (batch == null) {
                 batch = new DFLeafCarouselObject(point, this);
             } else {
-                batch = batches.values().iterator().next();
                 batch.addHomeNode(point);
             }
             return batch;

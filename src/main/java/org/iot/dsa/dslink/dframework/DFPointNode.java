@@ -38,12 +38,6 @@ public abstract class DFPointNode extends DFAbstractNode {
         synchronized (dev) {
             if (carObject == null) {
                 carObject = dev.getPollBatch(this);
-//                if (dev.noPollBatches()) {
-//                    carObject = new DFLeafCarouselObject(this, dev);
-//                } else {
-//                    carObject = dev.getPollBatch();
-//                    carObject.addHomeNode(this);
-//                }
             }
         }
     }

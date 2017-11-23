@@ -44,13 +44,14 @@ public class DFLeafCarouselObject extends DFCarouselObject {
     }
 
     void close(DFPointNode node) {
+        long pollRate = node.getPollRate();
         node.onDfStopped();
         if (!homeNodes.remove(node)) {
             System.out.println("Node is missing!");
         }
         if (homeNodes.isEmpty()) {
             running = false;
-            homeDevice.removePollBatch(this);
+            homeDevice.removePollBatch(this, pollRate);
         }
     }
 
