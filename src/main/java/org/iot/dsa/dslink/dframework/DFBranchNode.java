@@ -39,11 +39,10 @@ public abstract class DFBranchNode extends DFAbstractNode {
         else put(DFHelpers.STOP, makeStartStopAction());
     }
     
-    public DFBranchDelayCalculator getPingReconnectCalculator(DFBranchCarouselObject carObject) {
+    DFBranchDelayCalculator getPingReconnectCalculator(DFBranchCarouselObject carObject) {
         return new DFBranchDelayCalculator(this, carObject);
     }
 
-    
     public long getPingRate() {
         return DEFAULT_PING_RATE;
     }
