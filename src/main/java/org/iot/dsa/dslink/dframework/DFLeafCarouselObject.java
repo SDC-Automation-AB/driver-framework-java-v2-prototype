@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class DFLeafCarouselObject extends DFCarouselObject {
+
     private Set<DFPointNode> homeNodes = new HashSet<DFPointNode>();
     private final DFDeviceNode homeDevice;
 
@@ -25,11 +26,11 @@ public class DFLeafCarouselObject extends DFCarouselObject {
         }
     }
 
-    DFPointNode getAHomeNode() {
+    private DFPointNode getAHomeNode() {
         return homeNodes.iterator().next();
     }
 
-    private boolean iAmAnOrphan() {
+    private boolean amIanOrphan() {
         DFPointNode homeNode = getAHomeNode();
         if (homeNode.getParent() instanceof DFDeviceNode) {
             DFDeviceNode par = (DFDeviceNode) homeNode.getParent();
@@ -53,6 +54,13 @@ public class DFLeafCarouselObject extends DFCarouselObject {
         }
     }
 
+    private boolean containsNode(String name) {
+        for (DFPointNode node : homeNodes) {
+            if (node.getName().equals(name)) return true;
+        }
+        return false;
+    }
+
     @Override
     public void run() {
         synchronized (homeDevice) {
@@ -60,7 +68,7 @@ public class DFLeafCarouselObject extends DFCarouselObject {
                 return;
             }
 
-            if (iAmAnOrphan()) {
+            if (amIanOrphan()) {
                 for (DFPointNode n : homeNodes) {
                     n.stopCarObject();
                 }
