@@ -1,5 +1,8 @@
 package org.iot.dsa.dslink.dframework;
 
+import org.iot.dsa.dslink.dframework.DFHelpers.DFStatus;
+import org.iot.dsa.node.DSString;
+
 /**
  * @author James (Juris) Puchin
  * Created on 10/25/2017
@@ -55,6 +58,7 @@ public abstract class DFPointNode extends DFAbstractNode {
 
     @Override
     protected void onUnsubscribed() {
+        put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED));
         stopCarObject();
         System.out.println("Stopped Node: " + get("Value"));
     }
