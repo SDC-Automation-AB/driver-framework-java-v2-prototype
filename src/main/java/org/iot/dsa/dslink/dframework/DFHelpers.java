@@ -9,7 +9,7 @@ import java.util.LinkedList;
 public class DFHelpers {
     //Knobs
     public static final long DEFAULT_PING_DELAY = 50;
-    public static final double RECONNECT_DELAY_MULTIPLIER = 1.25;
+    public static final double RECONNECT_DELAY_MULTIPLIER = 1;
 
     static final String STATUS = "Status";
     static final String RESTART = "Restart";
