@@ -286,13 +286,24 @@ public class BasicTest {
                 conn_node_counter--;
                 for (String devName : getDFNodeNameSet(parent, DFDeviceNode.class)) {
                     dev_node_counter--;
-                    pnt_node_counter -= getDFNodeNameSet(parent.getNode(devName), DFPointNode.class).size();
+                    DSNode devNode = parent.getNode(devName);
+                    for (String pointName : getDFNodeNameSet(devNode, DFPointNode.class)){
+                        pnt_node_counter --;
+                        SubscribeHandlerImpl handle = subscriptions.remove(devNode.getInfo(pointName));
+                        if (handle != null) handle.getStream().closeStream();
+                    }
                 }
-            } else if (actionInfo.getParent() instanceof DFDeviceNode) {
+            } else if (parent instanceof DFDeviceNode) {
                 dev_node_counter--;
-                pnt_node_counter -= getDFNodeNameSet(parent, DFPointNode.class).size();
-            } else if (actionInfo.getParent() instanceof DFPointNode) {
+                for (String pointName : getDFNodeNameSet(parent, DFPointNode.class)) {
+                    pnt_node_counter--;
+                    SubscribeHandlerImpl handle = subscriptions.remove(parent.getInfo(pointName));
+                    if (handle != null) handle.getStream().closeStream();
+                }
+            } else if (parent instanceof DFPointNode) {
                 pnt_node_counter--;
+                SubscribeHandlerImpl handle = subscriptions.remove(parent.getInfo());
+                if (handle != null) handle.getStream().closeStream();
             } else {
                 throw new RuntimeException("Trying to remove a non DFNode: " + actionInfo.getParent().getName());
             }
