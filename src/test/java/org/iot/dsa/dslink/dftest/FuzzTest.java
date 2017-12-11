@@ -1,6 +1,9 @@
 package org.iot.dsa.dslink.dftest;
 
 import com.acuity.iot.dsa.dslink.test.TestLink;
+import difflib.DiffUtils;
+import difflib.Patch;
+import org.apache.commons.lang3.StringUtils;
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSIRequester;
 import org.iot.dsa.dslink.DSLink;
@@ -15,16 +18,19 @@ import org.iot.dsa.dslink.requester.AbstractSubscribeHandler;
 import org.iot.dsa.node.*;
 import org.iot.dsa.time.DSDateTime;
 import org.junit.Test;
-
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.Map.Entry;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
-public class BasicTest {
+public class FuzzTest {
 
     private static final long TEST_STEPS = 1000;
     private static final long SETUP_STEPS = 60;
@@ -67,18 +73,20 @@ public class BasicTest {
     private static long pnt_dev_counter = 0;
     private static final String DELIM = "\n\n== STEP ===============================================================================";
 
+    private static final String MASTER_OUT_FILENAME = "master-output.txt";
+    private static final String TESTING_OUT_FILENAME = "testing-output.txt";
+    
     @Test
-    public void testyMcTestface() {
+    public void runTestAndMatchOutput() throws IOException {
         assertEquals(1.0, PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT, .01);
         staticRootNode = new RootNode();
         DSLink link = new TestLink(staticRootNode);
         DSRuntime.run(link);
 
-        //TODO: Sleep to let things set up, needs to be cleaned
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
-            assert (false);
+            fail(e.getMessage());
         }
 
         requester = link.getConnection().getRequester();
@@ -93,19 +101,41 @@ public class BasicTest {
         }
 
         writer.close();
+        
+        List<String> masterLines = fileToLines(new File(MASTER_OUT_FILENAME));
+        List<String> testingLines = fileToLines(new File(TESTING_OUT_FILENAME));
+        
+        Patch<String> diff = DiffUtils.diff(masterLines, testingLines);
+        List<String> diffText = DiffUtils.generateUnifiedDiff(MASTER_OUT_FILENAME, TESTING_OUT_FILENAME, masterLines, diff, 0);
+        if (!diffText.isEmpty()) {
+            String diffString = StringUtils.join(diffText, '\n');
+            fail("Output does not match:\n" + diffString);
+        }
+    }
+    
+    private List<String> fileToLines(File file) throws IOException {
+        final List<String> lines = new ArrayList<String>();
+        String line;
+        final BufferedReader in = new BufferedReader(new FileReader(file));
+        while ((line = in.readLine()) != null) {
+            lines.add(line);
+        }
+        in.close();
+ 
+        return lines;
     }
 
     private static PrintWriter getNewPrintWriter() {
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter("testing-output.txt", "UTF-8");
+            writer = new PrintWriter(TESTING_OUT_FILENAME, "UTF-8");
         } catch (FileNotFoundException e) {
-            assert (false);
+            fail(e.getMessage());
         } catch (UnsupportedEncodingException e) {
-            assert (false);
+            fail(e.getMessage());
         }
         if (writer == null) {
-            assert (false);
+            fail("Failed to set up PrintWriter");
         }
         return writer;
     }
@@ -115,7 +145,7 @@ public class BasicTest {
             try {
                 Thread.sleep(PING_POLL_RATE * 2);
             } catch (InterruptedException e) {
-                assert (false);
+                fail(e.getMessage());
             }
         }
     }
@@ -222,17 +252,17 @@ public class BasicTest {
         if (rinfo.isAction()) {
             return invokeAction(rinfo);
         } else {
-            assert rinfo.getObject() instanceof TestConnectionNode;
+            assertTrue(rinfo.getObject() instanceof TestConnectionNode);
             DSInfo cinfo = pickAChild(rinfo.getNode(), 2);
             if (cinfo.isAction()) {
                 return invokeAction(cinfo);
             } else {
-                assert cinfo.getObject() instanceof TestDeviceNode;
+                assertTrue(cinfo.getObject() instanceof TestDeviceNode);
                 DSInfo dinfo = pickAChild(cinfo.getNode(), 3);
                 if (dinfo.isAction()) {
                     return invokeAction(dinfo);
                 } else {
-                    assert dinfo.getObject() instanceof TestPointNode;
+                    assertTrue(dinfo.getObject() instanceof TestPointNode);
                     int choice = random.nextInt(10);
                     if (choice == 0) {
                         return invokeAction(dinfo.getNode().getInfo("Remove"));
@@ -582,9 +612,9 @@ public class BasicTest {
 
         String act() {
             if (parent != null) {
-                return BasicTest.subscribeOrUnsubscribe(parent.getInfo(pointName));
+                return FuzzTest.subscribeOrUnsubscribe(parent.getInfo(pointName));
             } else {
-                BasicTest.requester.invoke(path, params, new BasicTest.InvokeHandlerImpl());
+                FuzzTest.requester.invoke(path, params, new FuzzTest.InvokeHandlerImpl());
                 return "Invoking Queued:" + path + " with parameters " + params;
             }
         }

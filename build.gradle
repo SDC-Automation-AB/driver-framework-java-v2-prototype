@@ -15,7 +15,7 @@ build {
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
     maven {
         url 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
@@ -26,6 +26,8 @@ dependencies {
     compile 'org.iot.dsa:dslink-core:+'
     compile 'org.iot.dsa:dslink-websocket-standalone:+'
     compile 'org.glassfish.tyrus.bundles:tyrus-standalone-client:1.13'
+    testCompile 'com.github.bkromhout:java-diff-utils:+'
+    testCompile 'org.apache.commons:commons-lang3:3.4'
     testCompile 'junit:junit:+'
 }
 
