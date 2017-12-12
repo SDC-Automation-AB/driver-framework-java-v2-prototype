@@ -38,3 +38,12 @@ run {
     workingDir project.buildDir
 }
 
+task sourcesJar(group: 'build', type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allJava
+}
+
+artifacts {
+    archives sourcesJar
+}
+
