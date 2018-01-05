@@ -1,6 +1,5 @@
 package org.iot.dsa.dslink.dftest;
 
-import java.util.Map.Entry;
 import java.util.Scanner;
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSLink;

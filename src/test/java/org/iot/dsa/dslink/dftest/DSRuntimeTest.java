@@ -23,7 +23,7 @@ public class DSRuntimeTest implements FailCallback {
         failed = true;
     }
 
-    @Test
+//    @Test
     public void testDSRuntime() {
         for (int i = 0; i < THREAD_COUNT; i++) {
             runners.add(i, new TestRunner(this, ITERATION_LENGTH, MAX_DELAY_ERROR, TOTAL_TEST_TIME));

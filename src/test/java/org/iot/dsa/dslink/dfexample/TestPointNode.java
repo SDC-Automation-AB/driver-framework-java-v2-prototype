@@ -86,16 +86,6 @@ public class TestPointNode extends DFPointNode implements DSIValue {
     }
 
     @Override
-    public DSIValue restore(DSElement element) {
-        return valueOf(element);
-    }
-
-    @Override
-    public DSElement store() {
-        return toElement();
-    }
-
-    @Override
     public DSElement toElement() {
         return value.getValue().toElement();
     }

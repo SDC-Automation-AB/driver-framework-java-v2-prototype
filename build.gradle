@@ -15,18 +15,19 @@ build {
 }
 
 repositories {
-    mavenCentral()
-    mavenLocal()
+    jcenter()
     maven {
         url 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
-    //flatDir { dirs 'dsa' }
+    flatDir { dirs 'dsa' }
 }
 
 dependencies {
     compile 'org.iot.dsa:dslink-core:+'
     compile 'org.iot.dsa:dslink-websocket-standalone:+'
     compile 'org.glassfish.tyrus.bundles:tyrus-standalone-client:1.13'
+    testCompile 'com.github.bkromhout:java-diff-utils:+'
+    testCompile 'org.apache.commons:commons-lang3:3.4'
     testCompile 'junit:junit:+'
 }
 
@@ -35,5 +36,14 @@ applicationDistribution.from(new File(project.projectDir, "/dslink.json"))
 run {
     args System.getProperty("exec.args", "").split()
     workingDir project.buildDir
+}
+
+task sourcesJar(group: 'build', type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allJava
+}
+
+artifacts {
+    archives sourcesJar
 }
 
