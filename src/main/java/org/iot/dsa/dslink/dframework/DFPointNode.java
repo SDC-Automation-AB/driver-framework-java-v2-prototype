@@ -53,14 +53,14 @@ public abstract class DFPointNode extends DFAbstractNode {
     @Override
     protected void onSubscribed() {
         startCarObject();
-        System.out.println("Started Node: " + get("Value"));
+        //System.out.println("Started Node: " + get("Value")); //DEBUG
     }
 
     @Override
     protected void onUnsubscribed() {
         put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED));
         stopCarObject();
-        System.out.println("Stopped Node: " + get("Value"));
+        //System.out.println("Stopped Node: " + get("Value")); //DEBUG
     }
     
     public long getPollRate() {

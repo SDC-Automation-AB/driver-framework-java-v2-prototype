@@ -30,7 +30,7 @@ public abstract class DFAbstractNode extends DSNode {
         //TODO: add full timestamp reporting
         declareDefault(DFHelpers.RESTART, makeRestartAction());
         declareDefault(DFHelpers.REMOVE, makeRemoveAction());
-        declareDefault(DFHelpers.PRINT, makePrintAction());
+        //declareDefault(DFHelpers.PRINT, makePrintAction());
 
         declareDefault(DFHelpers.IS_STOPPED, DSBool.FALSE).setReadOnly(true).setHidden(true);
     }
