@@ -38,7 +38,7 @@ public abstract class EditableNode extends DSNode {
         super.onStable();
     }
     
-    private DSAction makeEditAction() {
+    public DSAction makeEditAction() {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
