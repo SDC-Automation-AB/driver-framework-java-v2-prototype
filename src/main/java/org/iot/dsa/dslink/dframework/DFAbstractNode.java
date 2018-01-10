@@ -3,7 +3,6 @@ package org.iot.dsa.dslink.dframework;
 import org.iot.dsa.dslink.dframework.DFHelpers.DFStatus;
 import org.iot.dsa.node.DSBool;
 import org.iot.dsa.node.DSInfo;
-import org.iot.dsa.node.DSNode;
 import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
@@ -13,7 +12,7 @@ import org.iot.dsa.node.action.DSAction;
  * @author James (Juris) Puchin
  * Created on 10/25/2017
  */
-public abstract class DFAbstractNode extends DSNode {
+public abstract class DFAbstractNode extends EditableNode {
 
     private final DSInfo is_stopped = getInfo(DFHelpers.IS_STOPPED);
     boolean isNodeStopped() {
@@ -84,6 +83,11 @@ public abstract class DFAbstractNode extends DSNode {
             }
         };
         return act;
+    }
+    
+    @Override
+    public void onEdit() {
+        restartNode();
     }
     
     private DSAction makeRemoveAction() {

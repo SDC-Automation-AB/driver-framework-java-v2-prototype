@@ -10,6 +10,9 @@ public class DFHelpers {
     //Knobs
     public static final long DEFAULT_PING_DELAY = 50;
     public static final double RECONNECT_DELAY_MULTIPLIER = 1;
+    
+    public static final String PARAMETERS = "parameters";
+    public static final String NAME = "Name";
 
     static final String STATUS = "Status";
     static final String RESTART = "Restart";
@@ -18,6 +21,7 @@ public class DFHelpers {
     static final String REMOVE = "Remove";
     static final String IS_STOPPED = "Stopped";
     static final String PRINT = "Print";
+    public static final String ACTION_EDIT = "Edit";
 
     public enum DFConnStrat {
         LAZY,

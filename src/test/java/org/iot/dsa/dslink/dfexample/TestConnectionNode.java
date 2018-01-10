@@ -1,23 +1,32 @@
 package org.iot.dsa.dslink.dfexample;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.iot.dsa.dslink.dframework.DFConnectionNode;
 import org.iot.dsa.dslink.dframework.DFHelpers;
+import org.iot.dsa.dslink.dframework.DFUtil;
+import org.iot.dsa.dslink.dframework.ParameterDefinition;
 import org.iot.dsa.dslink.dftest.TestingConnection;
 import org.iot.dsa.node.DSElement;
-import org.iot.dsa.node.DSIObject;
-import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
-import org.iot.dsa.node.DSString;
+import org.iot.dsa.node.DSNode;
 import org.iot.dsa.node.DSValueType;
-import org.iot.dsa.node.action.ActionInvocation;
-import org.iot.dsa.node.action.ActionResult;
-import org.iot.dsa.node.action.DSAction;
 
 public class TestConnectionNode extends DFConnectionNode {
     protected static DFHelpers.DFRefChangeStrat REFRESH_CHANGE_STRAT_DEF = DFHelpers.DFRefChangeStrat.LINEAR;
+    
+    public static List<ParameterDefinition> parameterDefinitions = new ArrayList<ParameterDefinition>();
+    static {
+        parameterDefinitions.add(ParameterDefinition.makeParam("Connection String", DSValueType.STRING, null, null));
+        parameterDefinitions.add(ParameterDefinition.makeParamWithDefault("Ping Rate", DSLong.valueOf(TestConnectionNode.DEFAULT_PING_RATE), null, null));
+    }
+    
+    @Override
+    public List<ParameterDefinition> getParameterDefinitions() {
+        return parameterDefinitions;
+    }
 
-    DSMap parameters;
     TestingConnection connObj;
     
     public TestConnectionNode() {
@@ -28,47 +37,19 @@ public class TestConnectionNode extends DFConnectionNode {
     }
     
     @Override
+    public void addNewInstance(DSNode parent, DSMap newParameters) {
+        String name = newParameters.getString("Name");
+        parent.put(name, new TestConnectionNode(newParameters));
+    }
+    
+    @Override
     protected void declareDefaults() {
         super.declareDefaults();
-        declareDefault("Add Device", makeAddDeviceAction());
-    }
-
-    private DSIObject makeAddDeviceAction() {
-        DSAction act = new DSAction() {
-            @Override
-            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((TestConnectionNode) info.getParent()).addDevice(invocation.getParameters());
-                return null;
-            }
-        };
-        act.addParameter("Name", DSValueType.STRING, null);
-        act.addParameter("Device String", DSValueType.STRING, null);
-        act.addDefaultParameter("Ping Rate", DSLong.valueOf(TestConnectionNode.DEFAULT_PING_RATE), null);
-        return act;
-    }
-
-    void addDevice(DSMap deviceParameters) {
-        String name = deviceParameters.getString("Name");
-        TestDeviceNode device = new TestDeviceNode(deviceParameters);
-        put(name, device);
-        device.startCarObject();
-    }
-
-    @Override
-    protected void onStarted() {
-        if (this.parameters == null) {
-            DSIObject o = get("parameters");
-            if (o instanceof DSMap) {
-                this.parameters = (DSMap) o;
-            }
-        } else {
-            put("parameters", parameters.copy());
-        }
+        declareDefault("Add Device", DFUtil.getAddAction(TestDeviceNode.class));
     }
     
     @Override
     protected void onStable() {
-        put("Edit", makeEditAction());
         super.onStable();
     }
 
@@ -109,28 +90,6 @@ public class TestConnectionNode extends DFConnectionNode {
             return rate.toLong();
         }
         return super.getPingRate();
-    }
-    
-    private DSAction makeEditAction() {
-        DSAction act = new DSAction() {
-            @Override
-            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((TestConnectionNode) info.getParent()).edit(invocation.getParameters());
-                return null;
-            }
-        };
-        DSElement defStr = parameters.get("Connection String");
-        DSElement defPingRate = parameters.get("Ping Rate");
-        act.addDefaultParameter("Connection String", defStr != null ? defStr : DSString.EMPTY, null);
-        act.addDefaultParameter("Ping Rate", defPingRate != null ? defPingRate : DSLong.valueOf(TestDeviceNode.DEFAULT_PING_RATE), null);
-        return act;
-    }
-    
-    private void edit(DSMap newParameters) {
-        this.parameters = newParameters;
-        put("parameters", parameters.copy());
-        put("Edit", makeEditAction());
-        restartNode();
     }
 
 }

@@ -1,21 +1,31 @@
 package org.iot.dsa.dslink.dfexample;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.iot.dsa.dslink.dframework.DFPointNode;
+import org.iot.dsa.dslink.dframework.ParameterDefinition;
 import org.iot.dsa.node.DSElement;
-import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSIValue;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
+import org.iot.dsa.node.DSNode;
 import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.DSValueType;
-import org.iot.dsa.node.action.ActionInvocation;
-import org.iot.dsa.node.action.ActionResult;
-import org.iot.dsa.node.action.DSAction;
 
 public class TestPointNode extends DFPointNode implements DSIValue {
     
-    DSMap parameters;
+    public static List<ParameterDefinition> parameterDefinitions = new ArrayList<ParameterDefinition>();
+    static {
+        parameterDefinitions.add(ParameterDefinition.makeParam("ID", DSValueType.STRING, null, null));
+        parameterDefinitions.add(ParameterDefinition.makeParamWithDefault("Poll Rate", DSLong.valueOf(TestDeviceNode.DEFAULT_PING_RATE), null, null));
+    }
+    
+    @Override
+    public List<ParameterDefinition> getParameterDefinitions() {
+        return parameterDefinitions;
+    }
+    
     private DSInfo value = getInfo("Value");
     
     public TestPointNode() {
@@ -26,15 +36,11 @@ public class TestPointNode extends DFPointNode implements DSIValue {
     }
     
     @Override
-    protected void onStarted() {
-        if (this.parameters == null) {
-            DSIObject o = get("parameters");
-            if (o instanceof DSMap) {
-                this.parameters = (DSMap) o;
-            }
-        } else {
-            put("parameters", parameters.copy());
-        }
+    public void addNewInstance(DSNode parent, DSMap newParameters) {
+        String name = newParameters.getString("Name");
+        TestPointNode point = new TestPointNode(newParameters);
+        parent.put(name, point);
+//        point.startCarObject();
     }
     
     @Override
@@ -45,7 +51,6 @@ public class TestPointNode extends DFPointNode implements DSIValue {
     
     @Override
     protected void onStable() {
-        put("Edit", makeEditAction());
         super.onStable();
     }
     
@@ -56,28 +61,6 @@ public class TestPointNode extends DFPointNode implements DSIValue {
             return rate.toLong();
         }
         return super.getPollRate();
-    }
-    
-    private DSAction makeEditAction() {
-        DSAction act = new DSAction() {
-            @Override
-            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((TestPointNode) info.getParent()).edit(invocation.getParameters());
-                return null;
-            }
-        };
-        DSElement defID = parameters.get("ID");
-        DSElement defPingRate = parameters.get("Ping Rate");
-        act.addDefaultParameter("ID", defID != null ? defID : DSString.EMPTY, null);
-        act.addDefaultParameter("Poll Rate", defPingRate != null ? defPingRate : DSLong.valueOf(TestDeviceNode.DEFAULT_PING_RATE), null);
-        return act;
-    }
-    
-    private void edit(DSMap newParameters) {
-        this.parameters = newParameters;
-        put("parameters", parameters.copy());
-        put("Edit", makeEditAction());
-        restartNode();
     }
 
     @Override
