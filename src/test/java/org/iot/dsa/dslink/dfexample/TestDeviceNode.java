@@ -43,7 +43,7 @@ public class TestDeviceNode extends DFDeviceNode {
         String name = newParameters.getString("Name");
         TestDeviceNode device = new TestDeviceNode(newParameters);
         parent.put(name, device);
-        device.startCarObject();
+//        device.startCarObject();
     }
     
     @Override

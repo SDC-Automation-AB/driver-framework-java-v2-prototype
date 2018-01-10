@@ -35,8 +35,12 @@ public abstract class DFBranchNode extends DFAbstractNode {
     @Override
     protected void onStable() {
         super.onStable();
-        if (isNodeStopped()) put(DFHelpers.START, makeStartStopAction());
-        else put(DFHelpers.STOP, makeStartStopAction());
+        if (isNodeStopped()) { 
+            put(DFHelpers.START, makeStartStopAction());
+        } else {
+            put(DFHelpers.STOP, makeStartStopAction());
+            startCarObject();
+        }
     }
     
     DFBranchDelayCalculator getPingReconnectCalculator(DFBranchCarouselObject carObject) {
