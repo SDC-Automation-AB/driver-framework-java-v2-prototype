@@ -9,7 +9,6 @@ import org.iot.dsa.node.DSIValue;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
-import org.iot.dsa.node.DSNode;
 import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.DSValueType;
 
@@ -33,14 +32,6 @@ public class TestPointNode extends DFPointNode implements DSIValue {
     
     public TestPointNode(DSMap parameters) {
         this.parameters = parameters;
-    }
-    
-    @Override
-    public void addNewInstance(DSNode parent, DSMap newParameters) {
-        String name = newParameters.getString("Name");
-        TestPointNode point = new TestPointNode(newParameters);
-        parent.put(name, point);
-//        point.startCarObject();
     }
     
     @Override

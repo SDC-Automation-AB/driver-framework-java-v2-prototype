@@ -10,12 +10,21 @@ import org.iot.dsa.node.DSValueType;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
+import org.iot.dsa.util.DSException;
 
 public abstract class EditableNode extends DSNode {
     
     public abstract List<ParameterDefinition> getParameterDefinitions();
     
     public DSMap parameters;
+    
+    public EditableNode() {
+        super();
+    }
+    
+    private void setParameters(DSMap parameters) {
+        this.parameters = parameters;
+    }
     
     
     @Override
@@ -57,7 +66,9 @@ public abstract class EditableNode extends DSNode {
         put(DFHelpers.ACTION_EDIT, makeEditAction());
     }
     
-    public abstract void onEdit();
+    public void onEdit() {};
+    
+    public void onAdded() {};
     
     
     public static void verifyParameters(DSMap parameters, List<ParameterDefinition> parameterDefinitions) {
@@ -80,7 +91,7 @@ public abstract class EditableNode extends DSNode {
         }
     }
     
-    // should only be called on default instance
+    // should only be called on dummy instance
     public DSAction getAddAction() {
         final EditableNode inst = this;
         DSAction act = new DSAction() {
@@ -94,7 +105,17 @@ public abstract class EditableNode extends DSNode {
         return act;
     }
     
-    // should only be called on default instance
-    public abstract void addNewInstance(DSNode parent, DSMap newParameters);
+    // should only be called on dummy instance
+    private void addNewInstance(DSNode parent, DSMap newParameters) {
+        String name = newParameters.getString(DFHelpers.NAME);
+        try {
+            EditableNode inst = getClass().newInstance();
+            inst.setParameters(newParameters);
+            parent.put(name, inst);
+            inst.onAdded();
+        } catch (Exception e) {
+            DSException.throwRuntime(e);
+        }
+    }
 
 }

@@ -39,14 +39,6 @@ public class TestDeviceNode extends DFDeviceNode {
     }
     
     @Override
-    public void addNewInstance(DSNode parent, DSMap newParameters) {
-        String name = newParameters.getString("Name");
-        TestDeviceNode device = new TestDeviceNode(newParameters);
-        parent.put(name, device);
-//        device.startCarObject();
-    }
-    
-    @Override
     protected void declareDefaults() {
         super.declareDefaults();
         declareDefault("Add Point", DFUtil.getAddAction(TestPointNode.class));

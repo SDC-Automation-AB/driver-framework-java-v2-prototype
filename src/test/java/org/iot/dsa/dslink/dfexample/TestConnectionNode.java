@@ -10,7 +10,6 @@ import org.iot.dsa.dslink.dftest.TestingConnection;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
-import org.iot.dsa.node.DSNode;
 import org.iot.dsa.node.DSValueType;
 
 public class TestConnectionNode extends DFConnectionNode {
@@ -34,12 +33,6 @@ public class TestConnectionNode extends DFConnectionNode {
     
     public TestConnectionNode(DSMap parameters) {
         this.parameters = parameters;
-    }
-    
-    @Override
-    public void addNewInstance(DSNode parent, DSMap newParameters) {
-        String name = newParameters.getString("Name");
-        parent.put(name, new TestConnectionNode(newParameters));
     }
     
     @Override
