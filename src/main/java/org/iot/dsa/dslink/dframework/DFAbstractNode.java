@@ -89,32 +89,22 @@ public abstract class DFAbstractNode extends EditableNode {
     public void onEdit() {
         restartNode();
     }
-    
-    private DSAction makeRemoveAction() {
-        DSAction act = new DSAction() {
-            @Override
-            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DFAbstractNode) info.getParent()).removeConnection();
-                return null;
-            }
-        };
-        return act;
-    }
 
-    private DSAction makePrintAction() {
-        DSAction act = new DSAction() {
-            @Override
-            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                System.out.println(DFHelpers.getTestingString(info.getParent(), false, true));
-                return null;
-            }
-        };
-        return act;
-    }
+//    private DSAction makePrintAction() {
+//        DSAction act = new DSAction() {
+//            @Override
+//            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
+//                System.out.println(DFHelpers.getTestingString(info.getParent(), false, true));
+//                return null;
+//            }
+//        };
+//        return act;
+//    }
     
-    private void removeConnection() {
+    @Override
+    public void delete() {
         stopCarObject();
-        getParent().remove(getInfo());
+        super.delete();
     }
 
     public void onConnected() {

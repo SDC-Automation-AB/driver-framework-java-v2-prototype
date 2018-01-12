@@ -26,6 +26,10 @@ public abstract class EditableNode extends DSNode {
         this.parameters = parameters;
     }
     
+    @Override
+    protected void declareDefaults() {
+        super.declareDefaults();
+    }
     
     @Override
     protected void onStarted() {
@@ -34,10 +38,14 @@ public abstract class EditableNode extends DSNode {
             if (o instanceof DSMap) {
                 this.parameters = (DSMap) o;
             }
-            verifyParameters(parameters, getParameterDefinitions());
         } else {
-            verifyParameters(parameters, getParameterDefinitions());
             put(DFHelpers.PARAMETERS, parameters.copy());
+        }
+        try {
+            verifyParameters(parameters, getParameterDefinitions());
+        } catch (Exception e) {
+            getParent().remove(getInfo());
+            DSException.throwRuntime(e);
         }
     }
     
@@ -46,6 +54,22 @@ public abstract class EditableNode extends DSNode {
         put(DFHelpers.ACTION_EDIT, makeEditAction());
         super.onStable();
     }
+    
+    public DSAction makeRemoveAction() {
+        DSAction act = new DSAction() {
+            @Override
+            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
+                ((EditableNode) info.getParent()).delete();
+                return null;
+            }
+        };
+        return act;
+    }
+    
+    public void delete() {
+        getParent().remove(getInfo());
+    }
+    
     
     public DSAction makeEditAction() {
         DSAction act = new DSAction() {
@@ -108,6 +132,7 @@ public abstract class EditableNode extends DSNode {
     // should only be called on dummy instance
     private void addNewInstance(DSNode parent, DSMap newParameters) {
         String name = newParameters.getString(DFHelpers.NAME);
+        verifyParameters(newParameters, getParameterDefinitions());
         try {
             EditableNode inst = getClass().newInstance();
             inst.setParameters(newParameters);
