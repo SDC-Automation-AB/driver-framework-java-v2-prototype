@@ -84,11 +84,15 @@ public abstract class EditableNode extends DSNode {
     }
     
     private void edit(DSMap newParameters) {
+        preEdit(newParameters);
         verifyParameters(newParameters, getParameterDefinitions());
         this.parameters = newParameters;
         put(DFHelpers.PARAMETERS, parameters.copy());
         put(DFHelpers.ACTION_EDIT, makeEditAction());
+        onEdit();
     }
+    
+    public void preEdit(DSMap newParameters) {};
     
     public void onEdit() {};
     
