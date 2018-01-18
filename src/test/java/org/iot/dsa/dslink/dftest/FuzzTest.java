@@ -17,14 +17,11 @@ import org.iot.dsa.dslink.requester.AbstractInvokeHandler;
 import org.iot.dsa.dslink.requester.AbstractSubscribeHandler;
 import org.iot.dsa.node.*;
 import org.iot.dsa.time.DSDateTime;
+import org.junit.Before;
 import org.junit.Test;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import org.python.util.PythonInterpreter;
+
+import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -75,9 +72,12 @@ public class FuzzTest {
 
     private static final String MASTER_OUT_FILENAME = "master-output.txt";
     private static final String TESTING_OUT_FILENAME = "testing-output.txt";
-    
-    @Test
-    public void runTestAndMatchOutput() throws IOException {
+    private static final String PY_TEST_DIR = "py_tests"; //WARNING: this is hardcorded in getNewInterp()
+
+    private static PythonInterpreter interp;// = new PythonInterpreter();
+
+/*    @Before
+    public void setUp() {
         assertEquals(1.0, PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT, .01);
         staticRootNode = new RootNode();
         DSLink link = new TestLink(staticRootNode);
@@ -101,10 +101,13 @@ public class FuzzTest {
         }
 
         writer.close();
-        
+    }*/
+
+    @Test
+    public void exactMatchTest() throws IOException {
         List<String> masterLines = fileToLines(new File(MASTER_OUT_FILENAME));
         List<String> testingLines = fileToLines(new File(TESTING_OUT_FILENAME));
-        
+
         Patch<String> diff = DiffUtils.diff(masterLines, testingLines);
         List<String> diffText = DiffUtils.generateUnifiedDiff(MASTER_OUT_FILENAME, TESTING_OUT_FILENAME, masterLines, diff, 0);
         if (!diffText.isEmpty()) {
@@ -112,7 +115,120 @@ public class FuzzTest {
             fail("Output does not match:\n" + diffString);
         }
     }
-    
+
+    /**
+     * This tests whether the python testing framework is working correctly
+     */
+    @Test
+    public void pythonFrameworkTest() throws Exception {
+        String t_name = "helloo_world.py";
+        runPythonTest(t_name);
+    }
+
+    @Test
+    public void connected_was_subbed() throws Exception {
+        String t_name = "connected_was_subbed.py";
+        runPythonTest(t_name);
+    }
+
+    @Test
+    public void parent_connected() throws Exception {
+        String t_name = "parent_connected.py";
+        runPythonTest(t_name);
+    }
+
+    @Test
+    public void subbed_is_connected() throws Exception {
+        String t_name = "subbed_is_connected.py";
+        runPythonTest(t_name);
+    }
+
+    @Test
+    public void subbed_is_failed() throws Exception {
+        String t_name = "subbed_is_failed.py";
+        runPythonTest(t_name);
+    }
+
+    @Test
+    public void unsubbed_is_stopped() throws Exception {
+        String t_name = "unsubbed_is_stopped.py";
+        runPythonTest(t_name);
+    }
+
+    @Test
+    public void value_updates() throws Exception {
+        String t_name = "value_updates.py";
+        runPythonTest(t_name);
+    }
+
+    @Test
+    public void pyTest() {
+
+
+        String[] testList = {
+                "helloo_world.py",
+                "connected_was_subbed.py",
+                "parent_connected.py",
+                "subbed_is_connected.py",
+                "subbed_is_failed.py",
+                "unsubbed_is_stopped.py",
+                "value_updates.py"};
+
+        //This sets up the
+/*        interp.exec("import os\n" +
+                "os.chdir(\"py_tests\")\n" +
+                "import sys\n" +
+                "sys.path.append(os.getcwd())\n");*/
+
+        for (String t_name : testList) {
+            try {
+                runPythonTest(t_name);
+            } catch (Exception e) {
+                System.out.println("Opps" + e);
+            }
+/*            try {
+                runFile(PY_TEST_DIR + "\\" + t_name, getNewInterp());
+            } catch (Exception e) {
+                System.out.println("Opps" + e);
+            }*/
+        }
+    }
+
+    static void runPythonTest(String fileName) throws Exception {
+        String exec = PY_TEST_DIR + "\\" + fileName;
+        PythonInterpreter terp = getNewInterp();
+        runFile(exec, terp);
+    }
+
+    static PythonInterpreter getNewInterp() {
+        if (interp == null) {
+            interp = new PythonInterpreter();
+
+            //This sets up the interpreter to understand scripts
+            interp.exec("import os\n" +
+                    "os.chdir(\"py_tests\")\n" +
+                    "import sys\n" +
+                    "sys.path.append(os.getcwd())\n");
+        }
+        return interp;
+    }
+
+    static void runFile(String str, PythonInterpreter interp) throws Exception{
+        File f = new File(str);
+        try {
+            InputStream s = new FileInputStream(f);
+            try {
+                interp.execfile(s);
+                System.out.println("Test " + str + ": PASSED!");
+            } catch (Exception e) {
+                System.out.println("Test " + str + ": FAILED!\n" + e);
+                throw e;
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found: " + e);
+        }
+    }
+
     private List<String> fileToLines(File file) throws IOException {
         final List<String> lines = new ArrayList<String>();
         String line;
@@ -121,7 +237,7 @@ public class FuzzTest {
             lines.add(line);
         }
         in.close();
- 
+
         return lines;
     }
 
@@ -619,4 +735,5 @@ public class FuzzTest {
             }
         }
     }
+
 }
