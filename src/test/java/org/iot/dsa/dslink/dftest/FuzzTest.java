@@ -72,9 +72,9 @@ public class FuzzTest {
 
     private static final String MASTER_OUT_FILENAME = "master-output.txt";
     private static final String TESTING_OUT_FILENAME = "testing-output.txt";
-    private static final String PY_TEST_DIR = "py_tests"; //WARNING: this is hardcorded in getNewInterp()
+    private static final String PY_TEST_DIR = "py_tests"; //WARNING: this is hardcorded in getPyInterpreter()
 
-    private static PythonInterpreter interp;// = new PythonInterpreter();
+    private static PythonInterpreter interp;
     private static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
 
     @Before
@@ -165,46 +165,13 @@ public class FuzzTest {
         runPythonTest(t_name);
     }
 
-//    @Test
-//    public void pyTest() {
-//
-//
-//        String[] testList = {
-//                "helloo_world.py",
-//                "connected_was_subbed.py",
-//                "parent_connected.py",
-//                "subbed_is_connected.py",
-//                "subbed_is_failed.py",
-//                "unsubbed_is_stopped.py",
-//                "value_updates.py"};
-//
-//        //This sets up the
-///*        interp.exec("import os\n" +
-//                "os.chdir(\"py_tests\")\n" +
-//                "import sys\n" +
-//                "sys.path.append(os.getcwd())\n");*/
-//
-//        for (String t_name : testList) {
-//            try {
-//                runPythonTest(t_name);
-//            } catch (Exception e) {
-//                System.out.println("Opps" + e);
-//            }
-///*            try {
-//                runFile(PY_TEST_DIR + "\\" + t_name, getNewInterp());
-//            } catch (Exception e) {
-//                System.out.println("Opps" + e);
-//            }*/
-//        }
-//    }
-
     private static void runPythonTest(String fileName) throws Exception {
         String exec = PY_TEST_DIR + "\\" + fileName;
-        PythonInterpreter terp = getNewInterp();
+        PythonInterpreter terp = getPyInterpreter();
         runFile(exec, terp);
     }
 
-    private static PythonInterpreter getNewInterp() {
+    private static PythonInterpreter getPyInterpreter() {
         if (interp == null) {
             interp = new PythonInterpreter();
 
