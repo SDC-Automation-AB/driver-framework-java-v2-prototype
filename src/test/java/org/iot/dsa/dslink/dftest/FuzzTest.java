@@ -195,7 +195,7 @@ public class FuzzTest {
             interp.execfile(s);
             System.out.println("Test " + str + ": PASSED!");
         } catch (Exception e) {
-            System.out.println("Test " + str + ": FAILED!\n" + e);
+            System.out.println("Test " + str + ": FAILED!");
             throw e;
         }
     }
