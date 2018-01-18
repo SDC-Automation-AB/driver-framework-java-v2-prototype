@@ -6,7 +6,6 @@ class Step:
         self.dev_tree = TreeNode(None, None)
         self.dsa_tree = TreeNode(None, None)
 
-
 class TreeNode:
     def __init__(self, parent, line):
         self.children = []
@@ -19,7 +18,6 @@ class TreeNode:
             self.children[-1].append(line[1:])
         else:
             self.children.append(TreeNode(self, line))
-
 
 def parse(filename):
     f = file(filename)
@@ -48,7 +46,6 @@ def parse(filename):
             dsa_done = False
     return steps
 
-
 def find_in_dsa_tree(tree, path):
     assert len(path) <= 3
     assert len(tree.children) == 1
@@ -69,7 +66,6 @@ def find_in_dsa_tree(tree, path):
                             return point
     return None
 
-
 def find_in_dev_tree(tree, path):
     assert len(path) <= 3
     if len(path) == 0:
@@ -86,7 +82,6 @@ def find_in_dev_tree(tree, path):
                         if point.value.startswith(path[2]):
                             return point
     return None
-
 
 def get_all_dsa_points(tree):
     assert len(tree.children) == 1

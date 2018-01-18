@@ -72,10 +72,10 @@ public class FuzzTest {
 
     private static final String MASTER_OUT_FILENAME = "master-output.txt";
     private static final String TESTING_OUT_FILENAME = "testing-output.txt";
-    private static final String PY_TEST_DIR = "py_tests"; //WARNING: this is hardcorded in getPyInterpreter()
+    private static final String PY_TEST_DIR = "py_tests";
 
     private static PythonInterpreter interp;
-    private static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
+    private static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
 
     @Before
     public void setUp() {
@@ -181,7 +181,7 @@ public class FuzzTest {
 
             //This sets up the interpreter to understand scripts
             interp.exec("import os\n" +
-                    "os.chdir(\"py_tests\")\n" +
+                    "os.chdir(\"" + PY_TEST_DIR + "\")\n" +
                     "import sys\n" +
                     "sys.path.append(os.getcwd())\n");
         }
