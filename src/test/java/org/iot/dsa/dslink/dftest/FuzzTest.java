@@ -132,37 +132,60 @@ public class FuzzTest {
         String t_name = "helloo_world.py";
         runPythonTest(t_name);
     }
-
+    
+    /**
+     * Checks that, at any point in time, if a point is not "Stopped", then it was subscribed 
+     * to at some point in the past, and was not unsubscribed from since then.
+     */
     @Test
     public void connected_was_subbed() throws Exception {
         String t_name = "connected_was_subbed.py";
         runPythonTest(t_name);
     }
-
+    
+    /**
+     * Checks that whenever a point or device node is "Connected" or "Failed", its parent is "Connected"
+     */
     @Test
     public void parent_connected() throws Exception {
         String t_name = "parent_connected.py";
         runPythonTest(t_name);
     }
 
+    /**
+     * After a point node is subscribed to, checks that if its parent is "Connected" and the
+     * corresponding point exists on the device, then the node's status is "Connected" and its value
+     * is the same as the value of the point on the device
+     */
     @Test
     public void subbed_is_connected() throws Exception {
         String t_name = "subbed_is_connected.py";
         runPythonTest(t_name);
     }
 
+    /**
+     * After a point node is subscribed to, checks that if its parent is "Connected" and the
+     * corresponding point doesn't exist on the device, then the node's status is "Failed"
+     */
     @Test
     public void subbed_is_failed() throws Exception {
         String t_name = "subbed_is_failed.py";
         runPythonTest(t_name);
     }
 
+    /**
+     * After a point node is unsubscribed from, checks that if its parent is "Connected", then the
+     * node's status is "Stopped"
+     */
     @Test
     public void unsubbed_is_stopped() throws Exception {
         String t_name = "unsubbed_is_stopped.py";
         runPythonTest(t_name);
     }
 
+    /**
+     * Checks that active ("Connected") point nodes update their values correctly
+     */
     @Test
     public void value_updates() throws Exception {
         String t_name = "value_updates.py";
