@@ -107,6 +107,10 @@ public class FuzzTest {
         }
     }
 
+    /**
+     * Checks whether the output file is an exact match to the golden output.
+     * @throws IOException
+     */
     @Test
     public void exactMatchTest() throws IOException {
         List<String> masterLines = fileToLines(new File(MASTER_OUT_FILENAME));
@@ -184,19 +188,15 @@ public class FuzzTest {
         return interp;
     }
 
-    static void runFile(String str, PythonInterpreter interp) throws Exception{
+    static void runFile(String str, PythonInterpreter interp) throws Exception {
         File f = new File(str);
+        InputStream s = new FileInputStream(f);
         try {
-            InputStream s = new FileInputStream(f);
-            try {
-                interp.execfile(s);
-                System.out.println("Test " + str + ": PASSED!");
-            } catch (Exception e) {
-                System.out.println("Test " + str + ": FAILED!\n" + e);
-                throw e;
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found: " + e);
+            interp.execfile(s);
+            System.out.println("Test " + str + ": PASSED!");
+        } catch (Exception e) {
+            System.out.println("Test " + str + ": FAILED!\n" + e);
+            throw e;
         }
     }
 
@@ -404,8 +404,8 @@ public class FuzzTest {
                 for (String devName : getDFNodeNameSet(parent, DFDeviceNode.class)) {
                     dev_node_counter--;
                     DSNode devNode = parent.getNode(devName);
-                    for (String pointName : getDFNodeNameSet(devNode, DFPointNode.class)){
-                        pnt_node_counter --;
+                    for (String pointName : getDFNodeNameSet(devNode, DFPointNode.class)) {
+                        pnt_node_counter--;
                         SubscribeHandlerImpl handle = subscriptions.remove(devNode.getInfo(pointName));
                         if (handle != null) handle.getStream().closeStream();
                     }
@@ -681,7 +681,6 @@ public class FuzzTest {
 
         /**
          * Constructor for doing an action
-         *
          */
         DelayedActionOrSub(String path, DSMap params) {
             this.path = path;
@@ -690,7 +689,6 @@ public class FuzzTest {
 
         /**
          * Constructor for subscribing or unsubscribing
-         *
          */
         DelayedActionOrSub(DSNode parent, String pointName) {
             this.parent = parent;
