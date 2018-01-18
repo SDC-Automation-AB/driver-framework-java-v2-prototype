@@ -109,7 +109,7 @@ public class FuzzTest {
 
     /**
      * Checks whether the output file is an exact match to the golden output.
-     * @throws IOException
+     * @throws IOException Failed to find the required inputs/outputs
      */
     @Test
     public void exactMatchTest() throws IOException {
@@ -271,19 +271,26 @@ public class FuzzTest {
         return thingDone;
     }
 
+    /**
+     * Perform an action on the mock device tree
+     * @return Return a description of the action performed
+     */
     private static String createOrModifyDevice() {
         double rand = random.nextDouble();
+        //Create a connection
         if ((rand < PROB_ROOT || conn_dev_counter < MIN_CON) && conn_dev_counter < MAX_CON) {
             String c = generateConnString();
             addConn(c);
             conn_dev_counter++;
             return "Creating connection " + c;
+        //Or choose a connection to act on
         } else {
             int rrand = random.nextInt(TestingConnection.connections.size());
             Entry<String, TestingConnection> centry = (Entry<String, TestingConnection>) TestingConnection.connections.entrySet().toArray()[rrand];
             String c = centry.getKey();
             TestingConnection conn = centry.getValue();
             rand = random.nextDouble();
+            //Act on the connection (create new device or flip state)
             if (((rand < PROB_CON / (1 - PROB_ROOT)) || dev_dev_counter < MIN_DEV)) {
                 rand = random.nextDouble();
                 if ((rand >= PROB_SWAP_CON_STATE || dev_dev_counter < MIN_DEV) && dev_dev_counter < MAX_DEV) {
@@ -292,9 +299,9 @@ public class FuzzTest {
                     dev_dev_counter++;
                     return "Creating device " + c + ":" + d;
                 } else {
-                    conn.shouldSucceed = !conn.shouldSucceed;
-                    return "Setting ShouldSucceed to " + conn.shouldSucceed + " on " + c;
+                    return "Setting ShouldSucceed to " + flipConn(conn) + " on " + c;
                 }
+            //Or choose a device to act on
             } else {
                 int devCount = conn.devices.size();
                 if (devCount == 0) return createOrModifyDevice();
@@ -303,6 +310,7 @@ public class FuzzTest {
                 String d = dentry.getKey();
                 TestingDevice dev = dentry.getValue();
                 rand = random.nextDouble();
+                //Act on a device (create a new point or flip state)
                 if (((rand < PROB_DEV / (1 - PROB_ROOT - PROB_CON)) || pnt_dev_counter < MIN_PNT)) {
                     if ((rand >= PROB_SWAP_DEV_STATE || pnt_dev_counter < MIN_PNT) && pnt_dev_counter < MAX_PNT) {
                         String p = generatePointString();
@@ -311,15 +319,16 @@ public class FuzzTest {
                         pnt_dev_counter++;
                         return "Creating new point " + c + ":" + d + ":" + p + " to " + v;
                     } else {
-                        dev.active = !dev.active;
-                        return "Setting Active to " + dev.active + " on " + c + ":" + d;
+                        return "Setting Active to " + flipDev(dev) + " on " + c + ":" + d;
                     }
+                //Or choose a point to act on
                 } else {
                     int pointCount = dev.points.size();
                     if (pointCount == 0) return createOrModifyDevice();
                     int drand = random.nextInt(pointCount);
                     String p = (String) dev.points.keySet().toArray()[drand];
                     rand = random.nextDouble();
+                    //Either delete or change the value of a point
                     if (rand < PROB_REMOVE_PNT || pnt_dev_counter > MAX_PNT) {
                         dev.points.remove(p);
                         pnt_dev_counter--;
@@ -586,6 +595,26 @@ public class FuzzTest {
 
     private static String generatePointValue() {
         return DFHelpers.adjectives[random.nextInt(DFHelpers.adjectives.length)];
+    }
+
+    /**
+     * Flip connection state
+     * @param conn
+     * @return return new state
+     */
+    private static boolean flipConn(TestingConnection conn) {
+        conn.shouldSucceed = !conn.shouldSucceed;
+        return conn.shouldSucceed;
+    }
+
+    /**
+     * Flip device state
+     * @param dev
+     * @return return new state
+     */
+    private static boolean flipDev(TestingDevice dev) {
+        dev.active = !dev.active;
+        return dev.active;
     }
 
     private static TestingConnection addConn(String c) {
