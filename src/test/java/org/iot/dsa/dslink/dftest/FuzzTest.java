@@ -306,7 +306,7 @@ public class FuzzTest {
                 int devCount = conn.devices.size();
                 if (devCount == 0) return createOrModifyDevice();
                 int crand = random.nextInt(devCount);
-                Entry<String, TestingDevice> dentry = (Entry<String, TestingDevice>) conn.devices.entrySet().toArray()[crand];
+                Entry <String, TestingDevice> dentry = (Entry<String, TestingDevice>) conn.devices.entrySet().toArray()[crand];
                 String d = dentry.getKey();
                 TestingDevice dev = dentry.getValue();
                 rand = random.nextDouble();
@@ -315,27 +315,27 @@ public class FuzzTest {
                     if ((rand >= PROB_SWAP_DEV_STATE || pnt_dev_counter < MIN_PNT) && pnt_dev_counter < MAX_PNT) {
                         String p = generatePointString();
                         String v = generatePointValue();
-                        dev.points.put(p, v);
+                        dev.addPoint(p, v);
                         pnt_dev_counter++;
                         return "Creating new point " + c + ":" + d + ":" + p + " to " + v;
                     } else {
-                        return "Setting Active to " + flipDev(dev) + " on " + c + ":" + d;
+                        return "Setting Active to " + dev.flipDev() + " on " + c + ":" + d;
                     }
                 //Or choose a point to act on
                 } else {
-                    int pointCount = dev.points.size();
+                    int pointCount = dev.getPointCount();
                     if (pointCount == 0) return createOrModifyDevice();
                     int drand = random.nextInt(pointCount);
-                    String p = (String) dev.points.keySet().toArray()[drand];
+                    String p = dev.getNthPointName(drand);
                     rand = random.nextDouble();
                     //Either delete or change the value of a point
                     if (rand < PROB_REMOVE_PNT || pnt_dev_counter > MAX_PNT) {
-                        dev.points.remove(p);
+                        dev.removePoint(p);
                         pnt_dev_counter--;
                         return "Removing point " + c + ":" + d + ":" + p;
                     } else {
                         String v = generatePointValue();
-                        dev.points.put(p, v);
+                        dev.changePointValue(p, v);
                         return "Setting point " + c + ":" + d + ":" + p + " to " + v;
                     }
                 }
@@ -518,13 +518,13 @@ public class FuzzTest {
         return nodes;
     }
 
-    private static String getChildNameStringHelper(Object[] possibleNames, Set<String> nodes) {
+    private static String getChildNameStringHelper(String[] possibleNames, Set<String> nodes) {
         int size = possibleNames.length;
         if (random.nextDouble() >= PROB_OF_BAD_CONFIG) {
             int choice = size > 0 ? random.nextInt(size) : 0;
             for (int i = 0; i < size; i++) {
                 int nextIdx = (i + choice) % size;
-                String name = (String) possibleNames[nextIdx];
+                String name = possibleNames[nextIdx];
                 if (!nodes.contains(name)) return name;
             }
         }
@@ -533,7 +533,7 @@ public class FuzzTest {
 
     private static String getConnStringToAdd(DSNode parent) {
         Set<String> nodes = getDFNodeNameSet(parent, DFConnectionNode.class);
-        Object[] possibleNames = TestingConnection.connections.keySet().toArray();
+        String[] possibleNames = (String[]) TestingConnection.connections.keySet().toArray();
         String name = getChildNameStringHelper(possibleNames, nodes);
         return name != null ? name : generateConnString();
     }
@@ -543,7 +543,7 @@ public class FuzzTest {
         TestingConnection conn = TestingConnection.connections.get(parent.getName());
         String name = null;
         if (conn != null) {
-            Object[] possibleNames = conn.devices.keySet().toArray();
+            String[] possibleNames = (String[]) conn.devices.keySet().toArray();
             name = getChildNameStringHelper(possibleNames, nodes);
         }
         return name != null ? name : generateDevString();
@@ -555,7 +555,7 @@ public class FuzzTest {
         TestingDevice dev = conn != null ? conn.devices.get(parent.getName()) : null;
         String name = null;
         if (dev != null) {
-            Object[] possibleNames = dev.points.keySet().toArray();
+            String[] possibleNames = dev.getNameSet();
             name = getChildNameStringHelper(possibleNames, nodes);
         }
         return name != null ? name : generatePointString();
@@ -605,16 +605,6 @@ public class FuzzTest {
     private static boolean flipConn(TestingConnection conn) {
         conn.shouldSucceed = !conn.shouldSucceed;
         return conn.shouldSucceed;
-    }
-
-    /**
-     * Flip device state
-     * @param dev
-     * @return return new state
-     */
-    private static boolean flipDev(TestingDevice dev) {
-        dev.active = !dev.active;
-        return dev.active;
     }
 
     private static TestingConnection addConn(String c) {

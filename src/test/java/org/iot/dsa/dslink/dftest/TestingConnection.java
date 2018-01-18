@@ -63,17 +63,17 @@ public class TestingConnection {
         } else if (!devices.containsValue(device)) {
             throw new TestingException("Device not found");
         } else {
-            return device.active;
+            return device.isActive();
         }
     }
     
     public String readPoint(TestingDevice device, String pointId) throws TestingException {
         if (!pingDevice(device)) {
             throw new TestingException("Device not responding");
-        } else if (!device.points.containsKey(pointId)) {
+        } else if (!device.hasPoint(pointId)) {
             throw new TestingException("Point not found");
         } else {
-            return device.points.get(pointId);
+            return device.getPointValue(pointId);
         }
     }
     
@@ -107,14 +107,14 @@ public class TestingConnection {
                 sb.append('\t');
                 sb.append(dentry.getKey());
                 sb.append(" : ");
-                sb.append(d.active);
+                sb.append(d.isActive());
                 sb.append('\n');
-                for (Entry<String, String> pentry: d.points.entrySet()) {
+                for (String pname: d.getNameSet()) {
                     sb.append('\t');
                     sb.append('\t');
-                    sb.append(pentry.getKey());
+                    sb.append(pname);
                     sb.append(" : ");
-                    sb.append(pentry.getValue());
+                    sb.append(d.getPointValue(pname));
                     sb.append('\n');
                 }
             }

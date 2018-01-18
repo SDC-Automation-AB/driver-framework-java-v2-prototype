@@ -19,18 +19,18 @@ public class ManualTest implements Runnable {
         TestingDevice trebuchet = new TestingDevice();
         daniel.devices.put("Trebuchet", trebuchet);
         
-        teapot.points.put("Temperature", "178");
-        teapot.points.put("Target", "212");
-        teapot.points.put("WaterLevel", "6");
+        teapot.addPoint("Temperature", "178");
+        teapot.addPoint("Target", "212");
+        teapot.addPoint("WaterLevel", "6");
         
-        toaster.points.put("Setting", "Bagel");
-        toaster.points.put("MinutesRemaining", "0");
-        toaster.points.put("Color", "Red");
+        toaster.addPoint("Setting", "Bagel");
+        toaster.addPoint("MinutesRemaining", "0");
+        toaster.addPoint("Color", "Red");
         
-        trebuchet.points.put("Loaded", "True");
-        trebuchet.points.put("LaunchAngle", "45");
-        trebuchet.points.put("LaunchDirection", "North-East");
-        trebuchet.points.put("Projectile", "Rock");
+        trebuchet.addPoint("Loaded", "True");
+        trebuchet.addPoint("LaunchAngle", "45");
+        trebuchet.addPoint("LaunchDirection", "North-East");
+        trebuchet.addPoint("Projectile", "Rock");
         
         DSRuntime.run(new ManualTest());
         
@@ -105,7 +105,7 @@ public class ManualTest implements Runnable {
         if (conn != null) {
             TestingDevice dev = conn.devices.get(d);
             if (dev != null) {
-                dev.active = active;
+                dev.setDevActive(active);
                 return c + ":" + d + " - active set to " + active;
             } else {
                 return c + ":" + d + " not found";
@@ -120,7 +120,7 @@ public class ManualTest implements Runnable {
         if (conn != null) {
             TestingDevice dev = conn.devices.get(d);
             if (dev != null) {
-                dev.points.put(p, v);
+                dev.addPoint(p, v);
                 return c + ":" + d + ":" + p + " set to " + v;
             } else {
                 return c + ":" + d + " not found";
@@ -135,7 +135,7 @@ public class ManualTest implements Runnable {
         if (conn != null) {
             TestingDevice dev = conn.devices.get(d);
             if (dev != null) {
-                dev.points.remove(p);
+                dev.removePoint(p);
                 return c + ":" + d + ":" + p + " removed";
             } else {
                 return c + ":" + d + " not found";
