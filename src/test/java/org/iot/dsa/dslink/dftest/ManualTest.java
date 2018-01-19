@@ -9,15 +9,11 @@ public class ManualTest implements Runnable {
     static final Object monitor = new Object();
 
     public static void main(String[] args) {
-        TestingConnection daniel = new TestingConnection();
-        TestingConnection.connections.put("Daniel", daniel);
-        
-        TestingDevice teapot = new TestingDevice();
-        daniel.devices.put("Teapot", teapot);
-        TestingDevice toaster = new TestingDevice();
-        daniel.devices.put("Toaster", toaster);
-        TestingDevice trebuchet = new TestingDevice();
-        daniel.devices.put("Trebuchet", trebuchet);
+        TestingConnection daniel = TestingConnection.addNewConnection("Daniel");
+
+        TestingDevice teapot = daniel.addNewDevice("Teapot");
+        TestingDevice toaster = daniel.addNewDevice("Toaster");
+        TestingDevice trebuchet = daniel.addNewDevice("Trebuchet");
         
         teapot.addPoint("Temperature", "178");
         teapot.addPoint("Target", "212");
@@ -91,9 +87,9 @@ public class ManualTest implements Runnable {
     }
     
     private static String setConnShouldSucceed(String c, boolean shouldSucceed) {
-        TestingConnection conn = TestingConnection.connections.get(c);
+        TestingConnection conn = TestingConnection.getConnection(c);
         if (conn != null) {
-            conn.shouldSucceed = shouldSucceed;
+            conn.setPowerState(shouldSucceed);
             return c + " - shouldSucceed set to " + shouldSucceed;
         } else {
             return c + " not found";
@@ -101,9 +97,9 @@ public class ManualTest implements Runnable {
     }
     
     private static String setDevActive(String c, String d, boolean active) {
-        TestingConnection conn = TestingConnection.connections.get(c);
+        TestingConnection conn = TestingConnection.getConnection(c);
         if (conn != null) {
-            TestingDevice dev = conn.devices.get(d);
+            TestingDevice dev = conn.getDevice(d);
             if (dev != null) {
                 dev.setDevActive(active);
                 return c + ":" + d + " - active set to " + active;
@@ -116,9 +112,9 @@ public class ManualTest implements Runnable {
     }
     
     private static String setValue(String c, String d, String p, String v) {
-        TestingConnection conn = TestingConnection.connections.get(c);
+        TestingConnection conn = TestingConnection.getConnection(c);
         if (conn != null) {
-            TestingDevice dev = conn.devices.get(d);
+            TestingDevice dev = conn.getDevice(d);
             if (dev != null) {
                 dev.addPoint(p, v);
                 return c + ":" + d + ":" + p + " set to " + v;
@@ -131,9 +127,9 @@ public class ManualTest implements Runnable {
     }
     
     private static String clearValue(String c, String d, String p) {
-        TestingConnection conn = TestingConnection.connections.get(c);
+        TestingConnection conn = TestingConnection.getConnection(c);
         if (conn != null) {
-            TestingDevice dev = conn.devices.get(d);
+            TestingDevice dev = conn.getDevice(d);
             if (dev != null) {
                 dev.removePoint(p);
                 return c + ":" + d + ":" + p + " removed";

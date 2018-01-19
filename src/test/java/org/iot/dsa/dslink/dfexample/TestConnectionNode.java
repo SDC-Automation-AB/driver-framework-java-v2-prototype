@@ -50,7 +50,7 @@ public class TestConnectionNode extends DFConnectionNode {
     public boolean createConnection() {
         try {
             String cs = parameters.getString("Connection String");
-            connObj = TestingConnection.getConnection(cs);
+            connObj = TestingConnection.findConnection(cs);
             connObj.connect();
             return true;
         } catch (Exception e) {

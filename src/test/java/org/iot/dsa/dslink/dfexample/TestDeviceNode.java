@@ -54,7 +54,7 @@ public class TestDeviceNode extends DFDeviceNode {
         boolean success;
         try {
             String devStr = parameters.getString("Device String");
-            devObj = getParentNode().connObj.getDevice(devStr);
+            devObj = getParentNode().connObj.findDevice(devStr);
             success = getParentNode().connObj.pingDevice(devObj);
         } catch (Exception e) {
             success = false;

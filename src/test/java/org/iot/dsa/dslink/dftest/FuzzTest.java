@@ -24,6 +24,7 @@ import org.python.util.PythonInterpreter;
 import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
+import org.iot.dsa.dslink.dftest.TestingConnection.TestingException;
 
 import static org.junit.Assert.*;
 
@@ -192,6 +193,8 @@ public class FuzzTest {
         runPythonTest(t_name);
     }
 
+    //TODO: write python test to check that when a testing conn/dev/point is deactivated, it's corresponding node is failed
+
     private static void runPythonTest(String fileName) throws Exception {
         String exec = PY_TEST_DIR + "\\" + fileName;
         PythonInterpreter terp = getPyInterpreter();
@@ -303,35 +306,33 @@ public class FuzzTest {
         //Create a connection
         if ((rand < PROB_ROOT || conn_dev_counter < MIN_CON) && conn_dev_counter < MAX_CON) {
             String c = generateConnString();
-            addConn(c);
+            TestingConnection.addNewConnection(c);
             conn_dev_counter++;
             return "Creating connection " + c;
         //Or choose a connection to act on
         } else {
-            int rrand = random.nextInt(TestingConnection.connections.size());
-            Entry<String, TestingConnection> centry = (Entry<String, TestingConnection>) TestingConnection.connections.entrySet().toArray()[rrand];
-            String c = centry.getKey();
-            TestingConnection conn = centry.getValue();
+            int rrand = random.nextInt(TestingConnection.getConnectionCount());
+            String c = TestingConnection.getNthConnectionName(rrand);
+            TestingConnection conn = TestingConnection.getConnection(c);
             rand = random.nextDouble();
             //Act on the connection (create new device or flip state)
             if (((rand < PROB_CON / (1 - PROB_ROOT)) || dev_dev_counter < MIN_DEV)) {
                 rand = random.nextDouble();
                 if ((rand >= PROB_SWAP_CON_STATE || dev_dev_counter < MIN_DEV) && dev_dev_counter < MAX_DEV) {
                     String d = generateDevString();
-                    addDev(conn, d);
+                    conn.addNewDevice(d);
                     dev_dev_counter++;
                     return "Creating device " + c + ":" + d;
                 } else {
-                    return "Setting ShouldSucceed to " + flipConn(conn) + " on " + c;
+                    return "Setting ShouldSucceed to " + conn.flipPowerSwitch() + " on " + c;
                 }
             //Or choose a device to act on
             } else {
-                int devCount = conn.devices.size();
+                int devCount = conn.getDeviceCount();
                 if (devCount == 0) return createOrModifyDevice();
                 int crand = random.nextInt(devCount);
-                Entry <String, TestingDevice> dentry = (Entry<String, TestingDevice>) conn.devices.entrySet().toArray()[crand];
-                String d = dentry.getKey();
-                TestingDevice dev = dentry.getValue();
+                String d = conn.getNthDeviceName(crand);
+                TestingDevice dev = conn.getDevice(d);
                 rand = random.nextDouble();
                 //Act on a device (create a new point or flip state)
                 if (((rand < PROB_DEV / (1 - PROB_ROOT - PROB_CON)) || pnt_dev_counter < MIN_PNT)) {
@@ -556,17 +557,17 @@ public class FuzzTest {
 
     private static String getConnStringToAdd(DSNode parent) {
         Set<String> nodes = getDFNodeNameSet(parent, DFConnectionNode.class);
-        String[] possibleNames = (String[]) TestingConnection.connections.keySet().toArray();
+        String[] possibleNames = TestingConnection.getConnectionList();
         String name = getChildNameStringHelper(possibleNames, nodes);
         return name != null ? name : generateConnString();
     }
 
     private static String getDevStringToAdd(DSNode parent) {
         Set<String> nodes = getDFNodeNameSet(parent, DFDeviceNode.class);
-        TestingConnection conn = TestingConnection.connections.get(parent.getName());
+        TestingConnection conn = TestingConnection.getConnection(parent.getName());
         String name = null;
         if (conn != null) {
-            String[] possibleNames = (String[]) conn.devices.keySet().toArray();
+            String[] possibleNames = conn.getDeviceList();
             name = getChildNameStringHelper(possibleNames, nodes);
         }
         return name != null ? name : generateDevString();
@@ -574,8 +575,8 @@ public class FuzzTest {
 
     private static String getPointStringToAdd(DSNode parent) {
         Set<String> nodes = getDFNodeNameSet(parent, DFPointNode.class);
-        TestingConnection conn = TestingConnection.connections.get(parent.getParent().getName());
-        TestingDevice dev = conn != null ? conn.devices.get(parent.getName()) : null;
+        TestingConnection conn = TestingConnection.getConnection(parent.getParent().getName());
+        TestingDevice dev = conn != null ? conn.getDevice(parent.getName()) : null;
         String name = null;
         if (dev != null) {
             String[] possibleNames = dev.getNameSet();
@@ -618,28 +619,6 @@ public class FuzzTest {
 
     private static String generatePointValue() {
         return DFHelpers.adjectives[random.nextInt(DFHelpers.adjectives.length)];
-    }
-
-    /**
-     * Flip connection state
-     * @param conn
-     * @return return new state
-     */
-    private static boolean flipConn(TestingConnection conn) {
-        conn.shouldSucceed = !conn.shouldSucceed;
-        return conn.shouldSucceed;
-    }
-
-    private static TestingConnection addConn(String c) {
-        TestingConnection conn = new TestingConnection();
-        TestingConnection.connections.put(c, conn);
-        return conn;
-    }
-
-    private static TestingDevice addDev(TestingConnection conn, String d) {
-        TestingDevice dev = new TestingDevice();
-        conn.devices.put(d, dev);
-        return dev;
     }
 
     private static class SubscribeHandlerImpl extends AbstractSubscribeHandler {
