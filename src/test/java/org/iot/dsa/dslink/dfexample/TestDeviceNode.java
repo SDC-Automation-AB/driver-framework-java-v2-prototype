@@ -4,6 +4,7 @@ import org.iot.dsa.dslink.dframework.DFDeviceNode;
 import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.dslink.dframework.DFUtil;
 import org.iot.dsa.dslink.dframework.ParameterDefinition;
+import org.iot.dsa.dslink.dftest.MockParameters;
 import org.iot.dsa.dslink.dftest.TestingDevice;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSLong;
@@ -55,7 +56,7 @@ public class TestDeviceNode extends DFDeviceNode {
         try {
             String devStr = parameters.getString("Device String");
             devObj = getParentNode().connObj.findDevice(devStr);
-            success = getParentNode().connObj.pingDevice(devObj);
+            success = getParentNode().connObj.pingDevice(devObj, new MockParameters(parameters));
         } catch (Exception e) {
             success = false;
         }
@@ -68,7 +69,7 @@ public class TestDeviceNode extends DFDeviceNode {
     @Override
     public boolean ping() {
         try {
-            return getParentNode().connObj.pingDevice(devObj);
+            return getParentNode().connObj.pingDevice(devObj, new MockParameters(parameters));
         } catch (Exception e) {
             return false;
         }
@@ -107,7 +108,7 @@ public class TestDeviceNode extends DFDeviceNode {
             }
 
             Set<String> batch = polledPoints.keySet();
-            Map<String, String> results = getParentNode().connObj.batchRead(devObj, batch);
+            Map<String, String> results = getParentNode().connObj.batchRead(devObj, new MockParameters(parameters), batch);
 
             for (Map.Entry<String, String> entry: results.entrySet()) {
                 TestPointNode point = polledPoints.get(entry.getKey());

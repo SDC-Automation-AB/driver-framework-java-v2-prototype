@@ -6,6 +6,7 @@ import org.iot.dsa.dslink.dframework.DFConnectionNode;
 import org.iot.dsa.dslink.dframework.DFHelpers;
 import org.iot.dsa.dslink.dframework.DFUtil;
 import org.iot.dsa.dslink.dframework.ParameterDefinition;
+import org.iot.dsa.dslink.dftest.MockParameters;
 import org.iot.dsa.dslink.dftest.TestingConnection;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSLong;
@@ -51,7 +52,7 @@ public class TestConnectionNode extends DFConnectionNode {
         try {
             String cs = parameters.getString("Connection String");
             connObj = TestingConnection.findConnection(cs);
-            connObj.connect();
+            connObj.connect(new MockParameters());
             return true;
         } catch (Exception e) {
             connObj = null;
@@ -62,7 +63,7 @@ public class TestConnectionNode extends DFConnectionNode {
     @Override
     public boolean ping() {
         try {
-            return connObj.isConnected();
+            return connObj.isConnected(new MockParameters());
         } catch (Exception e) {
             return false;
         }

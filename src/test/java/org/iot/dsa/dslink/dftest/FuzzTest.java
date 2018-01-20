@@ -76,7 +76,7 @@ public class FuzzTest {
     private static final String PY_TEST_DIR = "py_tests";
 
     private static PythonInterpreter interp;
-    private static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
+    private static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
 
     @Before
     public void setUp() {
@@ -194,6 +194,7 @@ public class FuzzTest {
     }
 
     //TODO: write python test to check that when a testing conn/dev/point is deactivated, it's corresponding node is failed
+    //TODO: write test to check that when a testing conn/dev/point is activated, it's corresponding node is active
 
     private static void runPythonTest(String fileName) throws Exception {
         String exec = PY_TEST_DIR + "\\" + fileName;

@@ -1,12 +1,19 @@
 package org.iot.dsa.dslink.dftest;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TestingDevice {
-    
+
+    private String name;
+    private MockParameters devParams;
     private boolean active = true;
-    private Map<String, String> points = new HashMap<String, String>();
+    private Map<String, TestingPoint> points = new ConcurrentHashMap<>();
+
+    TestingDevice(String name) {
+        this.name = name;
+        this.devParams = new MockParameters();
+    }
 
     /**
      * Flip device state
@@ -25,13 +32,17 @@ public class TestingDevice {
         return active;
     }
 
+    boolean invalidDevParams(MockParameters params) {
+        return !devParams.verifyParameters(params);
+    }
+
     /**
      * Add point to the device
      * @param name Name of point
      * @param value Value of point
      */
     void addPoint(String name, String value) {
-        points.put(name, value);
+        points.put(name, new TestingPoint(name, value));
     }
 
     boolean hasPoint(String name) {
@@ -39,11 +50,11 @@ public class TestingDevice {
     }
 
     String getPointValue(String name) {
-        return points.get(name);
+        return points.get(name).getValue();
     }
 
     void changePointValue(String name, String value) {
-        points.put(name, value);
+        points.get(name).setValue(value);
     }
 
     void removePoint(String name) {
@@ -55,7 +66,7 @@ public class TestingDevice {
     }
 
     String[] getNameSet() {
-        return (String[]) points.keySet().toArray();
+        return points.keySet().toArray(new String[points.size()]);
     }
 
     int getPointCount() {

@@ -9,6 +9,8 @@ public class TestingConnection {
     
     private static Map<String, TestingConnection> connections = new HashMap<String, TestingConnection>();
     private Map<String, TestingDevice> devices = new HashMap<String, TestingDevice>();
+    private String name;
+    private MockParameters connParams;
     private boolean pluggedIn = true;
     private boolean running = false;
 
@@ -17,9 +19,14 @@ public class TestingConnection {
     ///////////////////////////////////////////////////////////////////////////
 
     public static TestingConnection addNewConnection(String name) {
-        TestingConnection conn = new TestingConnection();
+        TestingConnection conn = new TestingConnection(name);
         connections.put(name, conn);
         return conn;
+    }
+
+    TestingConnection(String name) {
+        this.name = name;
+        this.connParams = new MockParameters();
     }
 
     /**
@@ -31,7 +38,7 @@ public class TestingConnection {
     }
 
     public static String[] getConnectionList() {
-        return (String[]) connections.keySet().toArray();
+        return connections.keySet().toArray(new String[connections.size()]);
     }
 
     public static String getNthConnectionName(int n) {
@@ -59,9 +66,9 @@ public class TestingConnection {
     // Device Controls
     ///////////////////////////////////////////////////////////////////////////
 
-    TestingDevice addNewDevice(String d) {
-        TestingDevice dev = new TestingDevice();
-        devices.put(d, dev);
+    TestingDevice addNewDevice(String name) {
+        TestingDevice dev = new TestingDevice(name);
+        devices.put(name, dev);
         return dev;
     }
 
@@ -78,7 +85,7 @@ public class TestingConnection {
     }
 
     public String[] getDeviceList() {
-        return (String[]) devices.keySet().toArray();
+        return devices.keySet().toArray(new String[devices.size()]);
     }
 
     public int getDeviceCount() {
@@ -106,7 +113,11 @@ public class TestingConnection {
         }
     }
 
-    public void connect() throws TestingException {
+    public void connect(MockParameters connParams) throws TestingException {
+        if (invalidConnParams(connParams)) {
+            throw new TestingException("Invalid connection params");
+        }
+
         if (running) {
             return;
         }
@@ -121,11 +132,18 @@ public class TestingConnection {
         running = false;
     }
     
-    public boolean isConnected() {
+    public boolean isConnected(MockParameters params) {
         if (!pluggedIn) {
             close();
         }
+        if (invalidConnParams(params)) {
+            return false;
+        }
         return running; 
+    }
+
+    private boolean invalidConnParams(MockParameters params) {
+        return !connParams.verifyParameters(params);
     }
 
     //Device Level
@@ -145,28 +163,30 @@ public class TestingConnection {
         }
     }
 
-    public boolean pingDevice(TestingDevice device) throws TestingException {
+    public boolean pingDevice(TestingDevice device, MockParameters params) throws TestingException {
         if (!running) {
             throw new TestingException("Connection not running");
         } else if (!pluggedIn) {
             throw new TestingException("Request Failed");
         } else if (!devices.containsValue(device)) {
             throw new TestingException("Device not found");
+        } else if (device.invalidDevParams(params)) {
+            throw new TestingException("Invalid Device params");
         } else {
             return device.isActive();
         }
     }
     
-    public Map<String, String> batchRead(TestingDevice device, Set<String> ids) throws TestingException {
+    public Map<String, String> batchRead(TestingDevice device, MockParameters devParams, Set<String> ids) throws TestingException {
         Map<String, String> results = new HashMap<String, String>();
         for (String id: ids) {
-            results.put(id, readPoint(device, id));
+            results.put(id, readPoint(device, devParams, id));
         }
         return results;
     }
 
-    public String readPoint(TestingDevice device, String pointId) throws TestingException {
-        if (!pingDevice(device)) {
+    public String readPoint(TestingDevice device, MockParameters devParams, String pointId) throws TestingException {
+        if (!pingDevice(device, devParams)) {
             throw new TestingException("Device not responding");
         } else if (!device.hasPoint(pointId)) {
             throw new TestingException("Point not found");
