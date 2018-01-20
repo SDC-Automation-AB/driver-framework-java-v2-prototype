@@ -417,6 +417,10 @@ public class FuzzTest {
         String path = parent.getPath();
         path = path.endsWith("/") ? path + name : path + "/" + name;
         DSMap params = new DSMap();
+        //TODO: Generalize actions to work with ParameterDefinitions
+        //TODO: Figure out how to get parameters from the valid devices?
+        // -in getDevStringToAdd, return a MockParameters or Parameters
+        // -get them from some separate source and put them in
         if (name.equals("Edit")) {
             return "Edit action not yet supported!";
         } else if (name.equals("Add Connection")) {

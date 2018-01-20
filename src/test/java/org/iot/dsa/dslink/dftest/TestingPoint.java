@@ -15,6 +15,11 @@ public class TestingPoint {
         this.pointParams = new MockParameters();
     }
 
+    TestingPoint(String name, String value, MockParameters parameters) {
+        this(name, value);
+        pointParams = parameters;
+    }
+
     String getValue() {
         return value;
     }
