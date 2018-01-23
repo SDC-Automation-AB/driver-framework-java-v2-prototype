@@ -23,8 +23,6 @@ import org.python.util.PythonInterpreter;
 
 import java.io.*;
 import java.util.*;
-import java.util.Map.Entry;
-import org.iot.dsa.dslink.dftest.TestingConnection.TestingException;
 
 import static org.junit.Assert.*;
 
@@ -69,14 +67,14 @@ public class FuzzTest {
     private static long conn_dev_counter = 0;
     private static long dev_dev_counter = 0;
     private static long pnt_dev_counter = 0;
-    private static final String DELIM = "\n\n== STEP ===============================================================================";
 
+    private static final String DELIM = "\n\n== STEP ===============================================================================";
     private static final String MASTER_OUT_FILENAME = "master-output.txt";
     private static final String TESTING_OUT_FILENAME = "testing-output.txt";
     private static final String PY_TEST_DIR = "py_tests";
 
     private static PythonInterpreter interp;
-    private static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
+    private static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
 
     @Before
     public void setUp() {
@@ -123,6 +121,18 @@ public class FuzzTest {
             String diffString = StringUtils.join(diffText, '\n');
             fail("Output does not match:\n" + diffString);
         }
+    }
+
+    private List<String> fileToLines(File file) throws IOException {
+        final List<String> lines = new ArrayList<String>();
+        String line;
+        final BufferedReader in = new BufferedReader(new FileReader(file));
+        while ((line = in.readLine()) != null) {
+            lines.add(line);
+        }
+        in.close();
+
+        return lines;
     }
 
     /**
@@ -225,18 +235,6 @@ public class FuzzTest {
             System.out.println("Test " + str + ": FAILED!");
             throw e;
         }
-    }
-
-    private List<String> fileToLines(File file) throws IOException {
-        final List<String> lines = new ArrayList<String>();
-        String line;
-        final BufferedReader in = new BufferedReader(new FileReader(file));
-        while ((line = in.readLine()) != null) {
-            lines.add(line);
-        }
-        in.close();
-
-        return lines;
     }
 
     private static PrintWriter getNewPrintWriter() {

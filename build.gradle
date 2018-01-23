@@ -5,8 +5,8 @@ apply plugin: 'application'
 
 group 'org.iot.dsa'
 mainClassName = 'org.iot.dsa.dslink.DSLink'
-sourceCompatibility = 1.6
-targetCompatibility = 1.6
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
 
 build {
     def inputFile = file('dslink.json')
@@ -44,7 +44,13 @@ task sourcesJar(group: 'build', type: Jar, dependsOn: classes) {
     from sourceSets.main.allJava
 }
 
+task testJar(group: 'build', type: Jar, dependsOn: classes) {
+    classifier = 'tests'
+    from sourceSets.test.output
+}
+
 artifacts {
     archives sourcesJar
+    archives testJar
 }
 
