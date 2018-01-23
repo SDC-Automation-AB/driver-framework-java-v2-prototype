@@ -74,7 +74,7 @@ public class FuzzTest {
     private static final String PY_TEST_DIR = "py_tests";
 
     private static PythonInterpreter interp;
-    private static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
+    private static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
 
 
     @Before
