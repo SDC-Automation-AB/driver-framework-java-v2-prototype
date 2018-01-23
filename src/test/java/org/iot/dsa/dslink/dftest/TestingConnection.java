@@ -18,15 +18,28 @@ public class TestingConnection {
     // Connection Controls
     ///////////////////////////////////////////////////////////////////////////
 
-    public static TestingConnection addNewConnection(String name) {
+    public TestingConnection addNewConnection(String name) {
         TestingConnection conn = new TestingConnection(name);
         connections.put(name, conn);
         return conn;
     }
 
-    TestingConnection(String name) {
+    /**
+     * Blank constructor to be used for adding initial connections only.
+     */
+    public TestingConnection() {
+        this.name = null;
+        this.connParams = null;
+    }
+
+    protected TestingConnection(String name) {
         this.name = name;
         this.connParams = new MockParameters();
+    }
+
+    protected TestingConnection(String name, MockParameters pars) {
+        this.name = name;
+        this.connParams = pars;
     }
 
     /**

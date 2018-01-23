@@ -10,7 +10,7 @@ public class TestingDevice {
     private boolean active = true;
     private Map<String, TestingPoint> points = new ConcurrentHashMap<>();
 
-    TestingDevice(String name) {
+    protected TestingDevice(String name) {
         this.name = name;
         this.devParams = new MockParameters();
     }

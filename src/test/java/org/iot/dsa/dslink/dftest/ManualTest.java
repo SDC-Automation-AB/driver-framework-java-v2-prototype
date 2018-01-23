@@ -11,7 +11,7 @@ public class ManualTest implements Runnable {
     static final Object monitor = new Object();
 
     public static void main(String[] args) {
-        TestingConnection daniel = TestingConnection.addNewConnection("Daniel");
+        TestingConnection daniel = new TestingConnection().addNewConnection("Daniel");
 
         TestingDevice teapot = daniel.addNewDevice("Teapot");
         TestingDevice toaster = daniel.addNewDevice("Toaster");

@@ -51,7 +51,7 @@ public class FuzzTest {
 
     private static final double PROB_OF_BAD_CONFIG = 0.01;
 
-    private static final long PING_POLL_RATE = 100;
+    private static final long PING_POLL_RATE = 10;
 
     private static Set<String> unique_names = new HashSet<String>();
     private static Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
@@ -74,11 +74,11 @@ public class FuzzTest {
     private static final String PY_TEST_DIR = "py_tests";
 
     private static PythonInterpreter interp;
-    private static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
+    private static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
 
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception{
         if (REGENERATE_OUTPUT) {
             assertEquals(1.0, PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT, .01);
             staticRootNode = new RootNode();
@@ -285,7 +285,7 @@ public class FuzzTest {
         return complete;
     }
 
-    private static String doAThing() {
+    private static String doAThing() throws Exception {
         String thingDone;
         if (queuedAction != null) {
             thingDone = queuedAction.act();
@@ -308,7 +308,7 @@ public class FuzzTest {
         //Create a connection
         if ((rand < PROB_ROOT || conn_dev_counter < MIN_CON) && conn_dev_counter < MAX_CON) {
             String c = generateConnString();
-            TestingConnection.addNewConnection(c);
+            new TestingConnection().addNewConnection(c);
             conn_dev_counter++;
             return "Creating connection " + c;
             //Or choose a connection to act on

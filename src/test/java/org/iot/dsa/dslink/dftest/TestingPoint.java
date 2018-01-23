@@ -9,13 +9,13 @@ public class TestingPoint {
     private String value;
     private MockParameters pointParams;
 
-    TestingPoint(String name, String value) {
+    protected TestingPoint(String name, String value) {
         this.name = name;
         this.value = value;
         this.pointParams = new MockParameters();
     }
 
-    TestingPoint(String name, String value, MockParameters parameters) {
+    protected TestingPoint(String name, String value, MockParameters parameters) {
         this(name, value);
         pointParams = parameters;
     }
