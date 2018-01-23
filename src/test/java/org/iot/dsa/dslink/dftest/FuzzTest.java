@@ -76,6 +76,7 @@ public class FuzzTest {
     private static PythonInterpreter interp;
     private static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
 
+
     @Before
     public void setUp() {
         if (REGENERATE_OUTPUT) {
@@ -108,6 +109,7 @@ public class FuzzTest {
 
     /**
      * Checks whether the output file is an exact match to the golden output.
+     *
      * @throws IOException Failed to find the required inputs/outputs
      */
     @Test
@@ -143,9 +145,9 @@ public class FuzzTest {
         String t_name = "helloo_world.py";
         runPythonTest(t_name);
     }
-    
+
     /**
-     * Checks that, at any point in time, if a point is not "Stopped", then it was subscribed 
+     * Checks that, at any point in time, if a point is not "Stopped", then it was subscribed
      * to at some point in the past, and was not unsubscribed from since then.
      */
     @Test
@@ -153,7 +155,7 @@ public class FuzzTest {
         String t_name = "connected_was_subbed.py";
         runPythonTest(t_name);
     }
-    
+
     /**
      * Checks that whenever a point or device node is "Connected" or "Failed", its parent is "Connected"
      */
@@ -298,6 +300,7 @@ public class FuzzTest {
 
     /**
      * Perform an action on the mock device tree
+     *
      * @return Return a description of the action performed
      */
     private static String createOrModifyDevice() {
@@ -308,7 +311,7 @@ public class FuzzTest {
             TestingConnection.addNewConnection(c);
             conn_dev_counter++;
             return "Creating connection " + c;
-        //Or choose a connection to act on
+            //Or choose a connection to act on
         } else {
             int rrand = random.nextInt(TestingConnection.getConnectionCount());
             String c = TestingConnection.getNthConnectionName(rrand);
@@ -325,7 +328,7 @@ public class FuzzTest {
                 } else {
                     return "Setting ShouldSucceed to " + conn.flipPowerSwitch() + " on " + c;
                 }
-            //Or choose a device to act on
+                //Or choose a device to act on
             } else {
                 int devCount = conn.getDeviceCount();
                 if (devCount == 0) return createOrModifyDevice();
@@ -344,7 +347,7 @@ public class FuzzTest {
                     } else {
                         return "Setting Active to " + dev.flipDev() + " on " + c + ":" + d;
                     }
-                //Or choose a point to act on
+                    //Or choose a point to act on
                 } else {
                     int pointCount = dev.getPointCount();
                     if (pointCount == 0) return createOrModifyDevice();

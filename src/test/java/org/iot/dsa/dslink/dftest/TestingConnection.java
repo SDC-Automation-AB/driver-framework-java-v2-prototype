@@ -2,11 +2,11 @@ package org.iot.dsa.dslink.dftest;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 public class TestingConnection {
-    
+
     private static Map<String, TestingConnection> connections = new HashMap<String, TestingConnection>();
     private Map<String, TestingDevice> devices = new HashMap<String, TestingDevice>();
     private String name;
@@ -51,6 +51,7 @@ public class TestingConnection {
 
     /**
      * Flip connection state
+     *
      * @return return new state
      */
     public boolean flipPowerSwitch() {
@@ -100,6 +101,7 @@ public class TestingConnection {
 
     /**
      * Looks for a connection, throws exception if not found
+     *
      * @param connectionString name of the connection
      * @return The connection object
      * @throws TestingException when device is not found
@@ -127,11 +129,11 @@ public class TestingConnection {
             throw new TestingException("Connection Failed");
         }
     }
-    
+
     public void close() {
         running = false;
     }
-    
+
     public boolean isConnected(MockParameters params) {
         if (!pluggedIn) {
             close();
@@ -139,7 +141,7 @@ public class TestingConnection {
         if (invalidConnParams(params)) {
             return false;
         }
-        return running; 
+        return running;
     }
 
     private boolean invalidConnParams(MockParameters params) {
@@ -150,6 +152,7 @@ public class TestingConnection {
 
     /**
      * Looks for a device, throws exception if not found
+     *
      * @param deviceString name of the device
      * @return The device object
      * @throws TestingException when device is not found
@@ -176,10 +179,10 @@ public class TestingConnection {
             return device.isActive();
         }
     }
-    
+
     public Map<String, String> batchRead(TestingDevice device, MockParameters devParams, Set<String> ids) throws TestingException {
         Map<String, String> results = new HashMap<String, String>();
-        for (String id: ids) {
+        for (String id : ids) {
             results.put(id, readPoint(device, devParams, id));
         }
         return results;
@@ -201,20 +204,20 @@ public class TestingConnection {
 
     public static String getPrintout() {
         StringBuilder sb = new StringBuilder();
-        for (Entry<String, TestingConnection> entry: connections.entrySet()) {
+        for (Entry<String, TestingConnection> entry : connections.entrySet()) {
             TestingConnection c = entry.getValue();
             sb.append(entry.getKey());
             sb.append(" : ");
             sb.append(c.pluggedIn);
             sb.append('\n');
-            for (Entry<String, TestingDevice> dentry: c.devices.entrySet()) {
+            for (Entry<String, TestingDevice> dentry : c.devices.entrySet()) {
                 TestingDevice d = dentry.getValue();
                 sb.append('\t');
                 sb.append(dentry.getKey());
                 sb.append(" : ");
                 sb.append(d.isActive());
                 sb.append('\n');
-                for (String pname: d.getNameSet()) {
+                for (String pname : d.getNameSet()) {
                     sb.append('\t');
                     sb.append('\t');
                     sb.append(pname);

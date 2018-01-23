@@ -17,6 +17,7 @@ public class TestingDevice {
 
     /**
      * Flip device state
+     *
      * @return return new state
      */
     boolean flipDev() {
@@ -38,7 +39,8 @@ public class TestingDevice {
 
     /**
      * Add point to the device
-     * @param name Name of point
+     *
+     * @param name  Name of point
      * @param value Value of point
      */
     void addPoint(String name, String value) {

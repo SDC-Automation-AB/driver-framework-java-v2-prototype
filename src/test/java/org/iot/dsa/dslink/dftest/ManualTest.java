@@ -1,11 +1,13 @@
 package org.iot.dsa.dslink.dftest;
 
-import java.util.Scanner;
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSLink;
 
+import java.util.Scanner;
+
+
 public class ManualTest implements Runnable {
-    
+
     static final Object monitor = new Object();
 
     public static void main(String[] args) {
@@ -14,40 +16,40 @@ public class ManualTest implements Runnable {
         TestingDevice teapot = daniel.addNewDevice("Teapot");
         TestingDevice toaster = daniel.addNewDevice("Toaster");
         TestingDevice trebuchet = daniel.addNewDevice("Trebuchet");
-        
+
         teapot.addPoint("Temperature", "178");
         teapot.addPoint("Target", "212");
         teapot.addPoint("WaterLevel", "6");
-        
+
         toaster.addPoint("Setting", "Bagel");
         toaster.addPoint("MinutesRemaining", "0");
         toaster.addPoint("Color", "Red");
-        
+
         trebuchet.addPoint("Loaded", "True");
         trebuchet.addPoint("LaunchAngle", "45");
         trebuchet.addPoint("LaunchDirection", "North-East");
         trebuchet.addPoint("Projectile", "Rock");
-        
+
         DSRuntime.run(new ManualTest());
-        
+
         DSLink.main(args);
-        
-        synchronized(monitor) {
+
+        synchronized (monitor) {
             try {
                 monitor.wait();
             } catch (InterruptedException e) {
             }
         }
     }
-    
+
     private static String getPrintOut() {
-        return TestingConnection.getPrintout();  
+        return TestingConnection.getPrintout();
     }
 
     @Override
     public void run() {
         Scanner sc = new Scanner(System.in);
-        while(true) {
+        while (true) {
             String tok = sc.next();
             if (tok.toLowerCase().startsWith("print")) {
                 System.out.println(getPrintOut());
@@ -81,11 +83,11 @@ public class ManualTest implements Runnable {
             }
         }
         sc.close();
-        synchronized(monitor) {
+        synchronized (monitor) {
             monitor.notifyAll();
         }
     }
-    
+
     private static String setConnShouldSucceed(String c, boolean shouldSucceed) {
         TestingConnection conn = TestingConnection.getConnection(c);
         if (conn != null) {
@@ -95,7 +97,7 @@ public class ManualTest implements Runnable {
             return c + " not found";
         }
     }
-    
+
     private static String setDevActive(String c, String d, boolean active) {
         TestingConnection conn = TestingConnection.getConnection(c);
         if (conn != null) {
@@ -110,7 +112,7 @@ public class ManualTest implements Runnable {
             return c + " not found";
         }
     }
-    
+
     private static String setValue(String c, String d, String p, String v) {
         TestingConnection conn = TestingConnection.getConnection(c);
         if (conn != null) {
@@ -125,7 +127,7 @@ public class ManualTest implements Runnable {
             return c + " not found";
         }
     }
-    
+
     private static String clearValue(String c, String d, String p) {
         TestingConnection conn = TestingConnection.getConnection(c);
         if (conn != null) {
