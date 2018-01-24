@@ -75,7 +75,7 @@ public class FuzzTest {
 
     private static PythonInterpreter interp;
     private static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
-
+    private static final boolean PRINT_TO_CONSOLE = true;
 
     @Before
     public void setUp() throws Exception{
@@ -268,7 +268,7 @@ public class FuzzTest {
         String result = thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(staticRootNode, FLAT_TREE, VERBOSE) + DELIM.replaceFirst("STEP", Long.toString(step_counter + 1));
         writer.println(result);
         writer.flush();
-        System.out.println(result); //TODO: Remove debug
+        if (PRINT_TO_CONSOLE) System.out.println(result); //TODO: Remove debug
     }
 
     private static boolean setupIncomplete() {

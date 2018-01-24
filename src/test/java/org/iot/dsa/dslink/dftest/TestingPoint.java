@@ -5,9 +5,9 @@ package org.iot.dsa.dslink.dftest;
  * Created on 1/19/2018
  */
 public class TestingPoint {
-    private String name;
-    private String value;
-    private MockParameters pointParams;
+    protected String name;
+    protected String value;
+    protected MockParameters pointParams;
 
     protected TestingPoint(String name, String value) {
         this.name = name;

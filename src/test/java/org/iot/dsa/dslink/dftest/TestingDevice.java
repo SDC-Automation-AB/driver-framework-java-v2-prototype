@@ -5,14 +5,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class TestingDevice {
 
-    private String name;
-    private MockParameters devParams;
-    private boolean active = true;
-    private Map<String, TestingPoint> points = new ConcurrentHashMap<>();
+    protected String name;
+    protected MockParameters devParams;
+    protected boolean active = true;
+    protected Map<String, TestingPoint> points = new ConcurrentHashMap<>();
 
     protected TestingDevice(String name) {
         this.name = name;
         this.devParams = new MockParameters();
+    }
+
+    protected TestingDevice(String name, MockParameters pars) {
+        this.name = name;
+        this.devParams = pars;
     }
 
     /**
@@ -43,7 +48,7 @@ public class TestingDevice {
      * @param name  Name of point
      * @param value Value of point
      */
-    void addPoint(String name, String value) {
+    protected void addPoint(String name, String value) {
         points.put(name, new TestingPoint(name, value));
     }
 

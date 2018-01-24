@@ -9,10 +9,10 @@ public class TestingConnection {
 
     private static Map<String, TestingConnection> connections = new HashMap<String, TestingConnection>();
     private Map<String, TestingDevice> devices = new HashMap<String, TestingDevice>();
-    private String name;
-    private MockParameters connParams;
-    private boolean pluggedIn = true;
-    private boolean running = false;
+    protected String name;
+    protected MockParameters connParams;
+    protected boolean pluggedIn = true;
+    protected boolean running = false;
 
     ///////////////////////////////////////////////////////////////////////////
     // Connection Controls
@@ -22,6 +22,10 @@ public class TestingConnection {
         TestingConnection conn = new TestingConnection(name);
         connections.put(name, conn);
         return conn;
+    }
+
+    protected void addConnection(String name, TestingConnection conn) {
+        connections.put(name, conn);
     }
 
     /**
@@ -80,10 +84,14 @@ public class TestingConnection {
     // Device Controls
     ///////////////////////////////////////////////////////////////////////////
 
-    TestingDevice addNewDevice(String name) {
+    protected TestingDevice addNewDevice(String name) {
         TestingDevice dev = new TestingDevice(name);
         devices.put(name, dev);
         return dev;
+    }
+
+    protected void addDevice(String name, TestingDevice dev) {
+        devices.put(name, dev);
     }
 
     /**
