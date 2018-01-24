@@ -41,12 +41,7 @@ run {
 
 task sourcesJar(group: 'build', type: Jar, dependsOn: classes) {
     classifier = 'sources'
-    from sourceSets.main.allJava
-}
-
-task testSourcesJar(group: 'build', type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.test.allJava
+    from sourceSets.main.allJava+sourceSets.test.allJava
 }
 
 task testJar(group: 'build', type: Jar, dependsOn: classes) {
@@ -55,7 +50,6 @@ task testJar(group: 'build', type: Jar, dependsOn: classes) {
 }
 
 artifacts {
-    archives testSourcesJar
     archives sourcesJar
     archives testJar
 }
