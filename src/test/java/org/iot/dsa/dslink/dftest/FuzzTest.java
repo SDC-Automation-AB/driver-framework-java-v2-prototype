@@ -51,7 +51,7 @@ public class FuzzTest {
 
     private static final double PROB_OF_BAD_CONFIG = 0.01;
 
-    private static final long PING_POLL_RATE = 10;
+    private static final long PING_POLL_RATE = 15;
 
     private static Set<String> unique_names = new HashSet<String>();
     private static Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
@@ -78,7 +78,7 @@ public class FuzzTest {
     private static final boolean PRINT_TO_CONSOLE = true;
 
     @Before
-    public void setUp() throws Exception{
+    public void setUp() throws Exception {
         if (REGENERATE_OUTPUT) {
             assertEquals(1.0, PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT, .01);
             staticRootNode = new RootNode();
@@ -291,7 +291,7 @@ public class FuzzTest {
             thingDone = queuedAction.act();
             queuedAction = null;
         } else if (random.nextInt(2) < 1 || setupIncomplete()) {
-            thingDone = createOrModifyDevice();
+            thingDone = createOrModifyDevice(new TestingConnection());
         } else {
             thingDone = subscribeOrDoAnAction();
         }
@@ -299,16 +299,16 @@ public class FuzzTest {
     }
 
     /**
-     * Perform an action on the mock device tree
-     *
+     * Perform an action on the global mock device tree
+     * @param testConnSeed Dummy TestingConnection instance used to seed the mock tree construction.
      * @return Return a description of the action performed
-     */
-    private static String createOrModifyDevice() {
+     * */
+    private static String createOrModifyDevice(TestingConnection testConnSeed) {
         double rand = random.nextDouble();
         //Create a connection
         if ((rand < PROB_ROOT || conn_dev_counter < MIN_CON) && conn_dev_counter < MAX_CON) {
             String c = generateConnString();
-            new TestingConnection().addNewConnection(c, random);
+            testConnSeed.addNewConnection(c, random);
             conn_dev_counter++;
             return "Creating connection " + c;
             //Or choose a connection to act on
@@ -331,7 +331,7 @@ public class FuzzTest {
                 //Or choose a device to act on
             } else {
                 int devCount = conn.getDeviceCount();
-                if (devCount == 0) return createOrModifyDevice();
+                if (devCount == 0) return createOrModifyDevice(new TestingConnection());
                 int crand = random.nextInt(devCount);
                 String d = conn.getNthDeviceName(crand);
                 TestingDevice dev = conn.getDevice(d);
@@ -350,7 +350,7 @@ public class FuzzTest {
                     //Or choose a point to act on
                 } else {
                     int pointCount = dev.getPointCount();
-                    if (pointCount == 0) return createOrModifyDevice();
+                    if (pointCount == 0) return createOrModifyDevice(new TestingConnection());
                     int drand = random.nextInt(pointCount);
                     String p = dev.getNthPointName(drand);
                     rand = random.nextDouble();
