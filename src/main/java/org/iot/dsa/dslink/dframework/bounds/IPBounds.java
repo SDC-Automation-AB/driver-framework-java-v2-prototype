@@ -1,4 +1,4 @@
-package org.iot.dsa.dslink.dframework;
+package org.iot.dsa.dslink.dframework.bounds;
 
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSString;

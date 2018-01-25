@@ -1,7 +1,6 @@
-package org.iot.dsa.dslink.dframework;
+package org.iot.dsa.dslink.dframework.bounds;
 
 import org.iot.dsa.node.DSElement;
-import org.iot.dsa.node.DSInt;
 import org.iot.dsa.node.DSLong;
 
 import java.util.Random;
@@ -10,22 +9,22 @@ import java.util.Random;
  * @author James (Juris) Puchin
  * Created on 1/24/2018
  */
-public class IntegerBounds implements ParameterBounds<Integer> {
+public class LongBounds implements ParameterBounds<Long> {
 
-    private Integer min;
-    private Integer max;
+    private Long min;
+    private Long max;
 
-    IntegerBounds() {
-        this.min = Integer.MIN_VALUE;
-        this.max = Integer.MAX_VALUE;
+    public LongBounds() {
+        this.min = Long.MIN_VALUE;
+        this.max = Long.MAX_VALUE;
     }
 
     /**
-     * Creates an Integer bounds object with min and max set.
+     * Creates an Long bounds object with min and max set.
      * @param min inclusive
      * @param max inclusive
      */
-    IntegerBounds(Integer min, Integer max) {
+    public LongBounds(Long min, Long max) {
         if (min >= max) throw new RuntimeException("Min bound has to be less than max.");
         this.min = min;
         this.max = max;
@@ -47,6 +46,6 @@ public class IntegerBounds implements ParameterBounds<Integer> {
         Double dMin = Double.valueOf(min);
         Double dMax = Double.valueOf(max);
         Double answer = rand.nextDouble() * (dMax - dMin) + dMin;
-        return DSLong.valueOf(answer.intValue());
+        return DSLong.valueOf(answer.longValue());
     }
 }

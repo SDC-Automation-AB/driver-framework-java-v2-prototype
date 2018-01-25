@@ -1,5 +1,6 @@
 package org.iot.dsa.dslink.dframework;
 
+import org.iot.dsa.dslink.dframework.bounds.LongBounds;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSLong;
 import org.junit.Test;

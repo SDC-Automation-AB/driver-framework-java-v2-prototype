@@ -1,7 +1,7 @@
 package org.iot.dsa.dslink.dframework;
 
+import org.iot.dsa.dslink.dframework.bounds.IntegerBounds;
 import org.iot.dsa.node.DSElement;
-import org.iot.dsa.node.DSInt;
 import org.iot.dsa.node.DSLong;
 import org.junit.Test;
 

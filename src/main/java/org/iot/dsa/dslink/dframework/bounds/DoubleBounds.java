@@ -1,4 +1,4 @@
-package org.iot.dsa.dslink.dframework;
+package org.iot.dsa.dslink.dframework.bounds;
 
 import org.iot.dsa.node.DSDouble;
 import org.iot.dsa.node.DSElement;
@@ -14,7 +14,7 @@ public class DoubleBounds implements ParameterBounds<Double> {
     private Double min;
     private Double max;
 
-    DoubleBounds() {
+    public DoubleBounds() {
         this.min = Double.MIN_VALUE;
         this.max = Double.MAX_VALUE;
     }
@@ -24,7 +24,7 @@ public class DoubleBounds implements ParameterBounds<Double> {
      * @param min inclusive
      * @param max inclusive
      */
-    DoubleBounds(Double min, Double max) {
+    public DoubleBounds(Double min, Double max) {
         if (min >= max) throw new RuntimeException("Min bound has to be less than max.");
         this.min = min;
         this.max = max;

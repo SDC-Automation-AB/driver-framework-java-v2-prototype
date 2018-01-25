@@ -1,5 +1,6 @@
 package org.iot.dsa.dslink.dframework;
 
+import org.iot.dsa.dslink.dframework.bounds.IPBounds;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSString;
 import org.junit.Test;

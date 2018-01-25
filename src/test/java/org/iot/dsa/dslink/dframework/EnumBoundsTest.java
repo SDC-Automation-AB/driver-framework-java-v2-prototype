@@ -1,5 +1,7 @@
 package org.iot.dsa.dslink.dframework;
 
+import org.iot.dsa.dslink.dframework.bounds.EnumBounds;
+import org.iot.dsa.node.DSIEnum;
 import org.iot.dsa.node.DSJavaEnum;
 import org.iot.dsa.node.DSString;
 import org.junit.Test;
@@ -28,7 +30,7 @@ public class EnumBoundsTest {
     @Test
     public void validBounds() {
         DSJavaEnum a = DSJavaEnum.valueOf(EnumOne.A);
-        DSJavaEnum b = DSJavaEnum.valueOf(EnumOne.B);
+        DSIEnum b = DSJavaEnum.valueOf(EnumOne.B);
         DSJavaEnum f = DSJavaEnum.valueOf(EnumTwo.F);
         EnumBounds one = new EnumBounds(b);
         EnumBounds two = new EnumBounds(f);
@@ -41,7 +43,7 @@ public class EnumBoundsTest {
     @Test
     public void generateRandom() {
         DSJavaEnum a = DSJavaEnum.valueOf(EnumOne.A);
-        DSJavaEnum f = DSJavaEnum.valueOf(EnumTwo.F);
+        DSIEnum f = DSJavaEnum.valueOf(EnumTwo.F);
         EnumBounds one = new EnumBounds(a);
         EnumBounds two = new EnumBounds(f);
         Random rand = new Random(SEED);

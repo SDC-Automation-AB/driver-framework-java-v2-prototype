@@ -1,5 +1,7 @@
 package org.iot.dsa.dslink.dframework;
 
+import org.iot.dsa.dslink.dframework.bounds.EnumBounds;
+import org.iot.dsa.dslink.dframework.bounds.ParameterBounds;
 import org.iot.dsa.node.*;
 import org.iot.dsa.node.action.DSAction;
 
@@ -33,7 +35,7 @@ public class ParameterDefinition {
     }
 
     public static ParameterDefinition makeEnumParam(String name, DSIEnum enumtype, String description, String placeholder) {
-        return new ParameterDefinition(name, null, enumtype, null, null, description, placeholder);
+        return new ParameterDefinition(name, null, enumtype, null, new EnumBounds(enumtype), description, placeholder);
     }
 
     public static ParameterDefinition makeParamWithDefault(String name, DSIValue def, String description, String placeholder) {
@@ -42,6 +44,10 @@ public class ParameterDefinition {
 
     public static ParameterDefinition makeParamWithBounds(String name, DSValueType type, ParameterBounds bounds, String description, String placeholder) {
         return new ParameterDefinition(name, type, null, null, bounds, description, placeholder);
+    }
+
+    public static ParameterDefinition makeParamWithBoundsAndDef(String name, DSIValue def, ParameterBounds bounds, String description, String placeholder) {
+        return new ParameterDefinition(name, null, null, def, bounds, description, placeholder);
     }
 
     public DSMetadata addToAction(DSAction action, DSIValue defOverride) {
