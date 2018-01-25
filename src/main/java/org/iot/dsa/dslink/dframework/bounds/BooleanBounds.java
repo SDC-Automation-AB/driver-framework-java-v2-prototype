@@ -11,7 +11,7 @@ import java.util.Random;
  */
 public class BooleanBounds implements ParameterBounds<Boolean> {
 
-    BooleanBounds() {
+    public BooleanBounds() {
 
     }
 
