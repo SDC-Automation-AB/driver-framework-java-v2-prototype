@@ -1,48 +1,45 @@
 package org.iot.dsa.dslink.dframework;
 
-import org.iot.dsa.node.DSElement;
-import org.iot.dsa.node.DSFlexEnum;
-import org.iot.dsa.node.DSIEnum;
-import org.iot.dsa.node.DSIValue;
-import org.iot.dsa.node.DSJavaEnum;
-import org.iot.dsa.node.DSMap;
-import org.iot.dsa.node.DSMetadata;
-import org.iot.dsa.node.DSValueType;
+import org.iot.dsa.node.*;
 import org.iot.dsa.node.action.DSAction;
 
+import java.util.Random;
+
 public class ParameterDefinition {
-    
+
     public final String name;
     public final DSValueType type;
     public final DSIEnum enumtype;
     public final DSIValue def;
+    private final ParameterBounds bounds;
     public final String description;
     public final String placeholder;
-    
-    
-    protected ParameterDefinition(String name, DSValueType type, DSIEnum enumtype, DSIValue def,
-            String description, String placeholder) {
+
+
+    protected ParameterDefinition(String name, DSValueType type, DSIEnum enumtype, DSIValue def, ParameterBounds bounds,
+                                  String description, String placeholder) {
         super();
         this.name = name;
         this.type = type;
         this.enumtype = enumtype;
         this.def = def;
+        this.bounds = bounds;
         this.description = description;
         this.placeholder = placeholder;
     }
-    
+
     public static ParameterDefinition makeParam(String name, DSValueType type, String description, String placeholder) {
-        return new ParameterDefinition(name, type, null, null, description, placeholder);
+        return new ParameterDefinition(name, type, null, null, null, description, placeholder);
     }
-    
+
     public static ParameterDefinition makeEnumParam(String name, DSIEnum enumtype, String description, String placeholder) {
-        return new ParameterDefinition(name, null, enumtype, null, description, placeholder);
+        return new ParameterDefinition(name, null, enumtype, null, null, description, placeholder);
     }
-    
+
     public static ParameterDefinition makeParamWithDefault(String name, DSIValue def, String description, String placeholder) {
-        return new ParameterDefinition(name, null, null, def, description, placeholder);
+        return new ParameterDefinition(name, null, null, def, null, description, placeholder);
     }
-    
+
     public DSMetadata addToAction(DSAction action, DSIValue defOverride) {
         DSMetadata metadata;
         if (defOverride != null) {
@@ -52,7 +49,7 @@ public class ParameterDefinition {
             } else if (def instanceof DSIEnum) {
                 et = (DSIEnum) def;
             }
-            
+
             if (et == null) {
                 metadata = action.addDefaultParameter(name, defOverride, description);
             } else {
@@ -73,17 +70,17 @@ public class ParameterDefinition {
         } else {
             metadata = action.addParameter(name, type, description);
         }
-        
+
         if (placeholder != null) {
             metadata.setPlaceHolder(placeholder);
         }
         return metadata;
     }
-    
+
     public DSMetadata addToAction(DSAction action) {
         return addToAction(action, null);
     }
-    
+
     public void verify(DSMap parameters) {
         DSElement paramVal = parameters.get(name);
         if (paramVal == null) {
@@ -111,7 +108,18 @@ public class ParameterDefinition {
                 throw new RuntimeException("Unexpected Type on Parameter " + name);
             }
         }
-    }
-    
 
+        if (bounds != null && paramVal != null) {
+            if (!bounds.validBounds(paramVal)) throw new RuntimeException("Parameter Value out of bounds: " + name);
+        }
+    }
+
+    /**
+     * Returns a random value, if bounds are defined.
+     *
+     * @return a valid random parameter value, or null
+     */
+    public DSElement generateRandom(Random rand) {
+        return bounds != null ? bounds.generateRandom(rand) : null;
+    }
 }

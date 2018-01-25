@@ -5,7 +5,13 @@ package org.iot.dsa.dslink.dftest;
  * Created on 1/19/2018
  */
 
+import org.iot.dsa.dslink.dframework.DFUtil;
+import org.iot.dsa.dslink.dframework.EditableNode;
+import org.iot.dsa.dslink.dframework.ParameterDefinition;
 import org.iot.dsa.node.DSMap;
+
+import java.util.List;
+import java.util.Random;
 
 /**
  * MockParameters class is used to mimic Conn/Dev/Point configs in mock tree.
@@ -21,6 +27,19 @@ public class MockParameters {
      */
     public MockParameters() {
         mockParameters = new DSMap();
+    }
+
+    /**
+     * Produced a random set of mockParameters for the desired EditableNode
+     * @param clazz EditableNode class to make pars for
+     * @param rand Random object for par generation
+     */
+    public MockParameters(Class<? extends EditableNode> clazz, Random rand) {
+        mockParameters = new DSMap();
+        List<ParameterDefinition> parDefs = DFUtil.getDummyInstance(clazz).getParameterDefinitions();
+        for (ParameterDefinition prDef : parDefs) {
+            mockParameters.put(prDef.name, prDef.generateRandom(rand));
+        }
     }
 
     /**

@@ -1,5 +1,7 @@
 package org.iot.dsa.dslink.dframework;
 
+import org.iot.dsa.node.DSElement;
+
 import java.util.Random;
 
 /**
@@ -12,12 +14,12 @@ public interface ParameterBounds <T> {
      * @param val value to check
      * @return true if in bounds
      */
-    boolean validBounds(T val);
+    boolean validBounds(DSElement val);
 
     /**
      * Generates an appropriate value of the right value type
      * @param rand Random object for generation
      * @return a value in bounds
      */
-    T generateRandom(Random rand);
+    DSElement generateRandom(Random rand);
 }

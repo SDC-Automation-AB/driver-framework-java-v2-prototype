@@ -1,5 +1,8 @@
 package org.iot.dsa.dslink.dframework;
 
+import org.iot.dsa.node.DSElement;
+import org.iot.dsa.node.DSString;
+
 import java.util.Random;
 
 /**
@@ -13,8 +16,14 @@ public class IPBounds implements ParameterBounds<String> {
     //all 0s in network mean this network (e.g. 0.0.12.145)
     //all 1s in network means all networks (e.g. 255.255.1.2)
     @Override
-    public boolean validBounds(String val) {
-        String[] vals = val.split("\\.");
+    public boolean validBounds(DSElement val) {
+        String sVal;
+        if (val.isString())
+            sVal = val.toString();
+        else
+            return false;
+
+        String[] vals = sVal.split("\\.");
         if (vals.length != 4) return false;
         for (String s : vals) {
             Integer i;
@@ -33,7 +42,7 @@ public class IPBounds implements ParameterBounds<String> {
     }
 
     @Override
-    public String generateRandom(Random rand) {
+    public DSElement generateRandom(Random rand) {
         int first = 127;
         while (first == 127) first = getIPVal(rand);
         StringBuilder ip = new StringBuilder();
@@ -42,6 +51,6 @@ public class IPBounds implements ParameterBounds<String> {
             ip.append(".");
             ip.append(getIPVal(rand));
         }
-        return ip.toString();
+        return DSString.valueOf(ip.toString());
     }
 }

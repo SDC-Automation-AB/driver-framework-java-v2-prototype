@@ -1,5 +1,8 @@
 package org.iot.dsa.dslink.dframework;
 
+import org.iot.dsa.node.DSDouble;
+import org.iot.dsa.node.DSElement;
+
 import java.util.Random;
 
 /**
@@ -28,12 +31,18 @@ public class DoubleBounds implements ParameterBounds<Double> {
     }
 
     @Override
-    public boolean validBounds(Double val) {
-        return val <= max && val >= min;
+    public boolean validBounds(DSElement val) {
+        Double dVal;
+        if ( val.isDouble() )
+            dVal = val.toDouble();
+        else
+            return false;
+
+        return dVal <= max && dVal >= min;
     }
 
     @Override
-    public Double generateRandom(Random rand) {
-        return rand.nextDouble() * (max - min) + min;
+    public DSElement generateRandom(Random rand) {
+        return DSDouble.valueOf(rand.nextDouble() * (max - min) + min);
     }
 }
