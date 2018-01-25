@@ -3,6 +3,7 @@ package org.iot.dsa.dslink.dftest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 
 public class TestingConnection {
@@ -18,7 +19,7 @@ public class TestingConnection {
     // Connection Controls
     ///////////////////////////////////////////////////////////////////////////
 
-    public TestingConnection addNewConnection(String name) {
+    public TestingConnection addNewConnection(String name, Random rand) {
         TestingConnection conn = new TestingConnection(name);
         connections.put(name, conn);
         return conn;
@@ -84,7 +85,7 @@ public class TestingConnection {
     // Device Controls
     ///////////////////////////////////////////////////////////////////////////
 
-    protected TestingDevice addNewDevice(String name) {
+    protected TestingDevice addNewDevice(String name, Random rand) {
         TestingDevice dev = new TestingDevice(name);
         devices.put(name, dev);
         return dev;

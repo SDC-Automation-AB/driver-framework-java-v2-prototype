@@ -308,7 +308,7 @@ public class FuzzTest {
         //Create a connection
         if ((rand < PROB_ROOT || conn_dev_counter < MIN_CON) && conn_dev_counter < MAX_CON) {
             String c = generateConnString();
-            new TestingConnection().addNewConnection(c);
+            new TestingConnection().addNewConnection(c, random);
             conn_dev_counter++;
             return "Creating connection " + c;
             //Or choose a connection to act on
@@ -322,7 +322,7 @@ public class FuzzTest {
                 rand = random.nextDouble();
                 if ((rand >= PROB_SWAP_CON_STATE || dev_dev_counter < MIN_DEV) && dev_dev_counter < MAX_DEV) {
                     String d = generateDevString();
-                    conn.addNewDevice(d);
+                    conn.addNewDevice(d, random);
                     dev_dev_counter++;
                     return "Creating device " + c + ":" + d;
                 } else {
@@ -341,7 +341,7 @@ public class FuzzTest {
                     if ((rand >= PROB_SWAP_DEV_STATE || pnt_dev_counter < MIN_PNT) && pnt_dev_counter < MAX_PNT) {
                         String p = generatePointString();
                         String v = generatePointValue();
-                        dev.addPoint(p, v);
+                        dev.addPoint(p, v, random);
                         pnt_dev_counter++;
                         return "Creating new point " + c + ":" + d + ":" + p + " to " + v;
                     } else {

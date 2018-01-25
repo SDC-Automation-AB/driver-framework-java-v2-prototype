@@ -3,32 +3,35 @@ package org.iot.dsa.dslink.dftest;
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSLink;
 
+import java.util.Random;
 import java.util.Scanner;
 
 
 public class ManualTest implements Runnable {
 
     static final Object monitor = new Object();
+    static Random nullRand = null;
 
     public static void main(String[] args) {
-        TestingConnection daniel = new TestingConnection().addNewConnection("Daniel");
 
-        TestingDevice teapot = daniel.addNewDevice("Teapot");
-        TestingDevice toaster = daniel.addNewDevice("Toaster");
-        TestingDevice trebuchet = daniel.addNewDevice("Trebuchet");
+        TestingConnection daniel = new TestingConnection().addNewConnection("Daniel", nullRand);
 
-        teapot.addPoint("Temperature", "178");
-        teapot.addPoint("Target", "212");
-        teapot.addPoint("WaterLevel", "6");
+        TestingDevice teapot = daniel.addNewDevice("Teapot", nullRand);
+        TestingDevice toaster = daniel.addNewDevice("Toaster", nullRand);
+        TestingDevice trebuchet = daniel.addNewDevice("Trebuchet", nullRand);
 
-        toaster.addPoint("Setting", "Bagel");
-        toaster.addPoint("MinutesRemaining", "0");
-        toaster.addPoint("Color", "Red");
+        teapot.addPoint("Temperature", "178", nullRand);
+        teapot.addPoint("Target", "212", nullRand);
+        teapot.addPoint("WaterLevel", "6", nullRand);
 
-        trebuchet.addPoint("Loaded", "True");
-        trebuchet.addPoint("LaunchAngle", "45");
-        trebuchet.addPoint("LaunchDirection", "North-East");
-        trebuchet.addPoint("Projectile", "Rock");
+        toaster.addPoint("Setting", "Bagel", nullRand);
+        toaster.addPoint("MinutesRemaining", "0", nullRand);
+        toaster.addPoint("Color", "Red", nullRand);
+
+        trebuchet.addPoint("Loaded", "True", nullRand);
+        trebuchet.addPoint("LaunchAngle", "45", nullRand);
+        trebuchet.addPoint("LaunchDirection", "North-East", nullRand);
+        trebuchet.addPoint("Projectile", "Rock", nullRand);
 
         DSRuntime.run(new ManualTest());
 
@@ -118,7 +121,7 @@ public class ManualTest implements Runnable {
         if (conn != null) {
             TestingDevice dev = conn.getDevice(d);
             if (dev != null) {
-                dev.addPoint(p, v);
+                dev.addPoint(p, v, nullRand);
                 return c + ":" + d + ":" + p + " set to " + v;
             } else {
                 return c + ":" + d + " not found";

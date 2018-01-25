@@ -1,6 +1,7 @@
 package org.iot.dsa.dslink.dftest;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class TestingDevice {
@@ -48,7 +49,7 @@ public class TestingDevice {
      * @param name  Name of point
      * @param value Value of point
      */
-    protected void addPoint(String name, String value) {
+    protected void addPoint(String name, String value, Random rand) {
         points.put(name, new TestingPoint(name, value));
     }
 

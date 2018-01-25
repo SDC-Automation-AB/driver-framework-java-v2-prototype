@@ -33,7 +33,7 @@ public class DoubleBounds implements ParameterBounds<Double> {
     @Override
     public boolean validBounds(DSElement val) {
         Double dVal;
-        if ( val.isDouble() )
+        if ( val.isNumber() )
             dVal = val.toDouble();
         else
             return false;
