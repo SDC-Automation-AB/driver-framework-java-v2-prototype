@@ -23,6 +23,8 @@ public class IPBounds implements ParameterBounds<String> {
         else
             return false;
 
+        if (sVal.toLowerCase().equals("localhost")) return true;
+
         String[] vals = sVal.split("\\.");
         if (vals.length != 4) return false;
         for (String s : vals) {

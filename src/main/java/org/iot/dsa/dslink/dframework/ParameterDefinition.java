@@ -34,6 +34,9 @@ public class ParameterDefinition {
         return new ParameterDefinition(name, type, null, null, null, description, placeholder);
     }
 
+    /**
+     * Automatically includes ParameterBounds object.
+     */
     public static ParameterDefinition makeEnumParam(String name, DSIEnum enumtype, String description, String placeholder) {
         return new ParameterDefinition(name, null, enumtype, null, new EnumBounds(enumtype), description, placeholder);
     }
