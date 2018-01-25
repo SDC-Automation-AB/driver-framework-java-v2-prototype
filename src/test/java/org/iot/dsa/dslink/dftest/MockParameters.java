@@ -5,6 +5,7 @@ package org.iot.dsa.dslink.dftest;
  * Created on 1/19/2018
  */
 
+import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.dframework.DFUtil;
 import org.iot.dsa.dslink.dframework.EditableNode;
 import org.iot.dsa.dslink.dframework.ParameterDefinition;
@@ -23,10 +24,14 @@ public class MockParameters {
     DSMap mockParameters;
 
     /**
-     * Empty constructor should generate a random set of valid parameters
+     * Empty constructor generates a blank parameter set.
      */
     public MockParameters() {
         mockParameters = new DSMap();
+    }
+
+    public MockParameters makeRandomParamSet(Random rand) {
+        throw new RuntimeException("Must overwrite makeRandomParamSet(Random rand) constructor!");
     }
 
     /**
