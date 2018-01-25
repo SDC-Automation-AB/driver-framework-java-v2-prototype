@@ -40,6 +40,10 @@ public class ParameterDefinition {
         return new ParameterDefinition(name, null, null, def, null, description, placeholder);
     }
 
+    public static ParameterDefinition makeParamWithBounds(String name, DSValueType type, ParameterBounds bounds, String description, String placeholder) {
+        return new ParameterDefinition(name, type, null, null, bounds, description, placeholder);
+    }
+
     public DSMetadata addToAction(DSAction action, DSIValue defOverride) {
         DSMetadata metadata;
         if (defOverride != null) {
