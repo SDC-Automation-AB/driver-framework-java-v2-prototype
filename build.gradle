@@ -4,7 +4,7 @@ apply plugin: 'java'
 apply plugin: 'application'
 
 group 'org.iot.dsa'
-mainClassName = 'org.iot.dsa.dslink.DSLink'p
+mainClassName = 'org.iot.dsa.dslink.DSLink'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
