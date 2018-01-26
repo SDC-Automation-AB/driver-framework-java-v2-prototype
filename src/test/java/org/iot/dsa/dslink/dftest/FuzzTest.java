@@ -107,6 +107,19 @@ public class FuzzTest {
         }
     }
 
+    public void buildMockTree(int size, TestingConnection seedObject) {
+        while (step_counter < size) {
+            System.out.println(createOrModifyDevice(seedObject));
+            step_counter++;
+        }
+        System.out.printf("DONE!");
+    }
+
+    @Test
+    public void buildMockTreeTest() {
+        buildMockTree(100, new TestingConnection());
+    }
+
     /**
      * Checks whether the output file is an exact match to the golden output.
      *
