@@ -14,6 +14,9 @@ public class IntegerBounds implements ParameterBounds<Integer> {
     private Integer min;
     private Integer max;
 
+    private final static int RAND_MAX = 100;
+    private final static int RAND_MIN = -100;
+
     public IntegerBounds() {
         this.min = Integer.MIN_VALUE;
         this.max = Integer.MAX_VALUE;
@@ -43,9 +46,9 @@ public class IntegerBounds implements ParameterBounds<Integer> {
 
     @Override
     public DSElement generateRandom(Random rand) {
-        Double dMin = Double.valueOf(min);
-        Double dMax = Double.valueOf(max);
-        Double answer = rand.nextDouble() * (dMax - dMin) + dMin;
+        Integer rMax = max > RAND_MAX && min < RAND_MAX ? RAND_MAX : max;
+        Integer rMin = min < RAND_MIN && max > RAND_MIN ? RAND_MIN : min;
+        Double answer = rand.nextDouble() * (rMax - rMin) + rMin;
         return DSLong.valueOf(answer.intValue());
     }
 }

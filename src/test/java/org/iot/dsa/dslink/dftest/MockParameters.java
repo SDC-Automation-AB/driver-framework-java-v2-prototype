@@ -63,4 +63,8 @@ public class MockParameters {
     boolean verifyParameters(MockParameters otherSet) {
         return true;
     }
+
+    public DSMap getParamMap() {
+        return mockParameters;
+    }
 }
