@@ -1557,7 +1557,7 @@ turquoiseMonadnock : true
 Root: 
 
 == 61 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"blueCrag","Connection String":"blueCrag","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"blueCrag","Connection String":"blueCrag","Ping Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : valuable
@@ -1656,7 +1656,7 @@ Root:
 	Conn blueCrag: Status:Connected, Stopped:false
 
 == 64 ===============================================================================
-Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"rustMillipede","Device String":"rustMillipede","Ping Rate":10}
+Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"rustMillipede","Device String":"rustMillipede","Ping Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : valuable
@@ -1758,7 +1758,7 @@ Root:
 		Dev rustMillipede: Status:Connected, Stopped:false
 
 == 67 ===============================================================================
-Invoking /Nodes/blueCrag/rustMillipede/Add Point with parameters {"Name":"olive_armpit","ID":"olive_armpit","Poll Rate":10}
+Invoking /Nodes/blueCrag/rustMillipede/Add Point with parameters {"Name":"olive_armpit","ID":"olive_armpit","Poll Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : valuable
@@ -2389,7 +2389,7 @@ Root:
 		Dev rustMillipede: Status:Stopped by Parent, Stopped:false
 
 == 85 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"forestGreenRivercliff","Connection String":"forestGreenRivercliff","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"forestGreenRivercliff","Connection String":"forestGreenRivercliff","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : questionable
@@ -2461,7 +2461,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Connected, Stopped:false
 
 == 87 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"terracottaChimpanzee","Device String":"terracottaChimpanzee","Ping Rate":10}
+Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"terracottaChimpanzee","Device String":"terracottaChimpanzee","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : questionable
@@ -2831,7 +2831,7 @@ Root:
 		Dev terracottaChimpanzee: Status:Stopped by Parent, Stopped:false
 
 == 97 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"turquoiseMonadnock","Connection String":"turquoiseMonadnock","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"turquoiseMonadnock","Connection String":"turquoiseMonadnock","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : questionable
@@ -3021,7 +3021,7 @@ Root:
 	Conn turquoiseMonadnock: Status:Failed, Stopped:false
 
 == 102 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"viridianRivercliff","Connection String":"viridianRivercliff","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"viridianRivercliff","Connection String":"viridianRivercliff","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : questionable
@@ -3060,7 +3060,7 @@ Root:
 	Conn viridianRivercliff: Status:Connected, Stopped:false
 
 == 103 ===============================================================================
-Invoking /Nodes/viridianRivercliff/Add Device with parameters {"Name":"slateNightingale","Device String":"slateNightingale","Ping Rate":10}
+Invoking /Nodes/viridianRivercliff/Add Device with parameters {"Name":"slateNightingale","Device String":"slateNightingale","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : questionable
@@ -3180,7 +3180,7 @@ Root:
 		Dev slateNightingale: Status:Failed, Stopped:false
 
 == 106 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"shamrockCentipede","Device String":"shamrockCentipede","Ping Rate":10}
+Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"shamrockCentipede","Device String":"shamrockCentipede","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : questionable
@@ -3385,7 +3385,7 @@ Root:
 		Dev slateNightingale: Status:Failed, Stopped:false
 
 == 111 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"vermilion_indexFinger","ID":"vermilion_indexFinger","Poll Rate":10}
+Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"vermilion_indexFinger","ID":"vermilion_indexFinger","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : questionable
@@ -3637,7 +3637,7 @@ Root:
 		Dev slateNightingale: Status:Stopped by Parent, Stopped:false
 
 == 117 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/shamrockCentipede/Add Point with parameters {"Name":"vermilion_face","ID":"vermilion_face","Poll Rate":10}
+Invoking /Nodes/turquoiseMonadnock/shamrockCentipede/Add Point with parameters {"Name":"vermilion_face","ID":"vermilion_face","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : questionable
@@ -4067,7 +4067,7 @@ Root:
 		Dev slateNightingale: Status:Stopped by Parent, Stopped:false
 
 == 127 ===============================================================================
-Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"seaGreen_leg","ID":"seaGreen_leg","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"seaGreen_leg","ID":"seaGreen_leg","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : questionable
@@ -4947,7 +4947,7 @@ Root:
 			Point seaGreen_leg: Status:Stopped by Parent, Stopped:false, Value:
 
 == 147 ===============================================================================
-Invoking /Nodes/blueCrag/rustMillipede/Add Point with parameters {"Name":"silver_mouth","ID":"silver_mouth","Poll Rate":10}
+Invoking /Nodes/blueCrag/rustMillipede/Add Point with parameters {"Name":"silver_mouth","ID":"silver_mouth","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : questionable
@@ -5505,7 +5505,7 @@ Root:
 			Point seaGreen_leg: Status:Stopped, Stopped:false, Value:
 
 == 160 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"forestGreenRivercliff","Connection String":"forestGreenRivercliff","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"forestGreenRivercliff","Connection String":"forestGreenRivercliff","Ping Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : questionable
@@ -5548,7 +5548,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Failed, Stopped:false
 
 == 161 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/shamrockCentipede/Add Point with parameters {"Name":"orange_sideburns","ID":"orange_sideburns","Poll Rate":10}
+Invoking /Nodes/turquoiseMonadnock/shamrockCentipede/Add Point with parameters {"Name":"orange_sideburns","ID":"orange_sideburns","Poll Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : questionable
@@ -5768,7 +5768,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Failed, Stopped:false
 
 == 166 ===============================================================================
-Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"jet_neck","ID":"jet_neck","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"jet_neck","ID":"jet_neck","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : questionable
@@ -6482,7 +6482,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Failed, Stopped:false
 
 == 182 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/shamrockCentipede/Add Point with parameters {"Name":"lilac_face","ID":"lilac_face","Poll Rate":10}
+Invoking /Nodes/turquoiseMonadnock/shamrockCentipede/Add Point with parameters {"Name":"lilac_face","ID":"lilac_face","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : questionable
@@ -8505,7 +8505,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Connected, Stopped:false
 
 == 227 ===============================================================================
-Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"hotPinkApe","Device String":"hotPinkApe","Ping Rate":10}
+Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"hotPinkApe","Device String":"hotPinkApe","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : marked
@@ -8677,7 +8677,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Connected, Stopped:false
 
 == 231 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"terracottaChimpanzee","Device String":"terracottaChimpanzee","Ping Rate":10}
+Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"terracottaChimpanzee","Device String":"terracottaChimpanzee","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : marked
@@ -8978,7 +8978,7 @@ Root:
 		Dev terracottaChimpanzee: Status:Connected, Stopped:false
 
 == 238 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"carmine_breast","ID":"carmine_breast","Poll Rate":10}
+Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"carmine_breast","ID":"carmine_breast","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : marked
@@ -9066,7 +9066,7 @@ Root:
 			Point carmine_breast: Status:Failed, Stopped:false, Value:
 
 == 240 ===============================================================================
-Invoking /Nodes/blueCrag/rustMillipede/Add Point with parameters {"Name":"peach_heel","ID":"peach_heel","Poll Rate":10}
+Invoking /Nodes/blueCrag/rustMillipede/Add Point with parameters {"Name":"peach_heel","ID":"peach_heel","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : marked
@@ -9425,7 +9425,7 @@ Root:
 			Point carmine_breast: Status:Stopped by Parent, Stopped:false, Value:
 
 == 248 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"viridianRivercliff","Connection String":"viridianRivercliff","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"viridianRivercliff","Connection String":"viridianRivercliff","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : marked
@@ -9740,7 +9740,7 @@ Root:
 	Conn viridianRivercliff: Status:Connected, Stopped:false
 
 == 255 ===============================================================================
-Invoking /Nodes/blueCrag/hotPinkApe/Add Point with parameters {"Name":"sepia_eyebrow","ID":"sepia_eyebrow","Poll Rate":10}
+Invoking /Nodes/blueCrag/hotPinkApe/Add Point with parameters {"Name":"sepia_eyebrow","ID":"sepia_eyebrow","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : marked
@@ -10810,7 +10810,7 @@ Root:
 	Conn viridianRivercliff: Status:Connected, Stopped:false
 
 == 280 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"blueCrag","Connection String":"blueCrag","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"blueCrag","Connection String":"blueCrag","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : marked
@@ -12111,7 +12111,7 @@ Root:
 	Conn blueCrag: Status:Failed, Stopped:false
 
 == 311 ===============================================================================
-Invoking /Nodes/viridianRivercliff/Add Device with parameters {"Name":"slateNightingale","Device String":"slateNightingale","Ping Rate":10}
+Invoking /Nodes/viridianRivercliff/Add Device with parameters {"Name":"slateNightingale","Device String":"slateNightingale","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : marked
@@ -12498,7 +12498,7 @@ Root:
 	Conn blueCrag: Status:Stopped, Stopped:true
 
 == 320 ===============================================================================
-Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"rustMillipede","Device String":"rustMillipede","Ping Rate":10}
+Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"rustMillipede","Device String":"rustMillipede","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : marked
@@ -13466,7 +13466,7 @@ Root:
 		Dev rustMillipede: Status:Stopped by Parent, Stopped:false
 
 == 342 ===============================================================================
-Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"ocher_beard","ID":"ocher_beard","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"ocher_beard","ID":"ocher_beard","Poll Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : marked
@@ -15138,7 +15138,7 @@ Root:
 			Point ocher_beard: Status:Stopped by Parent, Stopped:false, Value:
 
 == 381 ===============================================================================
-Invoking /Nodes/viridianRivercliff/Add Device with parameters {"Name":"charcoalMole","Device String":"charcoalMole","Ping Rate":10}
+Invoking /Nodes/viridianRivercliff/Add Device with parameters {"Name":"charcoalMole","Device String":"charcoalMole","Ping Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -15840,7 +15840,7 @@ Root:
 			Point carmine_breast: Status:Stopped by Parent, Stopped:false, Value:
 
 == 398 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"steelBlue_thumb","ID":"steelBlue_thumb","Poll Rate":10}
+Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"steelBlue_thumb","ID":"steelBlue_thumb","Poll Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -16879,7 +16879,7 @@ Root:
 			Point steelBlue_thumb: Status:Stopped, Stopped:false, Value:
 
 == 424 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"blueCrag","Connection String":"blueCrag","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"blueCrag","Connection String":"blueCrag","Ping Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : zonked
@@ -17084,7 +17084,7 @@ Root:
 	Conn blueCrag: Status:Connected, Stopped:false
 
 == 429 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"viridianRivercliff","Connection String":"viridianRivercliff","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"viridianRivercliff","Connection String":"viridianRivercliff","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -17168,7 +17168,7 @@ Root:
 	Conn viridianRivercliff: Status:Connected, Stopped:false
 
 == 431 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"cinnamon_elbow","ID":"cinnamon_elbow","Poll Rate":10}
+Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"cinnamon_elbow","ID":"cinnamon_elbow","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -17426,7 +17426,7 @@ Root:
 	Conn viridianRivercliff: Status:Connected, Stopped:false
 
 == 437 ===============================================================================
-Invoking /Nodes/viridianRivercliff/Add Device with parameters {"Name":"charcoalMole","Device String":"charcoalMole","Ping Rate":10}
+Invoking /Nodes/viridianRivercliff/Add Device with parameters {"Name":"charcoalMole","Device String":"charcoalMole","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -17470,7 +17470,7 @@ Root:
 		Dev charcoalMole: Status:Connected, Stopped:false
 
 == 438 ===============================================================================
-Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"darkSkunk","Device String":"darkSkunk","Ping Rate":10}
+Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"darkSkunk","Device String":"darkSkunk","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -17695,7 +17695,7 @@ Root:
 		Dev charcoalMole: Status:Connected, Stopped:false
 
 == 443 ===============================================================================
-Invoking /Nodes/viridianRivercliff/charcoalMole/Add Point with parameters {"Name":"beige_eyelash","ID":"beige_eyelash","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/charcoalMole/Add Point with parameters {"Name":"beige_eyelash","ID":"beige_eyelash","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -18508,7 +18508,7 @@ Root:
 			Point beige_eyelash: Status:Stopped by Parent, Stopped:false, Value:tame
 
 == 461 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"jungleGreenChough","Device String":"jungleGreenChough","Ping Rate":10}
+Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"jungleGreenChough","Device String":"jungleGreenChough","Ping Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -19542,7 +19542,7 @@ Root:
 			Point beige_eyelash: Status:Connected, Stopped:false, Value:tame
 
 == 485 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"turquoiseMonadnock","Connection String":"turquoiseMonadnock","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"turquoiseMonadnock","Connection String":"turquoiseMonadnock","Ping Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : zonked
@@ -19938,7 +19938,7 @@ Root:
 	Conn turquoiseMonadnock: Status:Failed, Stopped:false
 
 == 494 ===============================================================================
-Invoking /Nodes/viridianRivercliff/charcoalMole/Add Point with parameters {"Name":"green_throat","ID":"green_throat","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/charcoalMole/Add Point with parameters {"Name":"green_throat","ID":"green_throat","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -20073,7 +20073,7 @@ Root:
 	Conn turquoiseMonadnock: Status:Stopped, Stopped:true
 
 == 497 ===============================================================================
-Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"rustMillipede","Device String":"rustMillipede","Ping Rate":10}
+Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"rustMillipede","Device String":"rustMillipede","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -20394,7 +20394,7 @@ Root:
 	Conn turquoiseMonadnock: Status:Stopped, Stopped:true
 
 == 504 ===============================================================================
-Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"hotPinkApe","Device String":"hotPinkApe","Ping Rate":10}
+Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"hotPinkApe","Device String":"hotPinkApe","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -20535,7 +20535,7 @@ Root:
 	Conn turquoiseMonadnock: Status:Stopped, Stopped:true
 
 == 507 ===============================================================================
-Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"charcoalLouse","Device String":"charcoalLouse","Ping Rate":10}
+Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"charcoalLouse","Device String":"charcoalLouse","Ping Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : zonked
@@ -20823,7 +20823,7 @@ Root:
 	Conn turquoiseMonadnock: Status:Failed, Stopped:false
 
 == 513 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"cinnamon_elbow","ID":"cinnamon_elbow","Poll Rate":10}
+Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"cinnamon_elbow","ID":"cinnamon_elbow","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -21313,7 +21313,7 @@ Root:
 	Conn turquoiseMonadnock: Status:Stopped, Stopped:true
 
 == 523 ===============================================================================
-Invoking /Nodes/viridianRivercliff/charcoalMole/Add Point with parameters {"Name":"slate_earlobe","ID":"slate_earlobe","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/charcoalMole/Add Point with parameters {"Name":"slate_earlobe","ID":"slate_earlobe","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -21833,7 +21833,7 @@ Root:
 	Conn turquoiseMonadnock: Status:Stopped, Stopped:true
 
 == 534 ===============================================================================
-Invoking /Nodes/blueCrag/darkSkunk/Add Point with parameters {"Name":"hotPink_chin","ID":"hotPink_chin","Poll Rate":10}
+Invoking /Nodes/blueCrag/darkSkunk/Add Point with parameters {"Name":"hotPink_chin","ID":"hotPink_chin","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -22013,7 +22013,7 @@ Root:
 	Conn turquoiseMonadnock: Status:Stopped, Stopped:true
 
 == 538 ===============================================================================
-Invoking /Nodes/viridianRivercliff/charcoalMole/Add Point with parameters {"Name":"ivory_leg","ID":"ivory_leg","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/charcoalMole/Add Point with parameters {"Name":"ivory_leg","ID":"ivory_leg","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -23312,7 +23312,7 @@ Root:
 			Point ivory_leg: Status:Stopped by Parent, Stopped:false, Value:
 
 == 567 ===============================================================================
-Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"limeToucan","Device String":"limeToucan","Ping Rate":10}
+Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"limeToucan","Device String":"limeToucan","Ping Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -23447,7 +23447,7 @@ Root:
 			Point ivory_leg: Status:Stopped, Stopped:false, Value:
 
 == 570 ===============================================================================
-Invoking /Nodes/viridianRivercliff/charcoalMole/Add Point with parameters {"Name":"beige_eyelash","ID":"beige_eyelash","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/charcoalMole/Add Point with parameters {"Name":"beige_eyelash","ID":"beige_eyelash","Poll Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -23585,7 +23585,7 @@ Root:
 			Point beige_eyelash: Status:Stopped by Parent, Stopped:false, Value:
 
 == 573 ===============================================================================
-Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"forestGreenMarten","Device String":"forestGreenMarten","Ping Rate":10}
+Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"forestGreenMarten","Device String":"forestGreenMarten","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -23835,7 +23835,7 @@ Root:
 			Point beige_eyelash: Status:Stopped by Parent, Stopped:false, Value:
 
 == 579 ===============================================================================
-Invoking /Nodes/viridianRivercliff/charcoalMole/Add Point with parameters {"Name":"mustard_mustache","ID":"mustard_mustache","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/charcoalMole/Add Point with parameters {"Name":"mustard_mustache","ID":"mustard_mustache","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -24315,7 +24315,7 @@ Root:
 			Point mustard_mustache: Status:Stopped by Parent, Stopped:false, Value:
 
 == 591 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"turquoiseMonadnock","Connection String":"turquoiseMonadnock","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"turquoiseMonadnock","Connection String":"turquoiseMonadnock","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -24642,7 +24642,7 @@ Root:
 	Conn turquoiseMonadnock: Status:Stopped, Stopped:true
 
 == 599 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"forestGreenRivercliff","Connection String":"forestGreenRivercliff","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"forestGreenRivercliff","Connection String":"forestGreenRivercliff","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -24852,7 +24852,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Connected, Stopped:false
 
 == 604 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"shamrockCentipede","Device String":"shamrockCentipede","Ping Rate":10}
+Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"shamrockCentipede","Device String":"shamrockCentipede","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -25196,7 +25196,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Connected, Stopped:false
 
 == 612 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"terracottaChimpanzee","Device String":"terracottaChimpanzee","Ping Rate":10}
+Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"terracottaChimpanzee","Device String":"terracottaChimpanzee","Ping Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -25988,7 +25988,7 @@ Root:
 		Dev terracottaChimpanzee: Status:Stopped, Stopped:true
 
 == 630 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/shamrockCentipede/Add Point with parameters {"Name":"navyBlue_beard","ID":"navyBlue_beard","Poll Rate":10}
+Invoking /Nodes/turquoiseMonadnock/shamrockCentipede/Add Point with parameters {"Name":"navyBlue_beard","ID":"navyBlue_beard","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -26078,7 +26078,7 @@ Root:
 		Dev terracottaChimpanzee: Status:Stopped, Stopped:true
 
 == 632 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"cinnamon_elbow","ID":"cinnamon_elbow","Poll Rate":10}
+Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"cinnamon_elbow","ID":"cinnamon_elbow","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -26308,7 +26308,7 @@ Root:
 			Point cinnamon_elbow: Status:Stopped by Parent, Stopped:false, Value:
 
 == 637 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"blueCrag","Connection String":"blueCrag","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"blueCrag","Connection String":"blueCrag","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -27389,7 +27389,7 @@ Root:
 	Conn blueCrag: Status:Failed, Stopped:false
 
 == 660 ===============================================================================
-Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"hotPinkApe","Device String":"hotPinkApe","Ping Rate":10}
+Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"hotPinkApe","Device String":"hotPinkApe","Ping Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -27677,7 +27677,7 @@ Root:
 		Dev hotPinkApe: Status:Stopped, Stopped:true
 
 == 666 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"wheatWallaby","Device String":"wheatWallaby","Ping Rate":10}
+Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"wheatWallaby","Device String":"wheatWallaby","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -29288,7 +29288,7 @@ Root:
 		Dev terracottaChimpanzee: Status:Stopped by Parent, Stopped:false
 
 == 700 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"blueCrag","Connection String":"blueCrag","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"blueCrag","Connection String":"blueCrag","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -29847,7 +29847,7 @@ Root:
 		Dev terracottaChimpanzee: Status:Stopped by Parent, Stopped:false
 
 == 712 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"ebonyBeetle","Device String":"ebonyBeetle","Ping Rate":10}
+Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"ebonyBeetle","Device String":"ebonyBeetle","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -30787,7 +30787,7 @@ Root:
 		Dev terracottaChimpanzee: Status:Stopped, Stopped:true
 
 == 732 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"fuchsiaAntelope","Device String":"fuchsiaAntelope","Ping Rate":10}
+Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"fuchsiaAntelope","Device String":"fuchsiaAntelope","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -30835,7 +30835,7 @@ Root:
 		Dev terracottaChimpanzee: Status:Stopped, Stopped:true
 
 == 733 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"amethystLapwing","Device String":"amethystLapwing","Ping Rate":10}
+Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"amethystLapwing","Device String":"amethystLapwing","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -31080,7 +31080,7 @@ Root:
 		Dev terracottaChimpanzee: Status:Stopped by Parent, Stopped:false
 
 == 738 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"blueCrag","Connection String":"blueCrag","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"blueCrag","Connection String":"blueCrag","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -31302,7 +31302,7 @@ Root:
 	Conn blueCrag: Status:Failed, Stopped:false
 
 == 743 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"viridianRivercliff","Connection String":"viridianRivercliff","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"viridianRivercliff","Connection String":"viridianRivercliff","Ping Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -31434,7 +31434,7 @@ Root:
 	Conn viridianRivercliff: Status:Stopped, Stopped:true
 
 == 746 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/amethystLapwing/Add Point with parameters {"Name":"grey_forehead","ID":"grey_forehead","Poll Rate":10}
+Invoking /Nodes/turquoiseMonadnock/amethystLapwing/Add Point with parameters {"Name":"grey_forehead","ID":"grey_forehead","Poll Rate":15}
 blueCrag : false
 	rustMillipede : true
 		olive_armpit : zonked
@@ -32064,7 +32064,7 @@ Root:
 	Conn viridianRivercliff: Status:Connected, Stopped:false
 
 == 760 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/shamrockCentipede/Add Point with parameters {"Name":"black_eyebrow","ID":"black_eyebrow","Poll Rate":10}
+Invoking /Nodes/turquoiseMonadnock/shamrockCentipede/Add Point with parameters {"Name":"black_eyebrow","ID":"black_eyebrow","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -32294,7 +32294,7 @@ Root:
 	Conn viridianRivercliff: Status:Connected, Stopped:false
 
 == 765 ===============================================================================
-Invoking /Nodes/viridianRivercliff/Add Device with parameters {"Name":"jadeWolverine","Device String":"jadeWolverine","Ping Rate":10}
+Invoking /Nodes/viridianRivercliff/Add Device with parameters {"Name":"jadeWolverine","Device String":"jadeWolverine","Ping Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -32623,7 +32623,7 @@ Root:
 		Dev jadeWolverine: Status:Failed, Stopped:false
 
 == 772 ===============================================================================
-Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"rustMillipede","Device String":"rustMillipede","Ping Rate":10}
+Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"rustMillipede","Device String":"rustMillipede","Ping Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -32863,7 +32863,7 @@ Root:
 		Dev jadeWolverine: Status:Stopped, Stopped:true
 
 == 777 ===============================================================================
-Invoking /Nodes/blueCrag/rustMillipede/Add Point with parameters {"Name":"olive_armpit","ID":"olive_armpit","Poll Rate":10}
+Invoking /Nodes/blueCrag/rustMillipede/Add Point with parameters {"Name":"olive_armpit","ID":"olive_armpit","Poll Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -33059,7 +33059,7 @@ Root:
 		Dev jadeWolverine: Status:Stopped, Stopped:true
 
 == 781 ===============================================================================
-Invoking /Nodes/viridianRivercliff/jadeWolverine/Add Point with parameters {"Name":"blue_knee","ID":"blue_knee","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/jadeWolverine/Add Point with parameters {"Name":"blue_knee","ID":"blue_knee","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -33359,7 +33359,7 @@ Root:
 			Point blue_knee: Status:Stopped by Parent, Stopped:false, Value:
 
 == 787 ===============================================================================
-Invoking /Nodes/blueCrag/rustMillipede/Add Point with parameters {"Name":"peach_heel","ID":"peach_heel","Poll Rate":10}
+Invoking /Nodes/blueCrag/rustMillipede/Add Point with parameters {"Name":"peach_heel","ID":"peach_heel","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -33716,7 +33716,7 @@ Root:
 			Point blue_knee: Status:Stopped by Parent, Stopped:false, Value:
 
 == 794 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/fuchsiaAntelope/Add Point with parameters {"Name":"dark_knuckle","ID":"dark_knuckle","Poll Rate":10}
+Invoking /Nodes/turquoiseMonadnock/fuchsiaAntelope/Add Point with parameters {"Name":"dark_knuckle","ID":"dark_knuckle","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -34027,7 +34027,7 @@ Root:
 			Point blue_knee: Status:Stopped by Parent, Stopped:false, Value:
 
 == 800 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"slate_eyelid","ID":"slate_eyelid","Poll Rate":10}
+Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"slate_eyelid","ID":"slate_eyelid","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -35535,7 +35535,7 @@ Root:
 			Point blue_knee: Status:Stopped, Stopped:false, Value:
 
 == 829 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"turquoiseMonadnock","Connection String":"turquoiseMonadnock","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"turquoiseMonadnock","Connection String":"turquoiseMonadnock","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -35664,7 +35664,7 @@ Root:
 	Conn turquoiseMonadnock: Status:Failed, Stopped:false
 
 == 832 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"shamrockCentipede","Device String":"shamrockCentipede","Ping Rate":10}
+Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"shamrockCentipede","Device String":"shamrockCentipede","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -35708,7 +35708,7 @@ Root:
 		Dev shamrockCentipede: Status:Stopped by Parent, Stopped:false
 
 == 833 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"forestGreenGoldfinch","Device String":"forestGreenGoldfinch","Ping Rate":10}
+Invoking /Nodes/turquoiseMonadnock/Add Device with parameters {"Name":"forestGreenGoldfinch","Device String":"forestGreenGoldfinch","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -36022,7 +36022,7 @@ Root:
 		Dev forestGreenGoldfinch: Status:Failed, Stopped:false
 
 == 840 ===============================================================================
-Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"hotPinkApe","Device String":"hotPinkApe","Ping Rate":10}
+Invoking /Nodes/blueCrag/Add Device with parameters {"Name":"hotPinkApe","Device String":"hotPinkApe","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -36160,7 +36160,7 @@ Root:
 		Dev forestGreenGoldfinch: Status:Stopped by Parent, Stopped:false
 
 == 843 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"tealGoose","Device String":"tealGoose","Ping Rate":10}
+Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"tealGoose","Device String":"tealGoose","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -36583,7 +36583,7 @@ Root:
 		Dev forestGreenGoldfinch: Status:Stopped by Parent, Stopped:false
 
 == 852 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/tealGoose/Add Point with parameters {"Name":"pale_thigh","ID":"pale_thigh","Poll Rate":10}
+Invoking /Nodes/forestGreenRivercliff/tealGoose/Add Point with parameters {"Name":"pale_thigh","ID":"pale_thigh","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -36818,7 +36818,7 @@ Root:
 		Dev forestGreenGoldfinch: Status:Stopped by Parent, Stopped:false
 
 == 857 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/forestGreenGoldfinch/Add Point with parameters {"Name":"forestGreen_eyebrow","ID":"forestGreen_eyebrow","Poll Rate":10}
+Invoking /Nodes/turquoiseMonadnock/forestGreenGoldfinch/Add Point with parameters {"Name":"forestGreen_eyebrow","ID":"forestGreen_eyebrow","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -37433,7 +37433,7 @@ Root:
 			Point forestGreen_eyebrow: Status:Stopped, Stopped:false, Value:
 
 == 871 ===============================================================================
-Invoking /Nodes/blueCrag/rustMillipede/Add Point with parameters {"Name":"goldenrod_scalp","ID":"goldenrod_scalp","Poll Rate":10}
+Invoking /Nodes/blueCrag/rustMillipede/Add Point with parameters {"Name":"goldenrod_scalp","ID":"goldenrod_scalp","Poll Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : zonked
@@ -37883,7 +37883,7 @@ Root:
 			Point forestGreen_eyebrow: Status:Stopped, Stopped:false, Value:
 
 == 881 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/forestGreenGoldfinch/Add Point with parameters {"Name":"thistle_tongue","ID":"thistle_tongue","Poll Rate":10}
+Invoking /Nodes/turquoiseMonadnock/forestGreenGoldfinch/Add Point with parameters {"Name":"thistle_tongue","ID":"thistle_tongue","Poll Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : zonked
@@ -37975,7 +37975,7 @@ Root:
 			Point thistle_tongue: Status:Stopped by Parent, Stopped:false, Value:
 
 == 883 ===============================================================================
-Invoking /Nodes/blueCrag/hotPinkApe/Add Point with parameters {"Name":"sepia_eyebrow","ID":"sepia_eyebrow","Poll Rate":10}
+Invoking /Nodes/blueCrag/hotPinkApe/Add Point with parameters {"Name":"sepia_eyebrow","ID":"sepia_eyebrow","Poll Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : zonked
@@ -38069,7 +38069,7 @@ Root:
 			Point thistle_tongue: Status:Stopped by Parent, Stopped:false, Value:
 
 == 885 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"forestGreenRivercliff","Connection String":"forestGreenRivercliff","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"forestGreenRivercliff","Connection String":"forestGreenRivercliff","Ping Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : zonked
@@ -38165,7 +38165,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Failed, Stopped:false
 
 == 887 ===============================================================================
-Invoking /Nodes/viridianRivercliff/Add Device with parameters {"Name":"slateNightingale","Device String":"slateNightingale","Ping Rate":10}
+Invoking /Nodes/viridianRivercliff/Add Device with parameters {"Name":"slateNightingale","Device String":"slateNightingale","Ping Rate":15}
 blueCrag : true
 	rustMillipede : true
 		olive_armpit : zonked
@@ -39036,7 +39036,7 @@ Root:
 			Point thistle_tongue: Status:Stopped by Parent, Stopped:false, Value:
 
 == 905 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/forestGreenGoldfinch/Add Point with parameters {"Name":"peach_earlobe","ID":"peach_earlobe","Poll Rate":10}
+Invoking /Nodes/turquoiseMonadnock/forestGreenGoldfinch/Add Point with parameters {"Name":"peach_earlobe","ID":"peach_earlobe","Poll Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -39183,7 +39183,7 @@ Root:
 			Point peach_earlobe: Status:Stopped, Stopped:false, Value:
 
 == 908 ===============================================================================
-Invoking /Nodes/Add Connection with parameters {"Name":"forestGreenRivercliff","Connection String":"forestGreenRivercliff","Ping Rate":10}
+Invoking /Nodes/Add Connection with parameters {"Name":"forestGreenRivercliff","Connection String":"forestGreenRivercliff","Ping Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -39383,7 +39383,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Failed, Stopped:false
 
 == 912 ===============================================================================
-Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"celadon_forearm","ID":"celadon_forearm","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"celadon_forearm","ID":"celadon_forearm","Poll Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -39587,7 +39587,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Failed, Stopped:false
 
 == 916 ===============================================================================
-Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"umber_pupil","ID":"umber_pupil","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"umber_pupil","ID":"umber_pupil","Poll Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -39899,7 +39899,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Failed, Stopped:false
 
 == 922 ===============================================================================
-Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"apricot_palm","ID":"apricot_palm","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"apricot_palm","ID":"apricot_palm","Poll Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -40058,7 +40058,7 @@ Root:
 	Conn forestGreenRivercliff: Status:Failed, Stopped:false
 
 == 925 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"terracottaChimpanzee","Device String":"terracottaChimpanzee","Ping Rate":10}
+Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"terracottaChimpanzee","Device String":"terracottaChimpanzee","Ping Rate":15}
 blueCrag : false
 	rustMillipede : false
 		olive_armpit : zonked
@@ -40706,7 +40706,7 @@ Root:
 		Dev terracottaChimpanzee: Status:Stopped by Parent, Stopped:false
 
 == 937 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"gray_beard","ID":"gray_beard","Poll Rate":10}
+Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"gray_beard","ID":"gray_beard","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -41091,7 +41091,7 @@ Root:
 			Point gray_beard: Status:Stopped, Stopped:false, Value:
 
 == 944 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/shamrockCentipede/Add Point with parameters {"Name":"umber_knuckle","ID":"umber_knuckle","Poll Rate":10}
+Invoking /Nodes/turquoiseMonadnock/shamrockCentipede/Add Point with parameters {"Name":"umber_knuckle","ID":"umber_knuckle","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -42379,7 +42379,7 @@ Root:
 			Point gray_beard: Status:Stopped by Parent, Stopped:false, Value:
 
 == 967 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"slate_eyebrow","ID":"slate_eyebrow","Poll Rate":10}
+Invoking /Nodes/forestGreenRivercliff/terracottaChimpanzee/Add Point with parameters {"Name":"slate_eyebrow","ID":"slate_eyebrow","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -42834,7 +42834,7 @@ Root:
 			Point slate_eyebrow: Status:Stopped, Stopped:false, Value:
 
 == 975 ===============================================================================
-Invoking /Nodes/turquoiseMonadnock/forestGreenGoldfinch/Add Point with parameters {"Name":"azure_nail","ID":"azure_nail","Poll Rate":10}
+Invoking /Nodes/turquoiseMonadnock/forestGreenGoldfinch/Add Point with parameters {"Name":"azure_nail","ID":"azure_nail","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -43414,7 +43414,7 @@ Root:
 			Point slate_eyebrow: Status:Stopped, Stopped:false, Value:
 
 == 985 ===============================================================================
-Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"peach_pinkie","ID":"peach_pinkie","Poll Rate":10}
+Invoking /Nodes/viridianRivercliff/slateNightingale/Add Point with parameters {"Name":"peach_pinkie","ID":"peach_pinkie","Poll Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
@@ -44004,7 +44004,7 @@ Root:
 			Point slate_eyebrow: Status:Stopped, Stopped:false, Value:
 
 == 995 ===============================================================================
-Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"celadonBaboon","Device String":"celadonBaboon","Ping Rate":10}
+Invoking /Nodes/forestGreenRivercliff/Add Device with parameters {"Name":"celadonBaboon","Device String":"celadonBaboon","Ping Rate":15}
 blueCrag : true
 	rustMillipede : false
 		olive_armpit : zonked
