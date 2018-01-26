@@ -13,12 +13,12 @@ public class ParameterDefinition {
     public final DSValueType type;
     public final DSIEnum enumtype;
     public final DSIValue def;
-    private final ParameterBounds bounds;
+    private final ParameterBounds<?> bounds;
     public final String description;
     public final String placeholder;
 
 
-    protected ParameterDefinition(String name, DSValueType type, DSIEnum enumtype, DSIValue def, ParameterBounds bounds,
+    protected ParameterDefinition(String name, DSValueType type, DSIEnum enumtype, DSIValue def, ParameterBounds<?> bounds,
                                   String description, String placeholder) {
         super();
         this.name = name;
@@ -45,11 +45,11 @@ public class ParameterDefinition {
         return new ParameterDefinition(name, null, null, def, null, description, placeholder);
     }
 
-    public static ParameterDefinition makeParamWithBounds(String name, DSValueType type, ParameterBounds bounds, String description, String placeholder) {
+    public static ParameterDefinition makeParamWithBounds(String name, DSValueType type, ParameterBounds<?> bounds, String description, String placeholder) {
         return new ParameterDefinition(name, type, null, null, bounds, description, placeholder);
     }
 
-    public static ParameterDefinition makeParamWithBoundsAndDef(String name, DSIValue def, ParameterBounds bounds, String description, String placeholder) {
+    public static ParameterDefinition makeParamWithBoundsAndDef(String name, DSIValue def, ParameterBounds<?> bounds, String description, String placeholder) {
         return new ParameterDefinition(name, null, null, def, bounds, description, placeholder);
     }
 
