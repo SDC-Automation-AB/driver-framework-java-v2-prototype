@@ -14,6 +14,9 @@ public class DoubleBounds implements ParameterBounds<Double> {
     private Double min;
     private Double max;
 
+    private final static double RAND_MAX = 10000;
+    private final static double RAND_MIN = -10000;
+
     public DoubleBounds() {
         this.min = Double.MIN_VALUE;
         this.max = Double.MAX_VALUE;
@@ -43,6 +46,8 @@ public class DoubleBounds implements ParameterBounds<Double> {
 
     @Override
     public DSElement generateRandom(Random rand) {
-        return DSDouble.valueOf(rand.nextDouble() * (max - min) + min);
+        Double rMax = max > RAND_MAX && min < RAND_MAX ? RAND_MAX : max;
+        Double rMin = min < RAND_MIN && max > RAND_MIN ? RAND_MIN : min;
+        return DSDouble.valueOf(rand.nextDouble() * (rMax - rMin) + rMin);
     }
 }

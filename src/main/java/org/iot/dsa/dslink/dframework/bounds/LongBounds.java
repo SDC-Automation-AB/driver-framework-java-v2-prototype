@@ -14,6 +14,10 @@ public class LongBounds implements ParameterBounds<Long> {
     private Long min;
     private Long max;
 
+
+    private final static long RAND_MAX = 1000;
+    private final static long RAND_MIN = -1000;
+
     public LongBounds() {
         this.min = Long.MIN_VALUE;
         this.max = Long.MAX_VALUE;
@@ -43,9 +47,9 @@ public class LongBounds implements ParameterBounds<Long> {
 
     @Override
     public DSElement generateRandom(Random rand) {
-        Double dMin = Double.valueOf(min);
-        Double dMax = Double.valueOf(max);
-        Double answer = rand.nextDouble() * (dMax - dMin) + dMin;
+        Long rMax = max > RAND_MAX && min < RAND_MAX ? RAND_MAX : max;
+        Long rMin = min < RAND_MIN && max > RAND_MIN ? RAND_MIN : min;
+        Double answer = rand.nextDouble() * (rMax - rMin) + rMin;
         return DSLong.valueOf(answer.longValue());
     }
 }

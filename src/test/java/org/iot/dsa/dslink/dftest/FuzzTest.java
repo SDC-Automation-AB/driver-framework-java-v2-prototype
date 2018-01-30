@@ -107,7 +107,7 @@ public class FuzzTest {
         }
     }
 
-    public void buildMockTree(int size, TestingConnection seedObject) {
+    public static void buildMockTree(int size, TestingConnection seedObject) {
         while (step_counter < size) {
             System.out.println(createOrModifyDevice(seedObject));
             step_counter++;
@@ -127,6 +127,7 @@ public class FuzzTest {
      */
     @Test
     public void exactMatchTest() throws IOException {
+        //TODO: re-write in python to remove DiffUtils and StringUtils dependencies
         List<String> masterLines = fileToLines(new File(MASTER_OUT_FILENAME));
         List<String> testingLines = fileToLines(new File(TESTING_OUT_FILENAME));
 
@@ -638,6 +639,21 @@ public class FuzzTest {
 
     private static String generatePointValue() {
         return DFHelpers.adjectives[random.nextInt(DFHelpers.adjectives.length)];
+    }
+
+    public static String dsMapToPrettyString(DSMap map) {
+        StringBuilder b = new StringBuilder();
+        b.append("(");
+        for (int i = 0; i < map.size(); i++) {
+            if (i != 0) b.append(", ");
+            String key = map.get(i).toString();
+            b.append(key);
+            b.append(":");
+            String val = map.get(key).toString();
+            b.append(val);
+        }
+        b.append(")");
+        return b.toString();
     }
 
     private static class SubscribeHandlerImpl extends AbstractSubscribeHandler {
