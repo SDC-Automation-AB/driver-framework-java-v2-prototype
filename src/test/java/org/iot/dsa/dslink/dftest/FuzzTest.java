@@ -51,22 +51,22 @@ public class FuzzTest {
 
     private static final double PROB_OF_BAD_CONFIG = 0.01;
 
-    private static final long PING_POLL_RATE = 15;
+    static final long PING_POLL_RATE = 15;
 
     private static Set<String> unique_names = new HashSet<String>();
-    private static Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
+    static Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
     private static final Random random = new Random(SEED);
     private static RootNode staticRootNode = null;
-    private static DSIRequester requester = null;
-    private static DelayedActionOrSub queuedAction = null;
+    static DSIRequester requester = null;
+    static DelayedActionOrSub queuedAction = null;
 
-    private static long step_counter = 0;
-    private static long conn_node_counter = 0;
-    private static long dev_node_counter = 0;
-    private static long pnt_node_counter = 0;
-    private static long conn_dev_counter = 0;
-    private static long dev_dev_counter = 0;
-    private static long pnt_dev_counter = 0;
+    static long step_counter = 0;
+    static long conn_node_counter = 0;
+    static long dev_node_counter = 0;
+    static long pnt_node_counter = 0;
+    static long conn_dev_counter = 0;
+    static long dev_dev_counter = 0;
+    static long pnt_dev_counter = 0;
 
     private static final String DELIM = "\n\n== STEP ===============================================================================";
     private static final String MASTER_OUT_FILENAME = "master-output.txt";
@@ -74,7 +74,7 @@ public class FuzzTest {
     private static final String PY_TEST_DIR = "py_tests";
 
     private static PythonInterpreter interp;
-    private static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
+    private static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
     private static final boolean PRINT_TO_CONSOLE = true;
 
     @Before
@@ -386,24 +386,24 @@ public class FuzzTest {
     private static String subscribeOrDoAnAction() {
         DSInfo rinfo = pickAChild(staticRootNode, 1);
         if (rinfo.isAction()) {
-            return invokeAction(rinfo);
+            return new DFFuzzNodeAction().invokeAction(rinfo);
         } else {
             assertTrue(rinfo.getObject() instanceof TestConnectionNode);
             DSInfo cinfo = pickAChild(rinfo.getNode(), 2);
             if (cinfo.isAction()) {
-                return invokeAction(cinfo);
+                return new DFFuzzNodeAction().invokeAction(cinfo);
             } else {
                 assertTrue(cinfo.getObject() instanceof TestDeviceNode);
                 DSInfo dinfo = pickAChild(cinfo.getNode(), 3);
                 if (dinfo.isAction()) {
-                    return invokeAction(dinfo);
+                    return new DFFuzzNodeAction().invokeAction(dinfo);
                 } else {
                     assertTrue(dinfo.getObject() instanceof TestPointNode);
                     int choice = random.nextInt(10);
                     if (choice == 0) {
-                        return invokeAction(dinfo.getNode().getInfo("Remove"));
+                        return new DFFuzzNodeAction().invokeAction(dinfo.getNode().getInfo("Remove"));
                     } else if (choice == 1) {
-                        return invokeAction(dinfo.getNode().getInfo("Edit"));
+                        return new DFFuzzNodeAction().invokeAction(dinfo.getNode().getInfo("Edit"));
                     } else {
                         return subscribeOrUnsubscribe(dinfo);
                     }
@@ -432,10 +432,6 @@ public class FuzzTest {
         String path = parent.getPath();
         path = path.endsWith("/") ? path + name : path + "/" + name;
         DSMap params = new DSMap();
-        //TODO: Generalize actions to work with ParameterDefinitions
-        //TODO: Figure out how to get parameters from the valid devices?
-        // -in getDevStringToAdd, return a MockParameters or Parameters
-        // -get them from some separate source and put them in
         if (name.equals("Edit")) {
             return "Edit action not yet supported!";
         } else if (name.equals("Add Connection")) {
@@ -449,7 +445,7 @@ public class FuzzTest {
         } else if (name.equals("Add Point")) {
             String p = getPointStringToAdd(parent);
             params.put("Name", p).put("ID", p).put("Poll Rate", PING_POLL_RATE);
-            queuedAction = new DelayedActionOrSub(actionInfo.getParent(), p);
+            queuedAction = new DelayedActionOrSub(parent, p);
             pnt_node_counter++;
         } else if (name.equals("Remove")) {
             if (parent instanceof DFConnectionNode) {
@@ -550,7 +546,7 @@ public class FuzzTest {
         return true;
     }
 
-    private static Set<String> getDFNodeNameSet(DSNode parent, Class<? extends DFAbstractNode> className) {
+    static Set<String> getDFNodeNameSet(DSNode parent, Class<? extends DFAbstractNode> className) {
         HashSet<String> nodes = new HashSet<String>();
         for (DSInfo info : parent) {
             if (info.isNode()) {
@@ -575,14 +571,14 @@ public class FuzzTest {
         return null;
     }
 
-    private static String getConnStringToAdd(DSNode parent) {
+    static String getConnStringToAdd(DSNode parent) {
         Set<String> nodes = getDFNodeNameSet(parent, DFConnectionNode.class);
         String[] possibleNames = TestingConnection.getConnectionList();
         String name = getChildNameStringHelper(possibleNames, nodes);
         return name != null ? name : generateConnString();
     }
 
-    private static String getDevStringToAdd(DSNode parent) {
+    static String getDevStringToAdd(DSNode parent) {
         Set<String> nodes = getDFNodeNameSet(parent, DFDeviceNode.class);
         TestingConnection conn = TestingConnection.getConnection(parent.getName());
         String name = null;
@@ -593,7 +589,7 @@ public class FuzzTest {
         return name != null ? name : generateDevString();
     }
 
-    private static String getPointStringToAdd(DSNode parent) {
+    static String getPointStringToAdd(DSNode parent) {
         Set<String> nodes = getDFNodeNameSet(parent, DFPointNode.class);
         TestingConnection conn = TestingConnection.getConnection(parent.getParent().getName());
         TestingDevice dev = conn != null ? conn.getDevice(parent.getName()) : null;
@@ -656,7 +652,7 @@ public class FuzzTest {
         return b.toString();
     }
 
-    private static class SubscribeHandlerImpl extends AbstractSubscribeHandler {
+    static class SubscribeHandlerImpl extends AbstractSubscribeHandler {
 
         @Override
         public void onUpdate(DSDateTime dateTime, DSElement value, DSStatus status) {
@@ -678,7 +674,7 @@ public class FuzzTest {
 
     }
 
-    private static class InvokeHandlerImpl extends AbstractInvokeHandler {
+    static class InvokeHandlerImpl extends AbstractInvokeHandler {
 
         @Override
         public void onColumns(DSList list) {

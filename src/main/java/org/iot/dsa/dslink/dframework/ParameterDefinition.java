@@ -46,6 +46,9 @@ public class ParameterDefinition {
     }
 
     public static ParameterDefinition makeParamWithBounds(String name, DSValueType type, ParameterBounds<?> bounds, String description, String placeholder) {
+        if (placeholder != null && placeholder.equals("UseBoundsObject")) {
+            //TODO: make bounds object generate placeholder text
+        }
         return new ParameterDefinition(name, type, null, null, bounds, description, placeholder);
     }
 
