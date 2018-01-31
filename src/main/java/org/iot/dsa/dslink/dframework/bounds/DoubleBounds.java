@@ -18,7 +18,7 @@ public class DoubleBounds implements ParameterBounds<Double> {
     private final static double RAND_MIN = -10000;
 
     public DoubleBounds() {
-        this.min = Double.MIN_VALUE;
+        this.min = -Double.MAX_VALUE;
         this.max = Double.MAX_VALUE;
     }
 

@@ -51,13 +51,13 @@ public class FuzzTest {
 
     private static final double PROB_OF_BAD_CONFIG = 0.01;
 
-    static final long PING_POLL_RATE = 15;
+    public static long PING_POLL_RATE = 15;
 
     private static Set<String> unique_names = new HashSet<String>();
     static Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
     private static final Random random = new Random(SEED);
-    private static RootNode staticRootNode = null;
-    static DSIRequester requester = null;
+    private static DSRootNode staticRootNode = null;
+    public static DSIRequester requester = null;
     static DelayedActionOrSub queuedAction = null;
 
     static long step_counter = 0;
@@ -77,26 +77,31 @@ public class FuzzTest {
     private static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
     private static final boolean PRINT_TO_CONSOLE = true;
 
+    public static void prepareToFuzz(DSRootNode root) {
+        staticRootNode = root;
+        DSLink link = new TestLink(staticRootNode);
+        DSRuntime.run(link);
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            fail(e.getMessage());
+        }
+
+        requester = link.getConnection().getRequester();
+
+    }
+
     @Before
     public void setUp() throws Exception {
         if (REGENERATE_OUTPUT) {
             assertEquals(1.0, PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT, .01);
-            staticRootNode = new RootNode();
-            DSLink link = new TestLink(staticRootNode);
-            DSRuntime.run(link);
-
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                fail(e.getMessage());
-            }
-
-            requester = link.getConnection().getRequester();
-            PrintWriter writer = getNewPrintWriter();
+            prepareToFuzz(new RootNode());
+            PrintWriter writer = getNewPrintWriter(TESTING_OUT_FILENAME);
 
             //Main loop
             while (step_counter < TEST_STEPS) {
-                String result = doAThing();
+                String result = doAThing(new TestingConnection(), new DFFuzzNodeAction());
                 waitAWhile();
                 printResult(result, writer);
                 step_counter++;
@@ -115,9 +120,25 @@ public class FuzzTest {
         System.out.printf("DONE!");
     }
 
+    public static void buildActionTree(int size, DSRootNode root, TestingConnection seedObject, FuzzNodeActionContainer fz) {
+        prepareToFuzz(root);
+        while (step_counter < size) {
+            String thing = doAThing(seedObject, fz);
+            waitAWhile();
+            printResult(thing, null);
+            step_counter++;
+        }
+        System.out.printf("DONE!");
+    }
+
     @Test
     public void buildMockTreeTest() {
         buildMockTree(100, new TestingConnection());
+    }
+
+    @Test
+    public void buildActionTreeTest() {
+        buildActionTree(100, new RootNode(), new TestingConnection(), new DFFuzzNodeAction());
     }
 
     /**
@@ -253,10 +274,10 @@ public class FuzzTest {
         }
     }
 
-    private static PrintWriter getNewPrintWriter() {
+    private static PrintWriter getNewPrintWriter(String fileName) {
         PrintWriter writer = null;
         try {
-            writer = new PrintWriter(TESTING_OUT_FILENAME, "UTF-8");
+            writer = new PrintWriter(fileName, "UTF-8");
         } catch (FileNotFoundException e) {
             fail(e.getMessage());
         } catch (UnsupportedEncodingException e) {
@@ -280,8 +301,10 @@ public class FuzzTest {
 
     private static void printResult(String thingDone, PrintWriter writer) {
         String result = thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(staticRootNode, FLAT_TREE, VERBOSE) + DELIM.replaceFirst("STEP", Long.toString(step_counter + 1));
-        writer.println(result);
-        writer.flush();
+        if (writer != null) {
+            writer.println(result);
+            writer.flush();
+        }
         if (PRINT_TO_CONSOLE) System.out.println(result); //TODO: Remove debug
     }
 
@@ -299,15 +322,15 @@ public class FuzzTest {
         return complete;
     }
 
-    private static String doAThing() throws Exception {
+    private static String doAThing(TestingConnection tstConn, FuzzNodeActionContainer fzNode) {
         String thingDone;
         if (queuedAction != null) {
             thingDone = queuedAction.act();
             queuedAction = null;
         } else if (random.nextInt(2) < 1 || setupIncomplete()) {
-            thingDone = createOrModifyDevice(new TestingConnection());
+            thingDone = createOrModifyDevice(tstConn);
         } else {
-            thingDone = subscribeOrDoAnAction();
+            thingDone = subscribeOrDoAnAction(fzNode);
         }
         return thingDone;
     }
@@ -383,27 +406,27 @@ public class FuzzTest {
         }
     }
 
-    private static String subscribeOrDoAnAction() {
+    private static String subscribeOrDoAnAction(FuzzNodeActionContainer fz) {
         DSInfo rinfo = pickAChild(staticRootNode, 1);
         if (rinfo.isAction()) {
-            return new DFFuzzNodeAction().invokeAction(rinfo);
+            return fz.invokeAction(rinfo, random);
         } else {
-            assertTrue(rinfo.getObject() instanceof TestConnectionNode);
+            assertTrue(rinfo.getObject() instanceof DFConnectionNode);
             DSInfo cinfo = pickAChild(rinfo.getNode(), 2);
             if (cinfo.isAction()) {
-                return new DFFuzzNodeAction().invokeAction(cinfo);
+                return fz.invokeAction(cinfo, random);
             } else {
-                assertTrue(cinfo.getObject() instanceof TestDeviceNode);
+                assertTrue(cinfo.getObject() instanceof DFDeviceNode);
                 DSInfo dinfo = pickAChild(cinfo.getNode(), 3);
                 if (dinfo.isAction()) {
-                    return new DFFuzzNodeAction().invokeAction(dinfo);
+                    return fz.invokeAction(dinfo, random);
                 } else {
-                    assertTrue(dinfo.getObject() instanceof TestPointNode);
+                    assertTrue(dinfo.getObject() instanceof DFPointNode);
                     int choice = random.nextInt(10);
                     if (choice == 0) {
-                        return new DFFuzzNodeAction().invokeAction(dinfo.getNode().getInfo("Remove"));
+                        return fz.invokeAction(dinfo.getNode().getInfo("Remove"), random);
                     } else if (choice == 1) {
-                        return new DFFuzzNodeAction().invokeAction(dinfo.getNode().getInfo("Edit"));
+                        return fz.invokeAction(dinfo.getNode().getInfo("Edit"), random);
                     } else {
                         return subscribeOrUnsubscribe(dinfo);
                     }
@@ -674,7 +697,7 @@ public class FuzzTest {
 
     }
 
-    static class InvokeHandlerImpl extends AbstractInvokeHandler {
+    public static class InvokeHandlerImpl extends AbstractInvokeHandler {
 
         @Override
         public void onColumns(DSList list) {
@@ -720,8 +743,7 @@ public class FuzzTest {
 
         @Override
         public void onError(String type, String msg, String detail) {
-            // TODO Auto-generated method stub
-
+            System.out.println("Type: " + type + " MSG: " + msg + " Detail: " + detail);
         }
     }
 

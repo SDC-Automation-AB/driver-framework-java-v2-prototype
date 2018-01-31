@@ -22,6 +22,8 @@ import java.util.Random;
  */
 public class MockParameters {
     DSMap mockParameters;
+    List<ParameterDefinition> parDefs;
+    private final int MAX_RETRIES = 100;
 
     /**
      * Empty constructor generates a blank parameter set.
@@ -40,11 +42,25 @@ public class MockParameters {
      * @param rand Random object for par generation
      */
     public MockParameters(Class<? extends EditableNode> clazz, Random rand) {
-        mockParameters = new DSMap();
-        List<ParameterDefinition> parDefs = DFUtil.getDummyInstance(clazz).getParameterDefinitions();
-        for (ParameterDefinition prDef : parDefs) {
-            mockParameters.put(prDef.name, prDef.generateRandom(rand));
+        parDefs = DFUtil.getDummyInstance(clazz).getParameterDefinitions();
+        int attempt = 0;
+        do {
+            if (attempt++ > MAX_RETRIES) throw new RuntimeException("Failed to generate valid parameters, for class " + clazz);
+            mockParameters = new DSMap();
+            for (ParameterDefinition prDef : parDefs) {
+                mockParameters.put(prDef.name, prDef.generateRandom(rand));
+            }
+        } while (!parametersValid());
+    }
+
+    private boolean parametersValid() {
+        boolean valid = true;
+        try {
+            EditableNode.verifyParameters(mockParameters, parDefs);
+        } catch (RuntimeException e) {
+            valid = false;
         }
+        return valid;
     }
 
     /**

@@ -7,6 +7,8 @@ import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSMap;
 import org.iot.dsa.node.DSNode;
 
+import java.util.Random;
+
 /**
  * @author James (Juris) Puchin
  * Created on 1/29/2018
@@ -14,7 +16,7 @@ import org.iot.dsa.node.DSNode;
 public class DFFuzzNodeAction extends FuzzNodeActionContainer {
 
     @Override
-    String invokeAction(DSInfo actionInfo) {
+    public String invokeAction(DSInfo actionInfo, Random rand) {
         String name = actionInfo.getName();
         DSNode parent = actionInfo.getParent();
         String path = parent.getPath();
