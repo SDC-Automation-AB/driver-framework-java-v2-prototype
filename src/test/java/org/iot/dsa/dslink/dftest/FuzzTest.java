@@ -115,6 +115,7 @@ public class FuzzTest {
     public static void buildMockTree(int size, TestingConnection seedObject) {
         while (step_counter < size) {
             System.out.println(createOrModifyDevice(seedObject));
+            System.out.println(TestingConnection.getPrintout());
             step_counter++;
         }
         System.out.printf("DONE!");
