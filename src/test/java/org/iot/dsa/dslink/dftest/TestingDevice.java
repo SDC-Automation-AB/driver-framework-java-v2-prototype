@@ -26,12 +26,12 @@ public class TestingDevice {
      *
      * @return return new state
      */
-    boolean flipDev() {
+    protected boolean flipDev() {
         active = !active;
         return isActive();
     }
 
-    void setDevActive(boolean act) {
+    protected void setDevActive(boolean act) {
         active = act;
     }
 
@@ -65,7 +65,7 @@ public class TestingDevice {
         points.get(name).setValue(value);
     }
 
-    void removePoint(String name) {
+    protected void removePoint(String name) {
         points.remove(name);
     }
 
