@@ -1,6 +1,7 @@
 package org.iot.dsa.dslink.dframework.bounds;
 
 import org.iot.dsa.node.DSElement;
+import org.iot.dsa.node.DSInt;
 import org.iot.dsa.node.DSLong;
 
 import java.util.Random;
@@ -11,15 +12,15 @@ import java.util.Random;
  */
 public class IntegerBounds implements ParameterBounds<Integer> {
 
-    private Integer min;
-    private Integer max;
+    private Integer min = Integer.MIN_VALUE;
+    private Integer max = Integer.MAX_VALUE;
 
-    private final static int RAND_MAX = 100;
-    private final static int RAND_MIN = -100;
+
+    private final static Integer RAND_MAX = 1000;
+    private final static Integer RAND_MIN = -1000;
 
     public IntegerBounds() {
-        this.min = Integer.MIN_VALUE;
-        this.max = Integer.MAX_VALUE;
+
     }
 
     /**
@@ -28,9 +29,9 @@ public class IntegerBounds implements ParameterBounds<Integer> {
      * @param max inclusive
      */
     public IntegerBounds(Integer min, Integer max) {
-        if (min >= max) throw new RuntimeException("Min bound has to be less than max.");
-        this.min = min;
-        this.max = max;
+        if (min != null) this.min = min;
+        if (max != null) this.max = max;
+        if (this.min >= this.max) throw new RuntimeException("Min bound has to be less than max.");
     }
 
     @Override

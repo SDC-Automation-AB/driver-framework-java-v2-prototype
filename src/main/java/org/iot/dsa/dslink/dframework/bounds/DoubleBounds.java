@@ -11,15 +11,13 @@ import java.util.Random;
  */
 public class DoubleBounds implements ParameterBounds<Double> {
 
-    private Double min;
-    private Double max;
+    private Double min = -Double.MAX_VALUE;
+    private Double max = Double.MAX_VALUE;
 
     private final static double RAND_MAX = 10000;
     private final static double RAND_MIN = -10000;
 
     public DoubleBounds() {
-        this.min = -Double.MAX_VALUE;
-        this.max = Double.MAX_VALUE;
     }
 
     /**
@@ -28,15 +26,15 @@ public class DoubleBounds implements ParameterBounds<Double> {
      * @param max inclusive
      */
     public DoubleBounds(Double min, Double max) {
-        if (min >= max) throw new RuntimeException("Min bound has to be less than max.");
-        this.min = min;
-        this.max = max;
+        if (min != null) this.min = min;
+        if (max != null) this.max = max;
+        if (this.min >= this.max) throw new RuntimeException("Min bound has to be less than max.");
     }
 
     @Override
     public boolean validBounds(DSElement val) {
         Double dVal;
-        if ( val.isNumber() )
+        if (val.isNumber())
             dVal = val.toDouble();
         else
             return false;

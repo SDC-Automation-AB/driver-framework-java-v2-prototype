@@ -11,17 +11,14 @@ import java.util.Random;
  */
 public class LongBounds implements ParameterBounds<Long> {
 
-    private Long min;
-    private Long max;
+    private Long min = Long.MIN_VALUE;
+    private Long max = Long.MAX_VALUE;
 
 
     private final static long RAND_MAX = 1000;
     private final static long RAND_MIN = -1000;
 
-    public LongBounds() {
-        this.min = Long.MIN_VALUE;
-        this.max = Long.MAX_VALUE;
-    }
+    public LongBounds() {}
 
     /**
      * Creates an Long bounds object with min and max set.
@@ -29,9 +26,9 @@ public class LongBounds implements ParameterBounds<Long> {
      * @param max inclusive
      */
     public LongBounds(Long min, Long max) {
-        if (min >= max) throw new RuntimeException("Min bound has to be less than max.");
-        this.min = min;
-        this.max = max;
+        if (min != null) this.min = min;
+        if (max != null) this.max = max;
+        if (this.min >= this.max) throw new RuntimeException("Min bound has to be less than max.");
     }
 
     @Override
