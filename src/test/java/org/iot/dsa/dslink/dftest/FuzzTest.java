@@ -71,7 +71,7 @@ public class FuzzTest {
     private static final String PY_TEST_DIR = "py_tests";
 
     private static PythonInterpreter interp;
-    private static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
+    private static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
     private static final boolean PRINT_TO_CONSOLE = true;
 
     public static void prepareToFuzz(DSMainNode root) {
@@ -115,7 +115,8 @@ public class FuzzTest {
             System.out.println(TestingConnection.getPrintout(false));
             step_counter++;
         }
-        System.out.println(DELIM.replaceFirst("STEP", "COMPLETE: " + Long.toString(step_counter + 1)));
+        System.out.println(DELIM.replaceFirst("STEP", "COMPLETE TREE"));
+        System.out.println(TestingConnection.getPrintout(true));
     }
 
     public static void buildActionTree(int size, DSMainNode root, TestingConnection seedObject, FuzzNodeActionContainer fz) {
@@ -126,7 +127,7 @@ public class FuzzTest {
             printResult(thing, null, false);
             step_counter++;
         }
-        System.out.println(DELIM.replaceFirst("STEP", "COMPLETE: " + Long.toString(step_counter + 1)));
+        System.out.println(DELIM.replaceFirst("STEP", "COMPLETE TREE"));
         printResult("Final Summary", null, true);
     }
 

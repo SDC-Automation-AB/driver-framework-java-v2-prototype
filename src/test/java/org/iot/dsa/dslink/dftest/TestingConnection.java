@@ -231,11 +231,11 @@ public class TestingConnection {
             sb.append(entry.getKey());
             sb.append(" : ");
             sb.append(c.pluggedIn);
-            sb.append('\n');
             if (verbose) {
+                sb.append(" ");
                 sb.append(c.connParams.getParamMap());
-                sb.append('\n');
             }
+            sb.append('\n');
             for (Entry<String, TestingDevice> dentry : c.devices.entrySet()) {
                 TestingDevice d = dentry.getValue();
                 sb.append('\t');
@@ -243,21 +243,22 @@ public class TestingConnection {
                 sb.append(" : ");
                 sb.append(d.isActive());
                 if (verbose) {
+                    sb.append(" ");
                     sb.append(d.devParams.getParamMap());
-                    sb.append('\n');
                 }
+                sb.append('\n');
                 for (String pname : d.getNameSet()) {
                     sb.append('\t');
                     sb.append('\t');
                     sb.append(pname);
                     sb.append(" : ");
                     sb.append(d.getPointValue(pname));
-                    sb.append('\n');
                     if (verbose) {
                         TestingPoint p = d.points.get(pname);
+                        sb.append(" ");
                         sb.append(p.pointParams.getParamMap());
-                        sb.append('\n');
                     }
+                    sb.append('\n');
                 }
             }
         }
