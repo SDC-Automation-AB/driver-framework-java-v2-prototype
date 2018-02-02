@@ -105,6 +105,18 @@ public abstract class DFPointNode extends DFAbstractNode implements DSIValue {
     @Override
     public void onSet(DSIValue value) {
         put(valueInfo, value);
+        onValueSet(value);
+    }
+    
+    @Override
+    public void onSet(DSInfo info, DSIValue value) {
+        if (valueInfo.equals(info)) {
+            onValueSet(value);
+        }
+    }
+    
+    public void onValueSet(DSIValue value) {
+        
     }
 
     @Override
