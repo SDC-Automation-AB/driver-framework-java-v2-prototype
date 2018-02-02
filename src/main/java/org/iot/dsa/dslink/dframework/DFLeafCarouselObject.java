@@ -1,8 +1,7 @@
 package org.iot.dsa.dslink.dframework;
 
 import org.iot.dsa.DSRuntime;
-import org.iot.dsa.dslink.DSRootNode;
-
+import org.iot.dsa.dslink.DSMainNode;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,7 +34,7 @@ public class DFLeafCarouselObject extends DFCarouselObject {
         if (homeNode.getParent() instanceof DFDeviceNode) {
             DFDeviceNode par = (DFDeviceNode) homeNode.getParent();
             return !par.isNodeConnected();
-        } else if (homeNode.getParent() instanceof DSRootNode) {
+        } else if (homeNode.getParent() instanceof DSMainNode) {
             return false;
         } else {
             throw new RuntimeException("Wrong parent class");

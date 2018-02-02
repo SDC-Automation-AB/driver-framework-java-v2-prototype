@@ -7,11 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSIRequester;
 import org.iot.dsa.dslink.DSLink;
-import org.iot.dsa.dslink.DSRootNode;
-import org.iot.dsa.dslink.dfexample.RootNode;
-import org.iot.dsa.dslink.dfexample.TestConnectionNode;
-import org.iot.dsa.dslink.dfexample.TestDeviceNode;
-import org.iot.dsa.dslink.dfexample.TestPointNode;
+import org.iot.dsa.dslink.DSMainNode;
+import org.iot.dsa.dslink.dfexample.MainNode;
 import org.iot.dsa.dslink.dframework.*;
 import org.iot.dsa.dslink.requester.AbstractInvokeHandler;
 import org.iot.dsa.dslink.requester.AbstractSubscribeHandler;
@@ -56,7 +53,7 @@ public class FuzzTest {
     private static Set<String> unique_names = new HashSet<String>();
     static Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
     private static final Random random = new Random(SEED);
-    private static DSRootNode staticRootNode = null;
+    private static DSMainNode staticRootNode = null;
     public static DSIRequester requester = null;
     static DelayedActionOrSub queuedAction = null;
 
@@ -77,7 +74,7 @@ public class FuzzTest {
     private static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
     private static final boolean PRINT_TO_CONSOLE = true;
 
-    public static void prepareToFuzz(DSRootNode root) {
+    public static void prepareToFuzz(DSMainNode root) {
         staticRootNode = root;
         DSLink link = new TestLink(staticRootNode);
         DSRuntime.run(link);
@@ -96,7 +93,7 @@ public class FuzzTest {
     public void setUp() throws Exception {
         if (REGENERATE_OUTPUT) {
             assertEquals(1.0, PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT, .01);
-            prepareToFuzz(new RootNode());
+            prepareToFuzz(new MainNode());
             PrintWriter writer = getNewPrintWriter(TESTING_OUT_FILENAME);
 
             //Main loop
@@ -121,7 +118,7 @@ public class FuzzTest {
         System.out.printf("DONE!");
     }
 
-    public static void buildActionTree(int size, DSRootNode root, TestingConnection seedObject, FuzzNodeActionContainer fz) {
+    public static void buildActionTree(int size, DSMainNode root, TestingConnection seedObject, FuzzNodeActionContainer fz) {
         prepareToFuzz(root);
         while (step_counter < size) {
             String thing = doAThing(seedObject, fz);
@@ -139,7 +136,7 @@ public class FuzzTest {
 
     @Test
     public void buildActionTreeTest() {
-        buildActionTree(100, new RootNode(), new TestingConnection(), new DFFuzzNodeAction());
+        buildActionTree(100, new MainNode(), new TestingConnection(), new DFFuzzNodeAction());
     }
 
     /**
@@ -534,7 +531,7 @@ public class FuzzTest {
                 break;
         }
 
-        if (actions.isEmpty() || (node instanceof DSRootNode && tooMany)) {
+        if (actions.isEmpty() || (node instanceof DSMainNode && tooMany)) {
             chooseChild = true;
         } else if (childs.isEmpty()) {
             chooseChild = false;

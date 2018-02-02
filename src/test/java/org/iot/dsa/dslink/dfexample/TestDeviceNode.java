@@ -10,6 +10,7 @@ import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
 import org.iot.dsa.node.DSNode;
+import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.DSValueType;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,7 +113,7 @@ public class TestDeviceNode extends DFDeviceNode {
 
             for (Map.Entry<String, String> entry: results.entrySet()) {
                 TestPointNode point = polledPoints.get(entry.getKey());
-                point.updateValue(entry.getValue());
+                point.updateValue(DSString.valueOf(entry.getValue()));
             }
 
             return true;

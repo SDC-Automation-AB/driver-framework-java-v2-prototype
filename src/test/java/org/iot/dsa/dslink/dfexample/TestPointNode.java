@@ -5,14 +5,11 @@ import java.util.List;
 import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.dslink.dframework.ParameterDefinition;
 import org.iot.dsa.node.DSElement;
-import org.iot.dsa.node.DSIValue;
-import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSLong;
 import org.iot.dsa.node.DSMap;
-import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.DSValueType;
 
-public class TestPointNode extends DFPointNode implements DSIValue {
+public class TestPointNode extends DFPointNode {
     
     public static List<ParameterDefinition> parameterDefinitions = new ArrayList<ParameterDefinition>();
     static {
@@ -25,24 +22,12 @@ public class TestPointNode extends DFPointNode implements DSIValue {
         return parameterDefinitions;
     }
     
-    private DSInfo value = getInfo("Value");
     
     public TestPointNode() {
     }
     
     public TestPointNode(DSMap parameters) {
         this.parameters = parameters;
-    }
-    
-    @Override
-    protected void declareDefaults() {
-        super.declareDefaults();
-        declareDefault("Value", DSString.EMPTY);
-    }
-    
-    @Override
-    protected void onStable() {
-        super.onStable();
     }
     
     @Override
@@ -53,30 +38,11 @@ public class TestPointNode extends DFPointNode implements DSIValue {
         }
         return super.getPollRate();
     }
-
-    @Override
-    public DSValueType getValueType() {
-        return DSValueType.STRING;
-    }
-
-    @Override
-    public DSElement toElement() {
-        return value.getValue().toElement();
-    }
-
-    @Override
-    public DSIValue valueOf(DSElement element) {
-        return value.getValue().valueOf(element);
-    }
-    
-    void updateValue(String val) {
-        put(value, DSString.valueOf(val));
-        getParent().childChanged(getInfo());
-    }
     
     String getPointID() {
         return parameters.getString("ID");
     }
+
     
 //    private TestDeviceNode getParentNode() {
 //        DSNode parent =  getParent();

@@ -1,7 +1,7 @@
 package org.iot.dsa.dslink.dframework;
 
 import org.iot.dsa.DSRuntime;
-import org.iot.dsa.dslink.DSRootNode;
+import org.iot.dsa.dslink.DSMainNode;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSInfo;
 
@@ -22,7 +22,7 @@ public class DFBranchCarouselObject extends DFCarouselObject{
             DFAbstractNode par = (DFAbstractNode) homeNode.getParent();
             return !par.isNodeConnected();
         }
-        else if (homeNode.getParent() instanceof DSRootNode) { return false; }
+        else if (homeNode.getParent() instanceof DSMainNode) { return false; }
         else { throw new RuntimeException("Wrong parent class: " + homeNode.getParent().getName() + "-" + homeNode.getParent().getClass()); }
     }
 

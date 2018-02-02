@@ -125,6 +125,7 @@ public abstract class EditableNode extends DSNode {
         DSAction act = new DSAction() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
+                System.out.println(info.getName() + "   " + invocation.getParameters());
                 inst.addNewInstance(info.getParent(), invocation.getParameters());
                 return null;
             }

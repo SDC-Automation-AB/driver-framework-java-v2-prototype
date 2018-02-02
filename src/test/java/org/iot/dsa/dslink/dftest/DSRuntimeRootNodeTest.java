@@ -1,6 +1,6 @@
 package org.iot.dsa.dslink.dftest;
 
-import org.iot.dsa.dslink.dfexample.RootNode;
+import org.iot.dsa.dslink.dfexample.MainNode;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSMap;
 import org.iot.dsa.node.action.ActionInvocation;
@@ -11,7 +11,7 @@ import org.iot.dsa.node.action.DSAction;
  * @author James (Juris) Puchin
  * Created on 11/20/2017
  */
-public class DSRuntimeRootNodeTest extends RootNode implements FailCallback {
+public class DSRuntimeRootNodeTest extends MainNode implements FailCallback {
     private static final long ITERATION_LENGTH = 1000;
     private static final long MAX_DELAY_ERROR = 100;
     private static final long TOTAL_TEST_TIME = 10000;

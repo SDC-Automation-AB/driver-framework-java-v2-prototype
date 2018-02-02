@@ -1,6 +1,6 @@
 package org.iot.dsa.dslink.dframework;
 
-import org.iot.dsa.dslink.DSRootNode;
+import org.iot.dsa.dslink.DSMainNode;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSNode;
 
@@ -56,7 +56,7 @@ public class DFHelpers {
 
     public static String getTestingString(DSNode node, boolean inline, boolean verbose) {
         String nodeType = "Unknown";
-        if (node instanceof DSRootNode) {
+        if (node instanceof DSMainNode) {
             nodeType = "Root";
         } else if (node instanceof DFConnectionNode) {
             String tabs = (inline) ? "" : "\t";
