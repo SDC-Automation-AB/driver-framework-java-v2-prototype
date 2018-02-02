@@ -24,7 +24,7 @@ public class TestingPoint {
         return value;
     }
 
-    void setValue(String value) {
+    protected void setValue(String value) {
         this.value = value;
     }
 }
