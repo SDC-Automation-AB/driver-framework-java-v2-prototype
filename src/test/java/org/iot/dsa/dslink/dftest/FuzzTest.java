@@ -240,6 +240,7 @@ public class FuzzTest {
 
     //TODO: write python test to check that when a testing conn/dev/point is deactivated, it's corresponding node is failed
     //TODO: write test to check that when a testing conn/dev/point is activated, it's corresponding node is active
+    //TODO: after device/conn/point add action is called an appropriate device or node appears in the appropriate tree
 
     private static void runPythonTest(String fileName) throws Exception {
         String exec = PY_TEST_DIR + "\\" + fileName;
