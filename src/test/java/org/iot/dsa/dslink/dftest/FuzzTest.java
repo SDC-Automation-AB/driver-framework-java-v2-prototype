@@ -100,7 +100,7 @@ public class FuzzTest {
             while (step_counter < TEST_STEPS) {
                 String result = doAThing(new TestingConnection(), new DFFuzzNodeAction());
                 waitAWhile();
-                printResult(result, writer);
+                printResult(result, writer, VERBOSE);
                 step_counter++;
             }
 
@@ -112,10 +112,10 @@ public class FuzzTest {
     public static void buildMockTree(int size, TestingConnection seedObject) {
         while (step_counter < size) {
             System.out.println(createOrModifyDevice(seedObject));
-            System.out.println(TestingConnection.getPrintout());
+            System.out.println(TestingConnection.getPrintout(false));
             step_counter++;
         }
-        System.out.printf("DONE!");
+        System.out.println(DELIM.replaceFirst("STEP", "COMPLETE: " + Long.toString(step_counter + 1)));
     }
 
     public static void buildActionTree(int size, DSMainNode root, TestingConnection seedObject, FuzzNodeActionContainer fz) {
@@ -123,10 +123,11 @@ public class FuzzTest {
         while (step_counter < size) {
             String thing = doAThing(seedObject, fz);
             waitAWhile();
-            printResult(thing, null);
+            printResult(thing, null, false);
             step_counter++;
         }
-        System.out.printf("DONE!");
+        System.out.println(DELIM.replaceFirst("STEP", "COMPLETE: " + Long.toString(step_counter + 1)));
+        printResult("Final Summary", null, true);
     }
 
     @Test
@@ -298,8 +299,8 @@ public class FuzzTest {
         }
     }
 
-    private static void printResult(String thingDone, PrintWriter writer) {
-        String result = thingDone + "\n" + TestingConnection.getPrintout() + "\n" + DFHelpers.getTestingString(staticRootNode, FLAT_TREE, VERBOSE) + DELIM.replaceFirst("STEP", Long.toString(step_counter + 1));
+    private static void printResult(String thingDone, PrintWriter writer, boolean verbose) {
+        String result = thingDone + "\n" + TestingConnection.getPrintout(verbose) + "\n" + DFHelpers.getTestingString(staticRootNode, FLAT_TREE, verbose) + DELIM.replaceFirst("STEP", Long.toString(step_counter + 1));
         if (writer != null) {
             writer.println(result);
             writer.flush();

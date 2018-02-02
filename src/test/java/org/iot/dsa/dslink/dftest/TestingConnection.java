@@ -224,7 +224,7 @@ public class TestingConnection {
     // Misc Helpers
     ///////////////////////////////////////////////////////////////////////////
 
-    public static String getPrintout() {
+    public static String getPrintout(boolean verbose) {
         StringBuilder sb = new StringBuilder();
         for (Entry<String, TestingConnection> entry : connections.entrySet()) {
             TestingConnection c = entry.getValue();
@@ -232,13 +232,20 @@ public class TestingConnection {
             sb.append(" : ");
             sb.append(c.pluggedIn);
             sb.append('\n');
+            if (verbose) {
+                sb.append(c.connParams.getParamMap());
+                sb.append('\n');
+            }
             for (Entry<String, TestingDevice> dentry : c.devices.entrySet()) {
                 TestingDevice d = dentry.getValue();
                 sb.append('\t');
                 sb.append(dentry.getKey());
                 sb.append(" : ");
                 sb.append(d.isActive());
-                sb.append('\n');
+                if (verbose) {
+                    sb.append(d.devParams.getParamMap());
+                    sb.append('\n');
+                }
                 for (String pname : d.getNameSet()) {
                     sb.append('\t');
                     sb.append('\t');
@@ -246,6 +253,11 @@ public class TestingConnection {
                     sb.append(" : ");
                     sb.append(d.getPointValue(pname));
                     sb.append('\n');
+                    if (verbose) {
+                        TestingPoint p = d.points.get(pname);
+                        sb.append(p.pointParams.getParamMap());
+                        sb.append('\n');
+                    }
                 }
             }
         }
