@@ -1,6 +1,6 @@
 from output_parser import *
 
-remove_prefix = "Invoking /Nodes/"
+remove_prefix = "Invoking /main/"
 remove_suffix = "/Remove with parameters {}"
 
 steps = parse("testing-output.txt")

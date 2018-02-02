@@ -1,6 +1,6 @@
 from output_parser import *
 
-unsubprefix = "Unsubscribing from /Nodes/"
+unsubprefix = "Unsubscribing from /main/"
 goodstatus = "Status:Connected"
 stoppedstatus = "Status:Stopped"
 

@@ -1,6 +1,6 @@
 from output_parser import *
 
-subprefix = "Subscribing to /Nodes/"
+subprefix = "Subscribing to /main/"
 goodstatus = "Status:Connected"
 
 steps = parse("../testing-output.txt")

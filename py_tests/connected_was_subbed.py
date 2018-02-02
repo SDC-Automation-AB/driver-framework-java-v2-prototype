@@ -1,7 +1,7 @@
 from output_parser import *
 
-subprefix = "Subscribing to /Nodes/"
-unsubprefix = "Unsubscribing from /Nodes/"
+subprefix = "Subscribing to /main/"
+unsubprefix = "Unsubscribing from /main/"
 goodstatus = "Status:Connected"
 badstatus = "Status:Failed"
 sbpstatus = "Status:Stopped by Parent"
