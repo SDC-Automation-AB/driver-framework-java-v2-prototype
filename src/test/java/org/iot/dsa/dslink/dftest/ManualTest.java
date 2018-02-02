@@ -46,7 +46,7 @@ public class ManualTest implements Runnable {
     }
 
     private static String getPrintOut() {
-        return TestingConnection.getPrintout();
+        return TestingConnection.getPrintout(false);
     }
 
     @Override
