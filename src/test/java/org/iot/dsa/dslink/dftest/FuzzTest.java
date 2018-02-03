@@ -25,28 +25,32 @@ import static org.junit.Assert.*;
 
 public class FuzzTest {
 
-    private static final long TEST_STEPS = 1000;
-    private static final long SETUP_STEPS = 60;
-    private static final boolean FLAT_TREE = false;
-    private static final boolean VERBOSE = false;
-    private static final long SEED = 420;
+    public static long TEST_STEPS = 1000;
+    public static long SETUP_STEPS = 60;
+    public static boolean FLAT_TREE = false;
+    public static boolean VERBOSE = false;
+    public static long SEED = 420;
 
-    private static final long MIN_CON = 2;
-    private static final long MAX_CON = 4;
-    private static final long MIN_DEV = 4;
-    private static final long MAX_DEV = 8;
-    private static final long MIN_PNT = 16;
-    private static final long MAX_PNT = 24;
+    public static long MIN_CON = 2;
+    public static long MAX_CON = 4;
+    public static long MIN_DEV = 4;
+    public static long MAX_DEV = 8;
+    public static long MIN_PNT = 16;
+    public static long MAX_PNT = 24;
 
-    private static final double PROB_ROOT = .1;
-    private static final double PROB_CON = .2;
-    private static final double PROB_DEV = .3;
-    private static final double PROB_PNT = .4;
-    private static final double PROB_SWAP_CON_STATE = .5;
-    private static final double PROB_SWAP_DEV_STATE = .5;
-    private static final double PROB_REMOVE_PNT = .1;
+    public static double PROB_ROOT = .1;
+    public static double PROB_CON = .2;
+    public static double PROB_DEV = .3;
+    public static double PROB_PNT = .4;
 
-    private static final double PROB_OF_BAD_CONFIG = 0.01;
+    public static double PROB_OFF_CON_STATE = .3;
+    public static double PROB_OFF_DEV_STATE = .3;
+    public static double PROB_ON_CON_STATE = .7;
+    public static double PROB_ON_DEV_STATE = .7;
+    public static double PROB_REMOVE_PNT = .1;
+
+
+    public static double PROB_OF_BAD_CONFIG = 0.01;
 
     public static long PING_POLL_RATE = 15;
 
@@ -71,7 +75,7 @@ public class FuzzTest {
     private static final String PY_TEST_DIR = "py_tests";
 
     private static PythonInterpreter interp;
-    private static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
+    private static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
     private static final boolean PRINT_TO_CONSOLE = true;
 
     public static void prepareToFuzz(DSMainNode root) {
@@ -358,7 +362,8 @@ public class FuzzTest {
             //Act on the connection (create new device or flip state)
             if (((rand < PROB_CON / (1 - PROB_ROOT)) || dev_dev_counter < MIN_DEV)) {
                 rand = random.nextDouble();
-                if ((rand >= PROB_SWAP_CON_STATE || dev_dev_counter < MIN_DEV) && dev_dev_counter < MAX_DEV) {
+                Double flipChance = conn.pluggedIn ? PROB_OFF_CON_STATE : PROB_ON_CON_STATE;
+                if ((rand >= flipChance || dev_dev_counter < MIN_DEV) && dev_dev_counter < MAX_DEV) {
                     String d = generateDevString();
                     conn.addNewDevice(d, random);
                     dev_dev_counter++;
@@ -376,7 +381,9 @@ public class FuzzTest {
                 rand = random.nextDouble();
                 //Act on a device (create a new point or flip state)
                 if (((rand < PROB_DEV / (1 - PROB_ROOT - PROB_CON)) || pnt_dev_counter < MIN_PNT)) {
-                    if ((rand >= PROB_SWAP_DEV_STATE || pnt_dev_counter < MIN_PNT) && pnt_dev_counter < MAX_PNT) {
+                    rand = random.nextDouble();
+                    Double flipChance = dev.active ? PROB_OFF_DEV_STATE : PROB_ON_DEV_STATE;
+                    if ((rand >= flipChance || pnt_dev_counter < MIN_PNT) && pnt_dev_counter < MAX_PNT) {
                         String p = generatePointString();
                         String v = generatePointValue();
                         dev.addPoint(p, v, random);
@@ -605,7 +612,6 @@ public class FuzzTest {
             TestingConnection.putConnectionParams(name, params);
             return name;
         } else {
-            params.clear();
             return generateConnString();
         }
     }
@@ -623,7 +629,6 @@ public class FuzzTest {
             conn.putDeviceParams(name, params);
             return name;
         } else {
-            params.clear();
             return generateDevString();
         }
     }
@@ -642,7 +647,6 @@ public class FuzzTest {
             dev.putPointParams(name, params);
             return name;
         } else {
-            params.clear();
             return generatePointString();
         }
     }

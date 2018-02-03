@@ -84,6 +84,6 @@ public class TestingDevice {
     }
 
     void putPointParams(String pointName, DSMap copy) {
-        points.get(pointName).pointParams.putAll(copy);
+        points.get(pointName).pointParams.copyAll(copy);
     }
 }

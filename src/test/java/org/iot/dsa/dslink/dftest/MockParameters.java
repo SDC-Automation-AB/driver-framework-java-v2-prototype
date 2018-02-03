@@ -85,9 +85,9 @@ public class MockParameters {
         return mockParameters;
     }
 
-    public boolean putAll(DSMap copy) {
+    public boolean copyAll(DSMap copy) {
         if (copy == null) return false;
-        mockParameters.putAll(copy);
+        copy.putAll(mockParameters);
         return true;
     }
 }

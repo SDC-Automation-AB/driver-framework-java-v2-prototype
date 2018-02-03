@@ -84,7 +84,7 @@ public class TestingConnection {
     }
 
     static void putConnectionParams(String conName, DSMap copy) {
-        connections.get(conName).connParams.putAll(copy);
+        connections.get(conName).connParams.copyAll(copy);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -122,7 +122,7 @@ public class TestingConnection {
     }
 
     void putDeviceParams(String devName, DSMap copy) {
-        devices.get(devName).devParams.putAll(copy);
+        devices.get(devName).devParams.copyAll(copy);
     }
 
     ///////////////////////////////////////////////////////////////////////////
