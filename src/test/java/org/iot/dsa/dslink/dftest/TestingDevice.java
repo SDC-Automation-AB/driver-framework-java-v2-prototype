@@ -1,5 +1,7 @@
 package org.iot.dsa.dslink.dftest;
 
+import org.iot.dsa.node.DSMap;
+
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -79,5 +81,9 @@ public class TestingDevice {
 
     int getPointCount() {
         return points.size();
+    }
+
+    void putPointParams(String pointName, DSMap copy) {
+        points.get(pointName).pointParams.putAll(copy);
     }
 }

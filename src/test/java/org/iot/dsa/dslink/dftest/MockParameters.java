@@ -21,6 +21,7 @@ import java.util.Random;
  * more sophisticated mock device objects. (Slave Devices, etc.)
  */
 public class MockParameters {
+
     DSMap mockParameters;
     List<ParameterDefinition> parDefs;
     private final int MAX_RETRIES = 100;
@@ -82,5 +83,11 @@ public class MockParameters {
 
     public DSMap getParamMap() {
         return mockParameters;
+    }
+
+    public boolean putAll(DSMap copy) {
+        if (copy == null) return false;
+        mockParameters.putAll(copy);
+        return true;
     }
 }

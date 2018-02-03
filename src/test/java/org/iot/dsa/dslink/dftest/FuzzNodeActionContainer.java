@@ -3,6 +3,7 @@ package org.iot.dsa.dslink.dftest;
 import org.iot.dsa.dslink.dframework.DFDeviceNode;
 import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.node.DSInfo;
+import org.iot.dsa.node.DSMap;
 import org.iot.dsa.node.DSNode;
 
 import java.util.Random;
@@ -19,19 +20,19 @@ public abstract class FuzzNodeActionContainer {
         return FuzzTest.PING_POLL_RATE;
     }
 
-    protected static String addConnectionHelper(DSNode parent) {
+    protected static String addConnectionHelper(DSNode parent, DSMap params) {
         FuzzTest.conn_node_counter++;
-        return FuzzTest.getConnStringToAdd(parent);
+        return FuzzTest.getConnStringToAdd(parent, params);
     }
 
-    protected static String addDeviceHelper(DSNode parent) {
+    protected static String addDeviceHelper(DSNode parent, DSMap params) {
         FuzzTest.dev_node_counter++;
-        return FuzzTest.getDevStringToAdd(parent);
+        return FuzzTest.getDevStringToAdd(parent, params);
     }
 
-    protected static String addPintHelper(DSNode parent) {
+    protected static String addPintHelper(DSNode parent, DSMap params) {
         FuzzTest.pnt_node_counter++;
-        String pnt = FuzzTest.getPointStringToAdd(parent);
+        String pnt = FuzzTest.getPointStringToAdd(parent, params);
         FuzzTest.queuedAction = new FuzzTest.DelayedActionOrSub(parent, pnt);
         return pnt;
     }

@@ -1,5 +1,7 @@
 package org.iot.dsa.dslink.dftest;
 
+import org.iot.dsa.node.DSMap;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -81,6 +83,10 @@ public class TestingConnection {
         pluggedIn = newState;
     }
 
+    static void putConnectionParams(String conName, DSMap copy) {
+        connections.get(conName).connParams.putAll(copy);
+    }
+
     ///////////////////////////////////////////////////////////////////////////
     // Device Controls
     ///////////////////////////////////////////////////////////////////////////
@@ -113,6 +119,10 @@ public class TestingConnection {
 
     public int getDeviceCount() {
         return devices.size();
+    }
+
+    void putDeviceParams(String devName, DSMap copy) {
+        devices.get(devName).devParams.putAll(copy);
     }
 
     ///////////////////////////////////////////////////////////////////////////

@@ -71,7 +71,7 @@ public class FuzzTest {
     private static final String PY_TEST_DIR = "py_tests";
 
     private static PythonInterpreter interp;
-    private static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
+    private static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
     private static final boolean PRINT_TO_CONSOLE = true;
 
     public static void prepareToFuzz(DSMainNode root) {
@@ -119,7 +119,7 @@ public class FuzzTest {
         System.out.println(TestingConnection.getPrintout(true));
     }
 
-    public static void buildActionTree(int size, DSMainNode root, TestingConnection seedObject, FuzzNodeActionContainer fz) {
+    public static void builFuzzDoubleTree(int size, DSMainNode root, TestingConnection seedObject, FuzzNodeActionContainer fz) {
         prepareToFuzz(root);
         while (step_counter < size) {
             String thing = doAThing(seedObject, fz);
@@ -138,7 +138,7 @@ public class FuzzTest {
 
     @Test
     public void buildActionTreeTest() {
-        buildActionTree(100, new MainNode(), new TestingConnection(), new DFFuzzNodeAction());
+        builFuzzDoubleTree(100, new MainNode(), new TestingConnection(), new DFFuzzNodeAction());
     }
 
     /**
@@ -450,7 +450,8 @@ public class FuzzTest {
         }
     }
 
-    private static String invokeAction(DSInfo actionInfo) {
+    //TODO: Remove old unreachable code once DF is done
+ /*   private static String invokeAction(DSInfo actionInfo) {
         String name = actionInfo.getName();
         DSNode parent = actionInfo.getParent();
         String path = parent.getPath();
@@ -500,7 +501,7 @@ public class FuzzTest {
         }
         requester.invoke(path, params, new InvokeHandlerImpl());
         return "Invoking " + path + " with parameters " + params;
-    }
+    }*/
 
     private static DSInfo pickAChild(DSNode node, int level) {
         List<DSInfo> actions = new ArrayList<DSInfo>();
@@ -595,14 +596,21 @@ public class FuzzTest {
         return null;
     }
 
-    static String getConnStringToAdd(DSNode parent) {
+    static String getConnStringToAdd(DSNode parent, DSMap params) {
         Set<String> nodes = getDFNodeNameSet(parent, DFConnectionNode.class);
         String[] possibleNames = TestingConnection.getConnectionList();
         String name = getChildNameStringHelper(possibleNames, nodes);
-        return name != null ? name : generateConnString();
+
+        if (name != null) {
+            TestingConnection.putConnectionParams(name, params);
+            return name;
+        } else {
+            params.clear();
+            return generateConnString();
+        }
     }
 
-    static String getDevStringToAdd(DSNode parent) {
+    static String getDevStringToAdd(DSNode parent, DSMap params) {
         Set<String> nodes = getDFNodeNameSet(parent, DFDeviceNode.class);
         TestingConnection conn = TestingConnection.getConnection(parent.getName());
         String name = null;
@@ -610,10 +618,17 @@ public class FuzzTest {
             String[] possibleNames = conn.getDeviceList();
             name = getChildNameStringHelper(possibleNames, nodes);
         }
-        return name != null ? name : generateDevString();
+
+        if (name != null) {
+            conn.putDeviceParams(name, params);
+            return name;
+        } else {
+            params.clear();
+            return generateDevString();
+        }
     }
 
-    static String getPointStringToAdd(DSNode parent) {
+    static String getPointStringToAdd(DSNode parent, DSMap params) {
         Set<String> nodes = getDFNodeNameSet(parent, DFPointNode.class);
         TestingConnection conn = TestingConnection.getConnection(parent.getParent().getName());
         TestingDevice dev = conn != null ? conn.getDevice(parent.getName()) : null;
@@ -622,7 +637,14 @@ public class FuzzTest {
             String[] possibleNames = dev.getNameSet();
             name = getChildNameStringHelper(possibleNames, nodes);
         }
-        return name != null ? name : generatePointString();
+
+        if (name != null) {
+            dev.putPointParams(name, params);
+            return name;
+        } else {
+            params.clear();
+            return generatePointString();
+        }
     }
 
     private static boolean notUnique(String name) {
