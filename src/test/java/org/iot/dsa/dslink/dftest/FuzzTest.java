@@ -43,10 +43,11 @@ public class FuzzTest {
     public static double PROB_DEV = .3;
     public static double PROB_PNT = .4;
 
-    public static double PROB_OFF_CON_STATE = .3;
-    public static double PROB_OFF_DEV_STATE = .3;
-    public static double PROB_ON_CON_STATE = .7;
-    public static double PROB_ON_DEV_STATE = .7;
+    public static boolean UNPLUG_DEVICES = true;
+    public static double PROB_OFF_CON_STATE = .4;
+    public static double PROB_OFF_DEV_STATE = .4;
+    public static double PROB_ON_CON_STATE = .6;
+    public static double PROB_ON_DEV_STATE = .6;
     public static double PROB_REMOVE_PNT = .1;
 
 
@@ -369,7 +370,11 @@ public class FuzzTest {
                     dev_dev_counter++;
                     return "Creating device " + c + ":" + d;
                 } else {
-                    return "Setting ShouldSucceed to " + conn.flipPowerSwitch() + " on " + c;
+                    if (UNPLUG_DEVICES) {
+                        return "Setting ShouldSucceed to " + conn.flipPowerSwitch() + " on " + c;
+                    } else {
+                        return "Unplugging connections is disabled, skipping " + c;
+                    }
                 }
                 //Or choose a device to act on
             } else {
@@ -390,7 +395,11 @@ public class FuzzTest {
                         pnt_dev_counter++;
                         return "Creating new point " + c + ":" + d + ":" + p + " to " + v;
                     } else {
-                        return "Setting Active to " + dev.flipDev() + " on " + c + ":" + d;
+                        if (UNPLUG_DEVICES) {
+                            return "Setting Active to " + dev.flipDev() + " on " + c + ":" + d;
+                        } else {
+                            return "Unplugging devices is disabled, skipping " + c + ":" + d;
+                        }
                     }
                     //Or choose a point to act on
                 } else {
