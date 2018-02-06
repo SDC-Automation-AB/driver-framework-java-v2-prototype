@@ -30,13 +30,13 @@ public class DFFuzzNodeAction extends FuzzNodeActionContainer {
             return "Edit action not yet supported!";
         } else if (name.equals("Add Connection")) {
             String c = addConnectionHelper(parent, params);
-            params.put("Name", c).put("Connection String", c).put("Ping Rate", getFuzzPingRate());
+            params.put("Name", c).put("Connection String", c).put("Ping Rate", getFuzzPingRateMillis());
         } else if (name.equals("Add Device")) {
             String d = addDeviceHelper(parent, params);
-            params.put("Name", d).put("Device String", d).put("Ping Rate", getFuzzPingRate());
+            params.put("Name", d).put("Device String", d).put("Ping Rate", getFuzzPingRateMillis());
         } else if (name.equals("Add Point")) {
             String p = addPintHelper(parent, params);
-            params.put("Name", p).put("ID", p).put("Poll Rate", getFuzzPingRate());
+            params.put("Name", p).put("ID", p).put("Poll Rate", getFuzzPingRateMillis());
         } else if (name.equals("Remove")) {
             if (parent instanceof DFConnectionNode) {
                 removeConnectionHelper(parent);

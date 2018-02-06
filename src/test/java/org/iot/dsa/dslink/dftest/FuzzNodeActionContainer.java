@@ -16,8 +16,12 @@ public abstract class FuzzNodeActionContainer {
 
     public abstract String invokeAction(DSInfo actionInfo, Random rand);
 
-    protected static long getFuzzPingRate() {
+    protected static long getFuzzPingRateMillis() {
         return FuzzTest.PING_POLL_RATE;
+    }
+
+    protected static Double getFuzzPingRateSec() {
+        return FuzzTest.PING_POLL_RATE / 1000.0;
     }
 
     protected static String addConnectionHelper(DSNode parent, DSMap params) {
