@@ -140,7 +140,7 @@ public class FuzzTest {
 
     @Test
     public void buildActionTreeTest() {
-        builFuzzDoubleTree(100, new MainNode(), new TestingConnection(), new DFFuzzNodeAction());
+        builFuzzDoubleTree(100, null, new MainNode(), new TestingConnection(), new DFFuzzNodeAction());
     }
 
     /**
