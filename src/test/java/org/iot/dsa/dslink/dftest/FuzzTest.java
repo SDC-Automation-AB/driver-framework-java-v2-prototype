@@ -42,6 +42,7 @@ public class FuzzTest {
     public static double PROB_CON = .2;
     public static double PROB_DEV = .3;
     public static double PROB_PNT = .4;
+    public static double PROB_ACTION = .5;
 
     public static boolean UNPLUG_DEVICES = true;
     public static double PROB_OFF_CON_STATE = .4;
@@ -76,8 +77,8 @@ public class FuzzTest {
     private static final String PY_TEST_DIR = "py_tests";
 
     private static PythonInterpreter interp;
-    private static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
-    private static final boolean PRINT_TO_CONSOLE = true;
+    public static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
+    public static final boolean PRINT_TO_CONSOLE = true;
 
     public static void prepareToFuzz(DSMainNode root) {
         staticRootNode = root;
@@ -95,19 +96,12 @@ public class FuzzTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         if (REGENERATE_OUTPUT) {
             assertEquals(1.0, PROB_ROOT + PROB_CON + PROB_DEV + PROB_PNT, .01);
-            prepareToFuzz(new MainNode());
-            PrintWriter writer = getNewPrintWriter(TESTING_OUT_FILENAME);
 
-            //Main loop
-            while (step_counter < TEST_STEPS) {
-                String result = doAThing(new TestingConnection(), new DFFuzzNodeAction());
-                waitAWhile();
-                printResult(result, writer, VERBOSE);
-                step_counter++;
-            }
+            PrintWriter writer = getNewPrintWriter(TESTING_OUT_FILENAME);
+            builFuzzDoubleTree(TEST_STEPS, writer, new MainNode(), new TestingConnection(), new DFFuzzNodeAction());
 
             writer.close();
             REGENERATE_OUTPUT = false;
@@ -124,14 +118,17 @@ public class FuzzTest {
         System.out.println(TestingConnection.getPrintout(true));
     }
 
-    public static void builFuzzDoubleTree(int size, DSMainNode root, TestingConnection seedObject, FuzzNodeActionContainer fz) {
+    public static void builFuzzDoubleTree(long size, PrintWriter writer, DSMainNode root, TestingConnection seedObject, FuzzNodeActionContainer fz) {
         prepareToFuzz(root);
+
+        //Main loop
         while (step_counter < size) {
             String thing = doAThing(seedObject, fz);
             waitAWhile();
-            printResult(thing, null, false);
+            printResult(thing, writer, VERBOSE);
             step_counter++;
         }
+
         System.out.println(DELIM.replaceFirst("STEP", "COMPLETE TREE"));
         printResult("Final Summary", null, true);
     }
@@ -311,7 +308,7 @@ public class FuzzTest {
             writer.println(result);
             writer.flush();
         }
-        if (PRINT_TO_CONSOLE) System.out.println(result); //TODO: Remove debug
+        if (PRINT_TO_CONSOLE) System.out.println(result);
     }
 
     private static boolean setupIncomplete() {
@@ -333,7 +330,7 @@ public class FuzzTest {
         if (queuedAction != null) {
             thingDone = queuedAction.act();
             queuedAction = null;
-        } else if (random.nextInt(2) < 1 || setupIncomplete()) {
+        } else if (random.nextDouble() > PROB_ACTION || setupIncomplete()) {
             thingDone = createOrModifyDevice(tstConn);
         } else {
             thingDone = subscribeOrDoAnAction(fzNode);
