@@ -150,19 +150,22 @@ public class FuzzTest {
      */
     @Test
     public void exactMatchTest() throws IOException {
-        //TODO: re-write in python to remove DiffUtils and StringUtils dependencies
-        List<String> masterLines = fileToLines(new File(MASTER_OUT_FILENAME));
-        List<String> testingLines = fileToLines(new File(TESTING_OUT_FILENAME));
+        performDiff(MASTER_OUT_FILENAME, TESTING_OUT_FILENAME);
+    }
+
+    public static void performDiff(String master, String test) throws IOException {
+        List<String> masterLines = fileToLines(new File(master));
+        List<String> testingLines = fileToLines(new File(test));
 
         Patch<String> diff = DiffUtils.diff(masterLines, testingLines);
-        List<String> diffText = DiffUtils.generateUnifiedDiff(MASTER_OUT_FILENAME, TESTING_OUT_FILENAME, masterLines, diff, 0);
+        List<String> diffText = DiffUtils.generateUnifiedDiff(master, test, masterLines, diff, 0);
         if (!diffText.isEmpty()) {
             String diffString = StringUtils.join(diffText, '\n');
             fail("Output does not match:\n" + diffString);
         }
     }
 
-    private List<String> fileToLines(File file) throws IOException {
+    private static List<String> fileToLines(File file) throws IOException {
         final List<String> lines = new ArrayList<String>();
         String line;
         final BufferedReader in = new BufferedReader(new FileReader(file));
@@ -277,7 +280,7 @@ public class FuzzTest {
         }
     }
 
-    private static PrintWriter getNewPrintWriter(String fileName) {
+    public static PrintWriter getNewPrintWriter(String fileName) {
         PrintWriter writer = null;
         try {
             writer = new PrintWriter(fileName, "UTF-8");
