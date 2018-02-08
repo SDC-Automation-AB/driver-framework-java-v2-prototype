@@ -74,7 +74,8 @@ public class FuzzTest {
     private static final String DELIM = "\n\n== STEP ===============================================================================";
     public static final String MASTER_OUT_FILENAME = "master-output.txt";
     public static final String TESTING_OUT_FILENAME = "testing-output.txt";
-    private static final String PY_TEST_DIR = /*"src/main/resources/"*/ "/py_tests";
+    private static final String PY_TEST_JAR = "/py_tests";
+    private static final String PY_TEST_DIR = "src\\main\\resources\\py_tests\\";
 
     private static PythonInterpreter interp;
     public static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
@@ -183,7 +184,7 @@ public class FuzzTest {
     @Test
     public void pythonFrameworkTest() throws Exception {
         String t_name = "helloo_world.py";
-        runPythonTest(t_name);
+        runPythonTestFromJar(t_name);
     }
 
     /**
@@ -193,7 +194,7 @@ public class FuzzTest {
     @Test
     public void connected_was_subbed() throws Exception {
         String t_name = "connected_was_subbed.py";
-        runPythonTest(t_name);
+        runPythonTestFromJar(t_name);
     }
 
     /**
@@ -202,7 +203,7 @@ public class FuzzTest {
     @Test
     public void parent_connected() throws Exception {
         String t_name = "parent_connected.py";
-        runPythonTest(t_name);
+        runPythonTestFromJar(t_name);
     }
 
     /**
@@ -213,7 +214,7 @@ public class FuzzTest {
     @Test
     public void subbed_is_connected() throws Exception {
         String t_name = "subbed_is_connected.py";
-        runPythonTest(t_name);
+        runPythonTestFromJar(t_name);
     }
 
     /**
@@ -223,7 +224,7 @@ public class FuzzTest {
     @Test
     public void subbed_is_failed() throws Exception {
         String t_name = "subbed_is_failed.py";
-        runPythonTest(t_name);
+        runPythonTestFromJar(t_name);
     }
 
     /**
@@ -233,7 +234,7 @@ public class FuzzTest {
     @Test
     public void unsubbed_is_stopped() throws Exception {
         String t_name = "unsubbed_is_stopped.py";
-        runPythonTest(t_name);
+        runPythonTestFromJar(t_name);
     }
 
     /**
@@ -242,17 +243,23 @@ public class FuzzTest {
     @Test
     public void value_updates() throws Exception {
         String t_name = "value_updates.py";
-        runPythonTest(t_name);
+        runPythonTestFromJar(t_name);
     }
 
     //TODO: write python test to check that when a testing conn/dev/point is deactivated, it's corresponding node is failed
     //TODO: write test to check that when a testing conn/dev/point is activated, it's corresponding node is active
     //TODO: after device/conn/point add action is called an appropriate device or node appears in the appropriate tree
 
-    public static void runPythonTest(String fileName) throws Exception {
-        String exec = PY_TEST_DIR + "/" + fileName;
+    public static void runPythonTestFromJar(String fileName) throws Exception {
+        String exec = PY_TEST_JAR + "/" + fileName;
         PythonInterpreter terp = getPyInterpreter();
-        runFile(exec, terp);
+        runFileFromJar(exec, terp);
+    }
+
+    public static void runPythonTestFromDir(String fileName) throws Exception {
+        String exec = PY_TEST_DIR + fileName;
+        PythonInterpreter terp = getPyInterpreter();
+        runFileFromDir(exec, terp);
     }
 
     private static PythonInterpreter getPyInterpreter() {
@@ -274,15 +281,23 @@ public class FuzzTest {
         return interp;
     }
 
-    static void runFile(String str, PythonInterpreter interp) throws Exception {
+    static void runFileFromDir(String scriptName, PythonInterpreter interp) throws Exception {
+        File f = new File(scriptName);
+        InputStream pyStr = new FileInputStream(f);
+        execPyScript(interp, pyStr, scriptName);
+    }
 
-        InputStream s = FuzzTest.class.getClass().getResourceAsStream(str);
+    static void runFileFromJar(String scriptName, PythonInterpreter interp) throws Exception {
+        InputStream pyStr = FuzzTest.class.getClass().getResourceAsStream(scriptName);
+        execPyScript(interp, pyStr, scriptName);
+    }
 
+    static void execPyScript(PythonInterpreter interp, InputStream scriptStream, String name) {
         try {
-            interp.execfile(s);
-            System.out.println("Test " + str + ": PASSED!");
+            interp.execfile(scriptStream);
+            System.out.println("Test " + name + ": PASSED!");
         } catch (Exception e) {
-            System.out.println("Test " + str + ": FAILED!");
+            System.out.println("Test " + name + ": FAILED!");
             throw e;
         }
     }
