@@ -1,10 +1,10 @@
-from output_parser import *
+# from output_parser import*
 
 subprefix = "Subscribing to /main/"
 goodstatus = "Status:Connected"
 badstatus = "Status:Failed"
 
-steps = parse("../testing-output.txt")
+steps = parse("testing-output.txt")
 for i in range(0, len(steps)):
     step = steps[i]
     if step.action.startswith(subprefix):

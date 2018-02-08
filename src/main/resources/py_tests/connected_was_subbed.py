@@ -1,4 +1,4 @@
-from output_parser import *
+# from output_parser import*
 
 subprefix = "Subscribing to /main/"
 unsubprefix = "Unsubscribing from /main/"
@@ -7,7 +7,7 @@ badstatus = "Status:Failed"
 sbpstatus = "Status:Stopped by Parent"
 
 should_be_subbed = set()
-steps = parse("../testing-output.txt")
+steps = parse("testing-output.txt")
 for i in range(len(steps) - 1, -1, -1):
     step = steps[i]
 

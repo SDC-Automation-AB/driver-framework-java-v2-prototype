@@ -1,9 +1,9 @@
-from output_parser import *
+# from output_parser import*
 
 goodstatus = "Status:Connected"
 update_prefix = "Setting point "
 
-steps = parse("../testing-output.txt")
+steps = parse("testing-output.txt")
 for i in range(0, len(steps)):
     step = steps[i]
     act = step.action.strip()

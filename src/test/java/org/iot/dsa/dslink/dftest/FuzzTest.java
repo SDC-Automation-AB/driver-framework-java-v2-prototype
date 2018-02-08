@@ -72,9 +72,9 @@ public class FuzzTest {
     static long pnt_dev_counter = 0;
 
     private static final String DELIM = "\n\n== STEP ===============================================================================";
-    private static final String MASTER_OUT_FILENAME = "master-output.txt";
-    private static final String TESTING_OUT_FILENAME = "testing-output.txt";
-    private static final String PY_TEST_DIR = "py_tests";
+    public static final String MASTER_OUT_FILENAME = "master-output.txt";
+    public static final String TESTING_OUT_FILENAME = "testing-output.txt";
+    private static final String PY_TEST_DIR = /*"src/main/resources/"*/ "/py_tests";
 
     private static PythonInterpreter interp;
     public static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
@@ -133,12 +133,12 @@ public class FuzzTest {
         printResult("Final Summary", null, true);
     }
 
-    @Test
+    //@Test
     public void buildMockTreeTest() {
         buildMockTree(100, new TestingConnection());
     }
 
-    @Test
+    //@Test
     public void buildActionTreeTest() {
         builFuzzDoubleTree(100, null, new MainNode(), new TestingConnection(), new DFFuzzNodeAction());
     }
@@ -249,28 +249,35 @@ public class FuzzTest {
     //TODO: write test to check that when a testing conn/dev/point is activated, it's corresponding node is active
     //TODO: after device/conn/point add action is called an appropriate device or node appears in the appropriate tree
 
-    private static void runPythonTest(String fileName) throws Exception {
-        String exec = PY_TEST_DIR + "\\" + fileName;
+    public static void runPythonTest(String fileName) throws Exception {
+        String exec = PY_TEST_DIR + "/" + fileName;
         PythonInterpreter terp = getPyInterpreter();
         runFile(exec, terp);
     }
 
     private static PythonInterpreter getPyInterpreter() {
         if (interp == null) {
+//            PythonInterpreter.initialize(System.getProperties(), System.getProperties(), new String[0]);
             interp = new PythonInterpreter();
 
-            //This sets up the interpreter to understand scripts
-            interp.exec("import os\n" +
-                    "os.chdir(\"" + PY_TEST_DIR + "\")\n" +
-                    "import sys\n" +
-                    "sys.path.append(os.getcwd())\n");
+            //This imports the output_parser.py dependency, all other dependencies have to be added here as well
+            InputStream parser_dependency = FuzzTest.class.getClass().getResourceAsStream("/py_tests/output_parser.py");
+            interp.execfile(parser_dependency);
+
+            //This is no longer necessary, as path is not being used
+//            //This sets up the interpreter to understand scripts
+//            interp.exec("import os\n" +
+//               //     "os.chdir(\"" + PY_TEST_DIR + "\")\n" +
+//                    "import sys\n" +
+//                    "sys.path.append(os.getcwd())\n");
         }
         return interp;
     }
 
     static void runFile(String str, PythonInterpreter interp) throws Exception {
-        File f = new File(str);
-        InputStream s = new FileInputStream(f);
+
+        InputStream s = FuzzTest.class.getClass().getResourceAsStream(str);
+
         try {
             interp.execfile(s);
             System.out.println("Test " + str + ": PASSED!");
@@ -278,6 +285,11 @@ public class FuzzTest {
             System.out.println("Test " + str + ": FAILED!");
             throw e;
         }
+    }
+
+    static String convertStreamToString(InputStream is) {
+        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
     }
 
     public static PrintWriter getNewPrintWriter(String fileName) {

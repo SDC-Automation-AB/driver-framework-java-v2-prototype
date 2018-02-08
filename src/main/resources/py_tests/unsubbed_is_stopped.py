@@ -1,10 +1,10 @@
-from output_parser import *
+# from output_parser import*
 
 unsubprefix = "Unsubscribing from /main/"
 goodstatus = "Status:Connected"
 stoppedstatus = "Status:Stopped"
 
-steps = parse("../testing-output.txt")
+steps = parse("testing-output.txt")
 for i in range(0, len(steps)):
     step = steps[i]
     if step.action.startswith(unsubprefix):
