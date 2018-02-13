@@ -246,9 +246,22 @@ public class FuzzTest {
         runPythonTestFromJar(t_name);
     }
 
+    @Test
+    public void add_works() throws Exception {
+        String t_name = "add_works.py";
+        runPythonTestFromJar(t_name);
+    }
+
+    @Test
+    public void remove_works() throws Exception {
+        String t_name = "remove_works.py";
+        runPythonTestFromJar(t_name);
+    }
+
+
+
     //TODO: write python test to check that when a testing conn/dev/point is deactivated, it's corresponding node is failed
     //TODO: write test to check that when a testing conn/dev/point is activated, it's corresponding node is active
-    //TODO: after device/conn/point add action is called an appropriate device or node appears in the appropriate tree
 
     public static void runPythonTestFromJar(String fileName) throws Exception {
         String exec = PY_TEST_JAR + "/" + fileName;

@@ -19,6 +19,8 @@ class TreeNode:
         else:
             self.children.append(TreeNode(self, line))
 
+# parses the file into a list of steps
+# each step cantains an aciont, a device tree and a dsa tree
 def parse(filename):
     f = file(filename)
     steps = []
@@ -46,6 +48,8 @@ def parse(filename):
             dsa_done = False
     return steps
 
+#takes a list of strings specifying a path
+#returens a dsa sub-tree descibed by the path, if it exists
 def find_in_dsa_tree(tree, path):
     assert len(path) <= 3
     assert len(tree.children) == 1
@@ -66,6 +70,8 @@ def find_in_dsa_tree(tree, path):
                             return point
     return None
 
+#takes a list of strings specifying a path
+#returens a device sub-tree descibed by the path, if it exists
 def find_in_dev_tree(tree, path):
     assert len(path) <= 3
     if len(path) == 0:
@@ -83,6 +89,7 @@ def find_in_dev_tree(tree, path):
                             return point
     return None
 
+#returns a list of dsa point sub-trees contained in a given tree
 def get_all_dsa_points(tree):
     assert len(tree.children) == 1
     root = tree.children[0]
@@ -93,6 +100,7 @@ def get_all_dsa_points(tree):
             points += dev.children
     return points
 
+#returns a list of dsa dev sub-trees contained in a given tree
 def get_all_dsa_devs(tree):
     assert len(tree.children) == 1
     root = tree.children[0]
