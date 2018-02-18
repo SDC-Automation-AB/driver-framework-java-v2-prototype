@@ -15,9 +15,9 @@ public class DFHelpers {
     public static final String NAME = "Name";
 
     static final String STATUS = "Status";
-    static final String RESTART = "Restart";
-    static final String STOP = "Stop";
-    static final String START = "Start";
+    public static final String RESTART = "Restart";
+    public static final String STOP = "Stop";
+    public static final String START = "Start";
     public static final String REMOVE = "Remove";
     static final String IS_STOPPED = "Stopped";
     static final String PRINT = "Print";
