@@ -18,7 +18,7 @@ public class DFHelpers {
     static final String RESTART = "Restart";
     static final String STOP = "Stop";
     static final String START = "Start";
-    static final String REMOVE = "Remove";
+    public static final String REMOVE = "Remove";
     static final String IS_STOPPED = "Stopped";
     static final String PRINT = "Print";
     public static final String ACTION_EDIT = "Edit";
