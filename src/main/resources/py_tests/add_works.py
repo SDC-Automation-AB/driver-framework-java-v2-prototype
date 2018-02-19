@@ -23,3 +23,5 @@ for i in range(0, len(steps)):
 if count == 0:
     print("No Add actions detected!")
     assert False
+else:
+    print count, "Add actions detected."

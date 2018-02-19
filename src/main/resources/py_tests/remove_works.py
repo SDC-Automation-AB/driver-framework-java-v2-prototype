@@ -21,3 +21,5 @@ for i in range(0, len(steps)):
 if count == 0:
     print("No Remove actions detected!")
     assert False
+else:
+    print count, "Remove actions detected."
