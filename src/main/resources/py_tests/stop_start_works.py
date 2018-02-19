@@ -6,12 +6,14 @@ startsuffix = "Start"
 stop_true = "Stopped:true"
 stop_false = "Stopped:false"
 stop = False
+fails = []
+
 
 def check_correct(node, shold_stop):
     if shold_stop:
-        assert stop_true in node.value
+        return stop_true in node.value
     else:
-        assert stop_false in node.value
+        return stop_false in node.value
 
 steps = parse("testing-output.txt")
 count_stop = 0
@@ -37,10 +39,12 @@ for i in range(0, len(steps)):
         node_after = find_in_dsa_tree(step.dsa_tree, path)
         # Check that it was correct before
         assert node_before is not None
-        check_correct(node_before, not stop)
+        if not check_correct(node_before, not stop):
+            fails.append(i)
         # Check that it is correct now
         assert node_after is not None
-        check_correct(node_after, stop)
+        if not check_correct(node_after, stop):
+            fails.append(i)
 
 
 if count_stop == 0:
@@ -54,3 +58,7 @@ if count_start == 0:
     assert False
 else:
     print count_start, "Start actions detected."
+
+if len(fails) != 0:
+    print fails
+    assert False
