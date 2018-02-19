@@ -27,6 +27,7 @@ public class FuzzTest {
 
     public static long TEST_STEPS = 1000;
     public static long SETUP_STEPS = 60;
+    public static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
     public static boolean FLAT_TREE = false;
     public static boolean VERBOSE = false;
     public static long SEED = 420;
@@ -78,7 +79,6 @@ public class FuzzTest {
     private static final String PY_TEST_DIR = "src\\main\\resources\\py_tests\\";
 
     private static PythonInterpreter interp;
-    public static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
     public static final boolean PRINT_TO_CONSOLE = true;
 
     public static void prepareToFuzz(DSMainNode root) {
