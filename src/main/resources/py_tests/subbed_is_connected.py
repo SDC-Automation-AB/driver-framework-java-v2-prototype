@@ -2,6 +2,7 @@
 
 subprefix = "Subscribing to /main/"
 goodstatus = "Status:Connected"
+fails = []
 
 steps = parse("testing-output.txt")
 for i in range(0, len(steps)):
@@ -13,6 +14,12 @@ for i in range(0, len(steps)):
         devpoint = find_in_dev_tree(step.dev_tree, path)
         assert dsapoint is not None
         if devpoint is not None and goodstatus in dsapoint.parent.value and goodstatus in dsapoint.parent.parent.value:
-            assert goodstatus in dsapoint.value
+            if (not goodstatus in dsapoint.value):
+                fails.append(i)
             actual_val = devpoint.value.split()[-1].strip()
-            assert "Value:" + actual_val in dsapoint.value
+            if not "Value:" + actual_val in dsapoint.value:
+                fails.append(i)
+
+if len(fails) != 0:
+    print "Fails:", fails
+    assert False

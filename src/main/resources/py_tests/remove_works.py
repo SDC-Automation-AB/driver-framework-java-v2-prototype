@@ -28,5 +28,5 @@ else:
     print count, "Remove actions detected."
 
 if len(fails) != 0:
-    print fails
+    print "Fails:", fails
     assert False
