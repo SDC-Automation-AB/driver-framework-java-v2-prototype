@@ -834,6 +834,8 @@ public class FuzzTest {
         DSMap params = null;
         DSNode parent = null;
         String pointName = null;
+        static final int DELAY_TIMEOUT = 100;
+        static final int DELAY_WAIT_MILLS = 100;
 
         /**
          * Constructor for doing an action
@@ -853,6 +855,14 @@ public class FuzzTest {
 
         String act() {
             if (parent != null) {
+                int step = DELAY_TIMEOUT;
+                while (parent.getInfo(pointName) == null && --step > 0) {
+                    try {
+                        wait(DELAY_WAIT_MILLS);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
                 return FuzzTest.subscribeOrUnsubscribe(parent.getInfo(pointName));
             } else {
                 FuzzTest.requester.invoke(path, params, new FuzzTest.InvokeHandlerImpl());
