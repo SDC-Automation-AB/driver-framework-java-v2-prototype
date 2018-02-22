@@ -858,7 +858,7 @@ public class FuzzTest {
                 int step = DELAY_TIMEOUT;
                 while (parent.getInfo(pointName) == null && --step > 0) {
                     try {
-                        wait(DELAY_WAIT_MILLS);
+                        Thread.sleep(DELAY_WAIT_MILLS);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
