@@ -5,12 +5,15 @@ import org.iot.dsa.dslink.DSMainNode;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSInfo;
 
-public class DFBranchCarouselObject extends DFCarouselObject{
+import java.util.concurrent.atomic.AtomicBoolean;
+
+public class DFBranchCarouselObject extends DFCarouselObject {
 
     private final DFBranchNode homeNode;
-    private boolean connected = false;
+    private PingConRunner runner = new PingConRunner();
+    private AtomicBoolean connected = new AtomicBoolean(false);
     private DFBranchDelayCalculator calculator;
-    
+
     DFBranchCarouselObject(DFBranchNode home) {
         homeNode = home;
         this.calculator = homeNode.getPingReconnectCalculator(this);
@@ -18,12 +21,14 @@ public class DFBranchCarouselObject extends DFCarouselObject{
     }
 
     private boolean iAmAnOrphan() {
-        if (homeNode.getParent() instanceof  DFAbstractNode) {
+        if (homeNode.getParent() instanceof DFAbstractNode) {
             DFAbstractNode par = (DFAbstractNode) homeNode.getParent();
             return !par.isNodeConnected();
+        } else if (homeNode.getParent() instanceof DSMainNode) {
+            return false;
+        } else {
+            throw new RuntimeException("Wrong parent class: " + homeNode.getParent().getName() + "-" + homeNode.getParent().getClass());
         }
-        else if (homeNode.getParent() instanceof DSMainNode) { return false; }
-        else { throw new RuntimeException("Wrong parent class: " + homeNode.getParent().getName() + "-" + homeNode.getParent().getClass()); }
     }
 
     private void killOrSpawnChildren(boolean kill) {
@@ -31,23 +36,23 @@ public class DFBranchCarouselObject extends DFCarouselObject{
             DSIObject o = info.getObject();
             if (o instanceof DFAbstractNode) {
                 DFAbstractNode child = (DFAbstractNode) o;
-                    if (kill) {
-                        child.stopCarObject();
-                    } else {
-                        if (!child.isNodeStopped())
-                            child.startCarObject();
-                    }
+                if (kill) {
+                    child.stopCarObject();
+                } else {
+                    if (!child.isNodeStopped())
+                        child.startCarObject();
+                }
             }
         }
     }
-    
+
     void close() {
         running = false;
         killOrSpawnChildren(true);
         homeNode.closeConnection();
         homeNode.onDfStopped();
     }
-    
+
     @Override
     public void run() {
         synchronized (homeNode) {
@@ -58,28 +63,44 @@ public class DFBranchCarouselObject extends DFCarouselObject{
                 homeNode.stopCarObject();
                 return;
             }
-            //Can add redundant check for isNodeStopped here
-            if (connected) {
-                connected = homeNode.ping();
-                if (!connected) {
-                    homeNode.onFailed();
-                    killOrSpawnChildren(true);
-                }
+            if (runnerNotRunning()) {
+                DSRuntime.runDelayed(runner, 0);
+            }
+            if (connected.get()) {
+                homeNode.onConnected();
+                killOrSpawnChildren(false);
             } else {
-                connected = homeNode.createConnection();
-                if (connected) {
-                    homeNode.onConnected();
-                    killOrSpawnChildren(false);
-                } else {
-                    homeNode.onFailed();
-                    killOrSpawnChildren(true);
-                }
+                homeNode.onFailed();
+                killOrSpawnChildren(true);
             }
             DSRuntime.runDelayed(this, calculator.getDelay());
         }
     }
 
     public boolean isConnected() {
-        return connected;
+        return connected.get();
+    }
+
+    private boolean runnerNotRunning() {
+        return !runner.running.get();
+    }
+
+    private class PingConRunner implements Runnable {
+
+        AtomicBoolean running;
+
+        @Override
+        public void run() {
+            try {
+                running.set(true);
+                if (connected.get()) {
+                    connected.set(homeNode.ping());
+                } else {
+                    connected.set(homeNode.createConnection());
+                }
+            } finally {
+                running.set(false);
+            }
+        }
     }
 }

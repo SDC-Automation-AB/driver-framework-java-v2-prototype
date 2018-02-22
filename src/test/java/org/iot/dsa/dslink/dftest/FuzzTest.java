@@ -25,9 +25,9 @@ import static org.junit.Assert.*;
 
 public class FuzzTest {
 
-    public static long TEST_STEPS = 1000;
+    public static long TEST_STEPS = 3000;
     public static long SETUP_STEPS = 60;
-    public static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
+    public static boolean REGENERATE_OUTPUT = false; //Set to false if you don't want to re-run the Fuzz
     public static boolean FLAT_TREE = false;
     public static boolean VERBOSE = false;
     public static long SEED = 420;
@@ -149,7 +149,7 @@ public class FuzzTest {
      *
      * @throws IOException Failed to find the required inputs/outputs
      */
-    @Test
+    //@Test
     public void exactMatchTest() throws IOException {
         performDiff(MASTER_OUT_FILENAME, TESTING_OUT_FILENAME);
     }
