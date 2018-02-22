@@ -53,16 +53,16 @@ public abstract class DFAbstractNode extends EditableNode {
 
     private void setNodeStopped() {
         remove(DFHelpers.STOP);
+        stopCarObject();
         put(DFHelpers.IS_STOPPED, DSBool.TRUE);
         put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED));
-        stopCarObject();
         put(DFHelpers.START,makeStartStopAction());
     }
 
     private void setNodeRunning() {
         remove(DFHelpers.START);
-        put(DFHelpers.IS_STOPPED, DSBool.FALSE);
         startCarObject();
+        put(DFHelpers.IS_STOPPED, DSBool.FALSE);
         put(DFHelpers.STOP,makeStartStopAction());
     }
 
@@ -103,8 +103,8 @@ public abstract class DFAbstractNode extends EditableNode {
     
     @Override
     public void delete() {
-        super.delete();
         stopCarObject();
+        super.delete();
     }
 
     public void onConnected() {

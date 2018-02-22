@@ -63,16 +63,18 @@ public class DFBranchCarouselObject extends DFCarouselObject {
                 homeNode.stopCarObject();
                 return;
             }
+
             if (runnerNotRunning()) {
+                if (connected.get()) {
+                    homeNode.onConnected();
+                    killOrSpawnChildren(false);
+                } else {
+                    homeNode.onFailed();
+                    killOrSpawnChildren(true);
+                }
                 DSRuntime.runDelayed(runner, 0);
             }
-            if (connected.get()) {
-                homeNode.onConnected();
-                killOrSpawnChildren(false);
-            } else {
-                homeNode.onFailed();
-                killOrSpawnChildren(true);
-            }
+
             DSRuntime.runDelayed(this, calculator.getDelay());
         }
     }
@@ -82,12 +84,18 @@ public class DFBranchCarouselObject extends DFCarouselObject {
     }
 
     private boolean runnerNotRunning() {
-        return !runner.running.get();
+        if (runner == null) {
+            runner = new PingConRunner();
+            homeNode.warn("Runner is dead: " + homeNode.getName());
+            return false;
+        } else {
+            return !runner.running.get();
+        }
     }
 
     private class PingConRunner implements Runnable {
 
-        AtomicBoolean running;
+        AtomicBoolean running = new AtomicBoolean();
 
         @Override
         public void run() {

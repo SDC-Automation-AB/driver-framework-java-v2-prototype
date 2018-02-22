@@ -74,6 +74,7 @@ public class DFLeafCarouselObject extends DFCarouselObject {
                 return;
             }
 
+            //TODO: IMPORTANT!!! Make batch pool asynch
             //Can add redundant check for isNodeStopped here
             boolean success = homeDevice.batchPoll(homeNodes);
 
