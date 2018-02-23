@@ -1,5 +1,6 @@
 #from output_parser import *
 
+fail_boat = "Subscription attempt failed:"
 addprefix = "Invoking /main/"
 addsuffix = "Add"
 goodstatus = "Status:Connected"
@@ -13,10 +14,8 @@ for i in range(0, len(steps)):
         path = step.action[len(addprefix):].strip().split("/")
         if path[-1].startswith(addsuffix):
             #Cleanup name of last node
-            new_name = path.pop().split(name_string)[1]
-            new_name = new_name.split("\"")[0]
-            path.append(new_name)
-            dsapoint = find_in_dsa_tree(step.dsa_tree, path)
-            tr.main_test(dsapoint is not None, i)
+            tr.main_test(True, i)
+    else:
+        tr.side_test(not step.action.startswith(fail_boat), i)
 
 tr.report()

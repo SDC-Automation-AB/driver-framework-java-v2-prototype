@@ -264,6 +264,12 @@ public class FuzzTest {
         runPythonTestFromJar(t_name);
     }
 
+    @Test
+    public void all_subscriptions_work() throws Exception {
+        String t_name = "all_subscriptions_work.py";
+        runPythonTestFromJar(t_name);
+    }
+
 
 
     //TODO: write python test to check that when a testing conn/dev/point is deactivated, it's corresponding node is failed
@@ -863,7 +869,11 @@ public class FuzzTest {
                         e.printStackTrace();
                     }
                 }
-                return FuzzTest.subscribeOrUnsubscribe(parent.getInfo(pointName));
+                if (step > 0) {
+                    return FuzzTest.subscribeOrUnsubscribe(parent.getInfo(pointName));
+                } else {
+                    return "Subscription attempt failed: " + parent.getName() + " " + pointName;
+                }
             } else {
                 FuzzTest.requester.invoke(path, params, new FuzzTest.InvokeHandlerImpl());
                 return "Invoking Queued:" + path + " with parameters " + params;
