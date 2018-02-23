@@ -49,7 +49,7 @@ public class DFBranchCarouselObject extends DFCarouselObject {
     void close() {
         running = false;
         killOrSpawnChildren(true);
-        homeNode.closeConnection();
+        DSRuntime.runDelayed(new CloseConRunner(), 0);
         homeNode.onDfStopped();
     }
 
@@ -109,6 +109,13 @@ public class DFBranchCarouselObject extends DFCarouselObject {
             } finally {
                 running.set(false);
             }
+        }
+    }
+
+    private class CloseConRunner implements Runnable {
+        @Override
+        public void run() {
+            homeNode.closeConnection();
         }
     }
 }

@@ -4,11 +4,14 @@ import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSMainNode;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DFLeafCarouselObject extends DFCarouselObject {
 
     private Set<DFPointNode> homeNodes = new HashSet<DFPointNode>();
     private final DFDeviceNode homeDevice;
+    private BatchPollRunner runner = new BatchPollRunner();
+    private AtomicBoolean success = new AtomicBoolean(false);
 
     DFLeafCarouselObject(DFPointNode homePoint, DFDeviceNode homeDev) {
         homeDevice = homeDev;
@@ -74,21 +77,45 @@ public class DFLeafCarouselObject extends DFCarouselObject {
                 return;
             }
 
-            //TODO: IMPORTANT!!! Make batch pool asynch
-            //Can add redundant check for isNodeStopped here
-            boolean success = homeDevice.batchPoll(homeNodes);
-
-            if (!success) {
-                for (DFPointNode n : homeNodes) {
-                    n.onFailed();
+            if (runnerNotRunning()) {
+                if (!success.get()) {
+                    for (DFPointNode n : homeNodes) {
+                        n.onFailed();
+                    }
+                } else {
+                    for (DFPointNode n : homeNodes) {
+                        n.onConnected();
+                    }
                 }
-            } else {
-                for (DFPointNode n : homeNodes) {
-                    n.onConnected();
-                }
+                DSRuntime.runDelayed(runner,0);
             }
+
             DSRuntime.runDelayed(this, getAHomeNode().getPollRate());
         }
     }
-    
+
+    private boolean runnerNotRunning() {
+        if (runner == null) {
+            runner = new BatchPollRunner();
+            homeDevice.warn("Runner is dead: " + homeDevice.getName());
+            return false;
+        } else {
+            return !runner.running.get();
+        }
+    }
+
+    private class BatchPollRunner implements Runnable {
+
+        AtomicBoolean running = new AtomicBoolean();
+
+        @Override
+        public void run() {
+            try {
+                running.set(true);
+                success.set(homeDevice.batchPoll(homeNodes));
+            } finally {
+                running.set(false);
+            }
+        }
+    }
 }
