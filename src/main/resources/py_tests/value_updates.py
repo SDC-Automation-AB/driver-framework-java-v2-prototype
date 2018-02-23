@@ -2,7 +2,7 @@
 
 goodstatus = "Status:Connected"
 update_prefix = "Setting point "
-good_vals = 0
+tr = Tracker()
 
 steps = parse("testing-output.txt")
 for i in range(0, len(steps)):
@@ -14,11 +14,6 @@ for i in range(0, len(steps)):
         val = arr[4]
         point = find_in_dsa_tree(step.dsa_tree, path)
         if point is not None and goodstatus in point.value:
-            assert "Value:" + val in point.value
-            good_vals += 1
+            tr.main_test("Value:" + val in point.value, i)
 
-if good_vals == 0:
-    print "Value update not tested!!"
-    assert False
-else:
-    print "Good value updates: ", good_vals
+tr.report()

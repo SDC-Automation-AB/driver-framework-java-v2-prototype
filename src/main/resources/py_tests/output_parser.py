@@ -19,6 +19,34 @@ class TreeNode:
         else:
             self.children.append(TreeNode(self, line))
 
+class Tracker:
+    def __init__(self):
+        self.fails = []
+        self.success = []
+
+    def side_test(self, cond, itr):
+        if not cond:
+            self.fails.append(itr)
+
+    def main_test(self, cond, itr):
+        if cond:
+            self.success.append(itr)
+        else:
+            self.fails.append(itr)
+
+    def report(self):
+        if len(self.fails) != 0:
+            print "Steps failed:"
+            print self.fails
+            assert False
+        elif len(self.success) == 0:
+            print "Test case absent from file!"
+            assert False
+        else:
+            print "Successful cases:", len(self.success)
+            print self.success
+
+
 # parses the file into a list of steps
 # each step cantains an aciont, a device tree and a dsa tree
 def parse(filename):
