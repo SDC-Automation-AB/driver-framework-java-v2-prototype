@@ -57,6 +57,8 @@ public class FuzzTest {
 
     public static long PING_POLL_RATE = 15;
     public static long INTERSTEP_WAIT_TIME = PING_POLL_RATE * 2;
+    public static int SUBSCRIBE_DELAY_RETRIES = 100;
+    public static int SUBSCRIBE_DELAY_WAIT_MILIS = 100;
 
     private static Set<String> unique_names = new HashSet<String>();
     static Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
@@ -841,8 +843,6 @@ public class FuzzTest {
         DSMap params = null;
         DSNode parent = null;
         String pointName = null;
-        static final int DELAY_TIMEOUT = 100;
-        static final int DELAY_WAIT_MILLS = 100;
 
         /**
          * Constructor for doing an action
@@ -862,11 +862,11 @@ public class FuzzTest {
 
         String act() {
             if (parent != null) {
-                int step = DELAY_TIMEOUT;
+                int step = SUBSCRIBE_DELAY_RETRIES;
 
                 while (parent.getInfo(pointName) == null && --step > 0) {
                     try {
-                        Thread.sleep(DELAY_WAIT_MILLS);
+                        Thread.sleep(SUBSCRIBE_DELAY_WAIT_MILIS);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
