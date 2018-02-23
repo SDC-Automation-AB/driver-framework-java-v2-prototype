@@ -56,6 +56,7 @@ public class FuzzTest {
     public static double PROB_OF_BAD_CONFIG = 0.01;
 
     public static long PING_POLL_RATE = 15;
+    public static long INTERSTEP_WAIT_TIME = PING_POLL_RATE * 2;
 
     private static Set<String> unique_names = new HashSet<String>();
     static Map<DSInfo, SubscribeHandlerImpl> subscriptions = new HashMap<DSInfo, SubscribeHandlerImpl>();
@@ -350,7 +351,7 @@ public class FuzzTest {
     private static void waitAWhile() {
         if (!setupIncomplete()) {
             try {
-                Thread.sleep(PING_POLL_RATE * 2);
+                Thread.sleep(INTERSTEP_WAIT_TIME);
             } catch (InterruptedException e) {
                 fail(e.getMessage());
             }
@@ -862,6 +863,7 @@ public class FuzzTest {
         String act() {
             if (parent != null) {
                 int step = DELAY_TIMEOUT;
+
                 while (parent.getInfo(pointName) == null && --step > 0) {
                     try {
                         Thread.sleep(DELAY_WAIT_MILLS);
@@ -869,7 +871,8 @@ public class FuzzTest {
                         e.printStackTrace();
                     }
                 }
-                if (step > 0) {
+
+                if (parent.getInfo(pointName) != null) {
                     return FuzzTest.subscribeOrUnsubscribe(parent.getInfo(pointName));
                 } else {
                     return "Subscription attempt failed: " + parent.getName() + " " + pointName;
