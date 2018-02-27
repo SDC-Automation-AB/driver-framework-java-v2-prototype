@@ -132,7 +132,7 @@ public class DFHelpers {
             "Parrot", "Partridge", "Peacock", "Peafowl", "Pekingese", "Pelican", "Penguin", "Persian", "Pheasant", "Pig",
             "Pigeon", "Pika", "Pike", "Piranha", "Platypus", "Pointer", "Pony", "Poodle", "Porcupine", "Porpoise",
             "Possum", "Prairie Dog", "Prawn", "Puffin", "Pug", "Puma", "Quail", "Quelea", "Quetzal", "Quokka", "Quoll",
-            "Rabbit", "Raccoon", "Ragdoll", "Rail", "Ram", "Rat", "Rattlesnake", "Raven", "Red deer", "Red panda",
+            "Rabbit", "Raccoon", "Ragdoll", "Rail", "Ram", "Rat", "Rattlesnake", "Raven",
             "Reindeer", "Rhinoceros", "Robin", "Rook", "Rottweiler", "Ruff", "Salamander", "Salmon", "SandDollar",
             "Sandpiper", "Saola", "Sardine", "Scorpion", "SeaLion", "SeaUrchin", "Seahorse", "Seal", "Serval", "Shark",
             "Sheep", "Shrew", "Shrimp", "Siamese", "Siberian", "Skunk", "Sloth", "Snail", "Snake", "Snowshoe", "Somali",

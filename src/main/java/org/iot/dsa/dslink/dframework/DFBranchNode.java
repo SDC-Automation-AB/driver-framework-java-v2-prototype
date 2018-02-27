@@ -14,6 +14,7 @@ public abstract class DFBranchNode extends DFAbstractNode {
     abstract public boolean createConnection();
     abstract public boolean ping();
     abstract public void closeConnection();
+    final Object pingConLock = new Object();
 
     public void stopCarObject() {
         synchronized (this) {

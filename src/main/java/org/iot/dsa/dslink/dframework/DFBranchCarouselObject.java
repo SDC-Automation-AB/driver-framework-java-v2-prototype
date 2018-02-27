@@ -99,16 +99,18 @@ public class DFBranchCarouselObject extends DFCarouselObject {
 
         @Override
         public void run() {
-            try {
-                running.set(true);
-                if (connected.get()) {
-                    connected.set(homeNode.ping());
-                } else {
-                    connected.set(homeNode.createConnection());
+           // synchronized (homeNode.pingConLock) {
+                try {
+                    running.set(true);
+                    if (connected.get()) {
+                        connected.set(homeNode.ping());
+                    } else {
+                        connected.set(homeNode.createConnection());
+                    }
+                } finally {
+                    running.set(false);
                 }
-            } finally {
-                running.set(false);
-            }
+          //  }
         }
     }
 

@@ -110,12 +110,14 @@ public class DFLeafCarouselObject extends DFCarouselObject {
 
         @Override
         public void run() {
-            try {
-                running.set(true);
-                success.set(homeDevice.batchPoll(homeNodes));
-            } finally {
-                running.set(false);
-            }
+            //synchronized (homeDevice.pingConLock) {
+                try {
+                    running.set(true);
+                    success.set(homeDevice.batchPoll(homeNodes));
+                } finally {
+                    running.set(false);
+                }
+           // }
         }
     }
 }
