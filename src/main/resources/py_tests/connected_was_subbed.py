@@ -1,4 +1,4 @@
-# from output_parser import*
+# from output_parser import *
 
 subprefix = "Subscribing to /main/"
 unsubprefix = "Unsubscribing from /main/"
@@ -8,6 +8,7 @@ sbpstatus = "Status:Stopped by Parent"
 
 should_be_subbed = set()
 steps = parse("testing-output.txt")
+tr = Tracker()
 for i in range(len(steps) - 1, -1, -1):
     step = steps[i]
 
@@ -20,8 +21,13 @@ for i in range(len(steps) - 1, -1, -1):
     should_be_subbed = conn_or_fail
 
     if step.action.startswith(subprefix):
-        should_be_subbed.remove(step.action.strip().split("/")[-1])
+        this_sub = step.action.strip().split("/")[-1]
+        test = this_sub in should_be_subbed
+        tr.main_test(test, i)
+        if test:
+            should_be_subbed.remove(this_sub)
     elif step.action.startswith(unsubprefix):
-        assert step.action.strip().split("/")[-1] not in should_be_subbed
+        tr.main_test(step.action.strip().split("/")[-1] not in should_be_subbed, i)
 
-assert len(should_be_subbed) == 0
+tr.side_test(len(should_be_subbed) == 0, -666)
+tr.report()
