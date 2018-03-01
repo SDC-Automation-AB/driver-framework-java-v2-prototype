@@ -46,10 +46,10 @@ public class FuzzTest {
     public static double PROB_ACTION = .5;
 
     public static boolean UNPLUG_DEVICES = true;
-    public static double PROB_OFF_CON_STATE = .4;
-    public static double PROB_OFF_DEV_STATE = .4;
-    public static double PROB_ON_CON_STATE = .6;
-    public static double PROB_ON_DEV_STATE = .6;
+    public static double PROB_OFF_CON_STATE = .3;
+    public static double PROB_OFF_DEV_STATE = .3;
+    public static double PROB_ON_CON_STATE = .7;
+    public static double PROB_ON_DEV_STATE = .7;
     public static double PROB_REMOVE_PNT = .1;
 
 
