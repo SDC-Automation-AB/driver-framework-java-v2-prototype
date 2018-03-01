@@ -16,7 +16,7 @@ for i in range(len(steps) - 1, -1, -1):
         [point.value.strip().split()[1][:-1] for point in get_all_dsa_points(step.dsa_tree) if goodstatus in point.value or badstatus in point.value or sbpstatus in point.value])
 
     if i < len(steps) - 1:
-        assert should_be_subbed.issubset(conn_or_fail)
+        tr.side_test(should_be_subbed.issubset(conn_or_fail), i)
 
     should_be_subbed = conn_or_fail
 
