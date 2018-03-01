@@ -212,10 +212,16 @@ public class TestingConnection {
         }
     }
 
-    public Map<String, String> batchRead(TestingDevice device, MockParameters devParams, Set<String> ids) throws TestingException {
-        Map<String, String> results = new HashMap<String, String>();
+    public Map<String, PollingResult> batchRead(TestingDevice device, MockParameters devParams, Set<String> ids) {
+        Map<String, PollingResult> results = new HashMap<String, PollingResult>();
         for (String id : ids) {
-            results.put(id, readPoint(device, devParams, id));
+            PollingResult result;
+            try {
+                result = new PollingResult(readPoint(device, devParams, id));
+            } catch (TestingException e) {
+                result = new PollingResult(e);
+            }
+            results.put(id, result);
         }
         return results;
     }
@@ -273,6 +279,33 @@ public class TestingConnection {
             }
         }
         return sb.toString();
+    }
+    
+    public static class PollingResult {
+        private Exception error;
+        private String result;
+        
+        public PollingResult(String result) {
+            this.error = null;
+            this.result = result;
+        }
+        
+        public PollingResult(Exception error) {
+            this.error = error;
+            this.result = null;
+        }
+        
+        public boolean isErrorResult() {
+            return error != null;
+        }
+        
+        public Exception getError() {
+            return error;
+        }
+        
+        public String getResult() {
+            return result;
+        }
     }
 
     public static class TestingException extends Exception {

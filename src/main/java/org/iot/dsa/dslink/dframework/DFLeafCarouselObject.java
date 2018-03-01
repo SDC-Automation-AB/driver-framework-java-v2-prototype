@@ -3,7 +3,9 @@ package org.iot.dsa.dslink.dframework;
 import org.iot.dsa.DSRuntime;
 import org.iot.dsa.dslink.DSMainNode;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DFLeafCarouselObject extends DFCarouselObject {
@@ -11,7 +13,8 @@ public class DFLeafCarouselObject extends DFCarouselObject {
     private Set<DFPointNode> homeNodes = new HashSet<DFPointNode>();
     private final DFDeviceNode homeDevice;
     private BatchPollRunner runner = new BatchPollRunner();
-    private AtomicBoolean success = new AtomicBoolean(false);
+    private Map<DFPointNode, Boolean> successes = new ConcurrentHashMap<DFPointNode, Boolean>();
+    //private AtomicBoolean success = new AtomicBoolean(false);
 
     DFLeafCarouselObject(DFPointNode homePoint, DFDeviceNode homeDev) {
         homeDevice = homeDev;
@@ -78,15 +81,14 @@ public class DFLeafCarouselObject extends DFCarouselObject {
             }
 
             if (runnerNotRunning()) {
-                if (!success.get()) {
-                    for (DFPointNode n : homeNodes) {
+                for (DFPointNode n : homeNodes) {
+                    if (successes.get(n) != null && successes.get(n)) {
+                        n.onConnected();
+                    } else {
                         n.onFailed();
                     }
-                } else {
-                    for (DFPointNode n : homeNodes) {
-                        n.onConnected();
-                    }
                 }
+
                 DSRuntime.runDelayed(runner,0);
             }
 
@@ -113,7 +115,7 @@ public class DFLeafCarouselObject extends DFCarouselObject {
             //synchronized (homeDevice.pingConLock) {
                 try {
                     running.set(true);
-                    success.set(homeDevice.batchPoll(homeNodes));
+                    successes = homeDevice.batchPoll(homeNodes);
                 } finally {
                     running.set(false);
                 }

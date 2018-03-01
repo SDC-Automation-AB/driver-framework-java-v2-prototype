@@ -1,6 +1,6 @@
 {
   "name": "DFTesting",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Test link for Driver Framework",
   "main": "bin/dslink-java-v2-example",
   "configs": {

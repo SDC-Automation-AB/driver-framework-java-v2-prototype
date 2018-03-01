@@ -5,6 +5,7 @@ import org.iot.dsa.dslink.dframework.DFPointNode;
 import org.iot.dsa.dslink.dframework.DFUtil;
 import org.iot.dsa.dslink.dframework.ParameterDefinition;
 import org.iot.dsa.dslink.dftest.MockParameters;
+import org.iot.dsa.dslink.dftest.TestingConnection.PollingResult;
 import org.iot.dsa.dslink.dftest.TestingDevice;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSLong;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class TestDeviceNode extends DFDeviceNode {
     
@@ -100,26 +102,30 @@ public class TestDeviceNode extends DFDeviceNode {
     }
 
     @Override
-    public boolean batchPoll(Set<DFPointNode> points) {
-        try {
-            Map<String, TestPointNode> polledPoints = new HashMap<String, TestPointNode>();
-            for (DFPointNode p: points) {
-                TestPointNode point = (TestPointNode) p;
-                polledPoints.put(point.getPointID(), point);
-            }
-
-            Set<String> batch = polledPoints.keySet();
-            Map<String, String> results = getParentNode().connObj.batchRead(devObj, new MockParameters(parameters), batch);
-
-            for (Map.Entry<String, String> entry: results.entrySet()) {
-                TestPointNode point = polledPoints.get(entry.getKey());
-                point.updateValue(DSString.valueOf(entry.getValue()));
-            }
-
-            return true;
-        } catch (Exception e) {
-            return false;
+    public Map<DFPointNode, Boolean> batchPoll(Set<DFPointNode> points) {
+        Map<String, TestPointNode> polledPoints = new HashMap<String, TestPointNode>();
+        for (DFPointNode p: points) {
+            TestPointNode point = (TestPointNode) p;
+            polledPoints.put(point.getPointID(), point);
         }
+
+        Set<String> batch = polledPoints.keySet();
+        Map<String, PollingResult> results = getParentNode().connObj.batchRead(devObj, new MockParameters(parameters), batch);
+
+        Map<DFPointNode, Boolean> successes = new ConcurrentHashMap<DFPointNode, Boolean>();
+        for (Map.Entry<String, PollingResult> entry: results.entrySet()) {
+            TestPointNode point = polledPoints.get(entry.getKey());
+            PollingResult result = entry.getValue();
+            if (result.isErrorResult()) {
+                successes.put(point, false);
+            } else {
+                point.updateValue(DSString.valueOf(result.getResult()));
+                successes.put(point, true);
+            }
+            
+        }
+
+        return successes;
     }
 
 }

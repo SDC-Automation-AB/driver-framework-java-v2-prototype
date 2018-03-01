@@ -15,7 +15,7 @@ public abstract class DFDeviceNode extends DFBranchNode {
     //private Map<DFLeafCarouselObject, Boolean> batches = new ConcurrentHashMap<DFLeafCarouselObject, Boolean>();
     private Map<Long, DFLeafCarouselObject> batches = new ConcurrentHashMap<Long, DFLeafCarouselObject>();
 
-    abstract public boolean batchPoll(Set<DFPointNode> points);
+    abstract public Map<DFPointNode, Boolean> batchPoll(Set<DFPointNode> points);
 
     synchronized boolean noPollBatches() {
         return batches.isEmpty();
