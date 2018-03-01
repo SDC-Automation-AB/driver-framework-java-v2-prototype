@@ -51,13 +51,13 @@ if count_stop == 0:
     print("No Stop actions detected!")
     assert False
 else:
-    print count_stop, "Stop actions detected."
+    print "Stop actions detected:" + str(count_stop)
 
 if count_start == 0:
     print "No Start actions detected!"
     assert False
 else:
-    print count_start, "Start actions detected."
+    print "Start actions detected:" + str(count_start)
 
 if len(fails) != 0:
     print "Fails:", fails
