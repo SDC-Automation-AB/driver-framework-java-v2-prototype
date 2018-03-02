@@ -81,8 +81,9 @@ public class DFLeafCarouselObject extends DFCarouselObject {
             }
 
             if (runnerNotRunning()) {
+                Map<DFPointNode, Boolean> latestSuccesses = this.successes;
                 for (DFPointNode n : homeNodes) {
-                    if (successes.get(n) != null && successes.get(n)) {
+                    if (latestSuccesses.get(n) != null && latestSuccesses.get(n)) {
                         n.onConnected();
                     } else {
                         n.onFailed();
