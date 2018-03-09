@@ -72,7 +72,7 @@ public class DFBranchCarouselObject extends DFCarouselObject {
                     homeNode.onFailed();
                     killOrSpawnChildren(true);
                 }
-                DSRuntime.runDelayed(runner, 0);
+                runner.launch();
             }
 
             DSRuntime.runDelayed(this, calculator.getDelay());
@@ -96,6 +96,11 @@ public class DFBranchCarouselObject extends DFCarouselObject {
     private class PingConRunner implements Runnable {
 
         AtomicBoolean running = new AtomicBoolean();
+        
+        public void launch() {
+            running.set(true);
+            DSRuntime.runDelayed(this, 0);
+        }
 
         @Override
         public void run() {

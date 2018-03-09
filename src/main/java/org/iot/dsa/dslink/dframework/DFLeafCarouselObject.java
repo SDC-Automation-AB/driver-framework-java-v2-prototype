@@ -89,8 +89,7 @@ public class DFLeafCarouselObject extends DFCarouselObject {
                         n.onFailed();
                     }
                 }
-
-                DSRuntime.runDelayed(runner,0);
+                runner.launch();
             }
 
             DSRuntime.runDelayed(this, getAHomeNode().getPollRate());
@@ -110,6 +109,11 @@ public class DFLeafCarouselObject extends DFCarouselObject {
     private class BatchPollRunner implements Runnable {
 
         AtomicBoolean running = new AtomicBoolean();
+        
+        public void launch() {
+            running.set(true);
+            DSRuntime.runDelayed(this, 0);
+        }
 
         @Override
         public void run() {
