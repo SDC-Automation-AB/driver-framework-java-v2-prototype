@@ -3,7 +3,7 @@ package org.iot.dsa.dslink.dframework;
 import org.iot.dsa.dslink.DSMainNode;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSNode;
-
+import java.text.NumberFormat;
 import java.util.LinkedList;
 
 public class DFHelpers {
@@ -93,7 +93,14 @@ public class DFHelpers {
             if (!first) str.append(", ");
             str.append(info.getName());
             str.append(":");
-            str.append(info.getValue());
+            if (info.getValue().toElement().isDouble()) {
+                double d = info.getValue().toElement().toDouble();
+                NumberFormat f = NumberFormat.getInstance();
+                f.setGroupingUsed(false);
+                str.append(f.format(d));
+            } else {
+                str.append(info.getValue());
+            }
             first = false;
         }
         for (DSInfo info : nodes) {
