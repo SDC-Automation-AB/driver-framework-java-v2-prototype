@@ -93,14 +93,7 @@ public class DFHelpers {
             if (!first) str.append(", ");
             str.append(info.getName());
             str.append(":");
-            if (info.getValue().toElement().isDouble()) {
-                double d = info.getValue().toElement().toDouble();
-                NumberFormat f = NumberFormat.getInstance();
-                f.setGroupingUsed(false);
-                str.append(f.format(d));
-            } else {
-                str.append(info.getValue());
-            }
+            str.append(info.getValue());
             first = false;
         }
         for (DSInfo info : nodes) {

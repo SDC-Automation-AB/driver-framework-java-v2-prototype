@@ -11,7 +11,8 @@ for i in range(0, len(steps)):
     if act.startswith(update_prefix):
         arr = act.split()
         path = arr[2].split(":")
-        val = arr[4]
+        devpoint = find_in_dev_tree(step.dev_tree, path)
+        val = devpoint.value.split()[-1].strip()
         point = find_in_dsa_tree(step.dsa_tree, path)
         if point is not None and goodstatus in point.value:
             tr.main_test("Value:" + val in point.value, i)

@@ -51,5 +51,9 @@ public abstract class DFBranchNode extends DFAbstractNode {
     public long getPingRate() {
         return DEFAULT_PING_RATE;
     }
+    
+    public double getReconnectDelayMultiplier() {
+        return DFHelpers.RECONNECT_DELAY_MULTIPLIER;
+    }
 
 }

@@ -14,10 +14,10 @@ public class DFBranchDelayCalculator extends DFDelayCalculator {
     @Override
     public long getDelay() {
         if (carObject.isConnected()) {
-            reconnectRate = homeNode.getPingRate();;
+            reconnectRate = homeNode.getPingRate();
             return homeNode.getPingRate();
         } else {
-            reconnectRate *= DFHelpers.RECONNECT_DELAY_MULTIPLIER;
+            reconnectRate *= homeNode.getReconnectDelayMultiplier();
             return reconnectRate;
         }
     }
