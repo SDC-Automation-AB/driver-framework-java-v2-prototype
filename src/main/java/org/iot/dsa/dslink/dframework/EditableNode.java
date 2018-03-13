@@ -1,6 +1,7 @@
 package org.iot.dsa.dslink.dframework;
 
 import java.util.List;
+import org.iot.dsa.dslink.DSMainNode;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSInfo;
@@ -53,6 +54,18 @@ public abstract class EditableNode extends DSNode {
     protected void onStable() {
         put(DFHelpers.ACTION_EDIT, makeEditAction());
         super.onStable();
+    }
+    
+    public DSMainNode getMainNode() {
+        DSNode n = this;
+        while (n != null) {
+            if (n instanceof DSMainNode) {
+                return (DSMainNode) n;
+            }
+            n = n.getParent();
+        }
+        DSException.throwRuntime(new RuntimeException("Main node not found, parent is null"));
+        return null;
     }
     
     public DSAction makeRemoveAction() {
