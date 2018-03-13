@@ -9,6 +9,7 @@ public class DFBranchDelayCalculator extends DFDelayCalculator {
     public DFBranchDelayCalculator(DFBranchNode homeNode, DFBranchCarouselObject carObject) {
         this.homeNode = homeNode;
         this.carObject = carObject;
+        this.reconnectRate = homeNode.getPingRate();
     }
 
     @Override
