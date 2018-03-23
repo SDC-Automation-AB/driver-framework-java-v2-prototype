@@ -12,6 +12,7 @@ import org.iot.dsa.dslink.dfexample.MainNode;
 import org.iot.dsa.dslink.dframework.*;
 import org.iot.dsa.dslink.requester.AbstractInvokeHandler;
 import org.iot.dsa.dslink.requester.AbstractSubscribeHandler;
+import org.iot.dsa.dslink.requester.ErrorType;
 import org.iot.dsa.node.*;
 import org.iot.dsa.time.DSDateTime;
 import org.junit.Before;
@@ -56,7 +57,7 @@ public class FuzzTest {
     public static double PROB_OF_BAD_CONFIG = 0.01;
 
     public static long PING_POLL_RATE = 15;
-    public static long INTERSTEP_WAIT_TIME = PING_POLL_RATE * 2;
+    public static long INTERSTEP_WAIT_TIME = PING_POLL_RATE * 3;
     public static int SUBSCRIBE_DELAY_RETRIES = 100;
     public static int SUBSCRIBE_DELAY_WAIT_MILIS = 100;
 
@@ -331,8 +332,13 @@ public class FuzzTest {
     }
 
     static String convertStreamToString(InputStream is) {
-        java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-        return s.hasNext() ? s.next() : "";
+        java.util.Scanner s = new java.util.Scanner(is);
+        s.useDelimiter("\\A");
+        try {
+            return s.hasNext() ? s.next() : "";
+        } finally {
+            s.close();
+        }
     }
 
     public static PrintWriter getNewPrintWriter(String fileName) {
@@ -781,9 +787,9 @@ public class FuzzTest {
         }
 
         @Override
-        public void onError(String type, String msg, String detail) {
+        public void onError(ErrorType type, String msg) {
             // TODO Auto-generated method stub
-
+            
         }
 
     }
@@ -833,8 +839,8 @@ public class FuzzTest {
         }
 
         @Override
-        public void onError(String type, String msg, String detail) {
-            System.out.println("Type: " + type + " MSG: " + msg + " Detail: " + detail);
+        public void onError(ErrorType type, String msg) {
+            System.out.println("Type: " + type + " MSG: " + msg);
         }
     }
 
