@@ -7,6 +7,7 @@ import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
+import org.iot.dsa.util.DSException;
 
 /**
  * @author James (Juris) Puchin
@@ -120,5 +121,16 @@ public abstract class DFAbstractNode extends EditableNode {
             put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED_BYP));
         else
             put(DFHelpers.STATUS, DSString.valueOf(DFStatus.STOPPED));
+    }
+    
+    public DFStatus getDFStatus() {
+        String statStr = status.getValue().toElement().toString();
+        for (DFStatus stat : DFStatus.values()) {
+            if (stat.toString().equals(statStr)) {
+                return stat;
+            }
+        }
+        DSException.throwRuntime(new RuntimeException("Unexpected DFStatus text"));
+        return null;
     }
 }
