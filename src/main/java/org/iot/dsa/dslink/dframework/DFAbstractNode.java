@@ -2,7 +2,9 @@ package org.iot.dsa.dslink.dframework;
 
 import org.iot.dsa.dslink.dframework.DFHelpers.DFStatus;
 import org.iot.dsa.node.DSBool;
+import org.iot.dsa.node.DSIStatus;
 import org.iot.dsa.node.DSInfo;
+import org.iot.dsa.node.DSStatus;
 import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.action.ActionInvocation;
 import org.iot.dsa.node.action.ActionResult;
@@ -13,7 +15,7 @@ import org.iot.dsa.util.DSException;
  * @author James (Juris) Puchin
  * Created on 10/25/2017
  */
-public abstract class DFAbstractNode extends EditableNode {
+public abstract class DFAbstractNode extends EditableNode implements DSIStatus {
 
     private final DSInfo is_stopped = getInfo(DFHelpers.IS_STOPPED);
     boolean isNodeStopped() {
@@ -132,5 +134,17 @@ public abstract class DFAbstractNode extends EditableNode {
         }
         DSException.throwRuntime(new RuntimeException("Unexpected DFStatus text"));
         return null;
+    }
+    
+    public DSStatus toStatus() {
+        DFStatus dfstat = getDFStatus();
+        switch (dfstat) {
+            case NEW: return DSStatus.unknown;
+            case CONNECTED: return DSStatus.ok;
+            case FAILED: return DSStatus.down;
+            case STOPPED: return DSStatus.disabled;
+            case STOPPED_BYP: return DSStatus.disabled;
+            default: return DSStatus.unknown;
+        }
     }
 }
