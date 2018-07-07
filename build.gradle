@@ -17,19 +17,16 @@ build {
 repositories {
     jcenter()
     maven {
-        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+        url 'https://jitpack.io'
     }
-    flatDir { dirs 'dsa' }
 }
 
 dependencies {
-    compile 'org.iot.dsa:dslink-core:+'
-    compile 'org.iot.dsa:dslink-websocket-standalone:+'
-    compile 'org.glassfish.tyrus.bundles:tyrus-standalone-client:1.13'
-    testCompile group: 'org.python', name: 'jython-standalone', version: '2.7.0'
-    testCompile 'com.github.bkromhout:java-diff-utils:+'
-    testCompile 'org.apache.commons:commons-lang3:3.4'
-    testCompile 'junit:junit:+'
+    implementation 'com.github.iot-dsa-v2:sdk-dslink-java-v2:+'
+    testImplementation group: 'org.python', name: 'jython-standalone', version: '2.7.0'
+    testImplementation 'com.github.bkromhout:java-diff-utils:+'
+    testImplementation 'org.apache.commons:commons-lang3:3.4'
+    testImplementation 'junit:junit:+'
 }
 
 applicationDistribution.from(new File(project.projectDir, "/dslink.json"))
