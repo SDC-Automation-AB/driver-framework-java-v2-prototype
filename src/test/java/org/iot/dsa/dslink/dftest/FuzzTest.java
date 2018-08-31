@@ -15,6 +15,7 @@ import org.iot.dsa.dslink.requester.AbstractSubscribeHandler;
 import org.iot.dsa.dslink.requester.ErrorType;
 import org.iot.dsa.node.*;
 import org.iot.dsa.time.DSDateTime;
+import org.iot.dsa.util.DSException;
 import org.junit.Before;
 import org.junit.Test;
 import org.python.util.PythonInterpreter;
@@ -327,7 +328,7 @@ public class FuzzTest {
             System.out.println("Test " + name + ": PASSED!");
         } catch (Exception e) {
             System.out.println("Test " + name + ": FAILED!");
-            throw e;
+            DSException.throwRuntime(e);
         }
     }
 

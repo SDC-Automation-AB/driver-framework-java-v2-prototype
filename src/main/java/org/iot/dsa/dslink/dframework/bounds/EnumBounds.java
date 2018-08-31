@@ -23,7 +23,7 @@ public class EnumBounds implements ParameterBounds<DSIEnum> {
     public EnumBounds(DSIEnum allValid) {
         DSList lst = new DSList();
         Iterator itr = allValid.getEnums(lst).iterator();
-        stringSet = new HashSet<>();
+        stringSet = new HashSet<String>();
         while (itr.hasNext()) {
             Object next = itr.next();
             DSElement nextEl;
@@ -44,7 +44,7 @@ public class EnumBounds implements ParameterBounds<DSIEnum> {
 //    }
 
     private void stringifySet(EnumSet set) {
-        stringSet = new HashSet<>();
+        stringSet = new HashSet<String>();
         for (Object validVal : set) {
             stringSet.add(validVal.toString());
         }

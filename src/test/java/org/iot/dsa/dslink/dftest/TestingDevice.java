@@ -11,7 +11,7 @@ public class TestingDevice {
     protected String name;
     protected MockParameters devParams;
     protected boolean active = true;
-    protected Map<String, TestingPoint> points = new ConcurrentHashMap<>();
+    protected Map<String, TestingPoint> points = new ConcurrentHashMap<String, TestingPoint>();
 
     protected TestingDevice(String name) {
         this.name = name;

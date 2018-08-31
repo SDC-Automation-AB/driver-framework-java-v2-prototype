@@ -135,8 +135,9 @@ public abstract class DFAbstractNode extends EditableNode implements DSIStatus {
         DSException.throwRuntime(new RuntimeException("Unexpected DFStatus text"));
         return null;
     }
-    
-    public DSStatus toStatus() {
+
+    @Override
+    public DSStatus getStatus() {
         DFStatus dfstat = getDFStatus();
         switch (dfstat) {
             case NEW: return DSStatus.unknown;
