@@ -14,6 +14,7 @@ import org.iot.dsa.dslink.requester.AbstractInvokeHandler;
 import org.iot.dsa.dslink.requester.AbstractSubscribeHandler;
 import org.iot.dsa.dslink.requester.ErrorType;
 import org.iot.dsa.node.*;
+import org.iot.dsa.node.DSMap.Entry;
 import org.iot.dsa.time.DSDateTime;
 import org.iot.dsa.util.DSException;
 import org.junit.Before;
@@ -761,13 +762,16 @@ public class FuzzTest {
     public static String dsMapToPrettyString(DSMap map) {
         StringBuilder b = new StringBuilder();
         b.append("(");
-        for (int i = 0; i < map.size(); i++) {
-            if (i != 0) b.append(", ");
-            String key = map.get(i).toString();
-            b.append(key);
+        boolean first = true;
+        for (Entry entry : map) {
+            if (first) {
+                first = false;
+            } else {
+                b.append(", ");
+            }
+            b.append(entry.getKey());
             b.append(":");
-            String val = map.get(key).toString();
-            b.append(val);
+            b.append(entry.getValue().toString());
         }
         b.append(")");
         return b.toString();
