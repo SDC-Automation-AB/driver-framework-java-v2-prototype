@@ -268,262 +268,246 @@ public class ParameterDefinitionTests {
     
     @Test
     public void addToAddActionBoolNoDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParam("BoolVal", DSValueType.BOOL, null, null);
         pdef.addToAction(act);
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("BoolVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.BOOL.toString(), param.getString(DSMetadata.TYPE));
             assertEquals(null, param.get(DSMetadata.DEFAULT));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToAddActionBoolWithDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParamWithDefault("BoolVal", DSBool.TRUE, null, null);
         pdef.addToAction(act);
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("BoolVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.BOOL.toString(), param.getString(DSMetadata.TYPE));
             assertEquals(true, param.getBoolean(DSMetadata.DEFAULT));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToEditActionBoolNoDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParam("BoolVal", DSValueType.BOOL, null, null);
         pdef.addToAction(act, DSBool.FALSE);
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("BoolVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.BOOL.toString(), param.getString(DSMetadata.TYPE));
             assertEquals(false, param.getBoolean(DSMetadata.DEFAULT));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToEditActionBoolWithDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParamWithDefault("BoolVal", DSBool.TRUE, null, null);
         pdef.addToAction(act, DSBool.FALSE);
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("BoolVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.BOOL.toString(), param.getString(DSMetadata.TYPE));
             assertEquals(false, param.getBoolean(DSMetadata.DEFAULT));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToAddActionDoubNoDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParam("DoubVal", DSValueType.NUMBER, null, null);
         pdef.addToAction(act);
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("DoubVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.NUMBER.toString(), param.getString(DSMetadata.TYPE));
             assertEquals(null, param.get(DSMetadata.DEFAULT));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToAddActionDoubWithDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParamWithDefault("DoubVal", DSDouble.valueOf(42), null, null);
         pdef.addToAction(act);
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("DoubVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.NUMBER.toString(), param.getString(DSMetadata.TYPE));
             assertEquals(42, param.getDouble(DSMetadata.DEFAULT), DELTA);
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToEditActionDoubNoDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParam("DoubVal", DSValueType.NUMBER, null, null);
         pdef.addToAction(act, DSDouble.valueOf(2.3));
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("DoubVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.NUMBER.toString(), param.getString(DSMetadata.TYPE));
             assertEquals(2.3, param.getDouble(DSMetadata.DEFAULT), DELTA);
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToEditActionDoubWithDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParamWithDefault("DoubVal", DSDouble.valueOf(42), null, null);
         pdef.addToAction(act, DSDouble.valueOf(2.3));
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("DoubVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.NUMBER.toString(), param.getString(DSMetadata.TYPE));
             assertEquals(2.3, param.getDouble(DSMetadata.DEFAULT), DELTA);
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToAddActionStrNoDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParam("StrVal", DSValueType.STRING, null, null);
         pdef.addToAction(act);
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("StrVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.STRING.toString(), param.getString(DSMetadata.TYPE));
             assertEquals(null, param.get(DSMetadata.DEFAULT));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToAddActionStrWithDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParamWithDefault("StrVal", DSString.valueOf("Hi"), null, null);
         pdef.addToAction(act);
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("StrVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.STRING.toString(), param.getString(DSMetadata.TYPE));
             assertEquals("Hi", param.getString(DSMetadata.DEFAULT));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToEditActionStrNoDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParam("StrVal", DSValueType.STRING, null, null);
         pdef.addToAction(act, DSString.valueOf("Hello!"));
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("StrVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.STRING.toString(), param.getString(DSMetadata.TYPE));
             assertEquals("Hello!", param.getString(DSMetadata.DEFAULT));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToEditActionStrWithDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParamWithDefault("StrVal", DSString.valueOf("Hi"), null, null);
         pdef.addToAction(act, DSString.valueOf("Hello!"));
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("StrVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.STRING.toString(), param.getString(DSMetadata.TYPE));
             assertEquals("Hello!", param.getString(DSMetadata.DEFAULT));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToAddActionEnumNoDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeEnumParam("EnumVal", DSJavaEnum.valueOf(Color.RED), null, null);
         pdef.addToAction(act);
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("EnumVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.ENUM.toString(), param.getString(DSMetadata.TYPE));
             assertEquals(null, param.get(DSMetadata.DEFAULT));
             assertEquals(new DSList().add("RED").add("GREEN").add("BLUE"), param.get(DSMetadata.ENUM_RANGE));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToAddActionEnumWithDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParamWithDefault("EnumVal", DSJavaEnum.valueOf(Color.RED), null, null);
         pdef.addToAction(act);
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("EnumVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.ENUM.toString(), param.getString(DSMetadata.TYPE));
             assertEquals("RED", param.getString(DSMetadata.DEFAULT));
             assertEquals(new DSList().add("RED").add("GREEN").add("BLUE"), param.get(DSMetadata.ENUM_RANGE));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToEditActionEnumNoDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeEnumParam("EnumVal", DSJavaEnum.valueOf(Color.RED), null, null);
         pdef.addToAction(act, DSString.valueOf("GREEN"));
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("EnumVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.ENUM.toString(), param.getString(DSMetadata.TYPE));
             assertEquals("GREEN", param.getString(DSMetadata.DEFAULT));
             assertEquals(new DSList().add("RED").add("GREEN").add("BLUE"), param.get(DSMetadata.ENUM_RANGE));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
     
     @Test
     public void addToEditActionEnumWithDefault() {
-        DSAction act = new DSAction();
+        DSAction act = new DSAction.Noop();
         ParameterDefinition pdef = ParameterDefinition.makeParamWithDefault("EnumVal", DSJavaEnum.valueOf(Color.RED), null, null);
         pdef.addToAction(act, DSString.valueOf("GREEN"));
-        int paramCount = 0;
-        for (Iterator<DSMap> iter = act.getParameters(); iter.hasNext();) {
-            DSMap param = iter.next();
-            paramCount++;
+        DSMap param = new DSMap();
+        for (int i = 0, len = act.getParameterCount(); i < len; i++) {
+            act.getParameterMetadata(i, param.clear());
             assertEquals("EnumVal", param.getString(DSMetadata.NAME));
             assertEquals(DSValueType.ENUM.toString(), param.getString(DSMetadata.TYPE));
             assertEquals("GREEN", param.getString(DSMetadata.DEFAULT));
             assertEquals(new DSList().add("RED").add("GREEN").add("BLUE"), param.get(DSMetadata.ENUM_RANGE));
         }
-        assertEquals(1, paramCount);
+        assertEquals(1, act.getParameterCount());
     }
 
 }

@@ -38,10 +38,10 @@ public abstract class DFAbstractNode extends EditableNode implements DSIStatus {
     }
 
     DSAction makeStartStopAction() {
-        DSAction act = new DSAction() {
+        DSAction act = new DSAction.Parameterless() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                DFAbstractNode par = ((DFAbstractNode) info.getParent());
+                DFAbstractNode par = ((DFAbstractNode) info.get());
                 if (par.isNodeStopped()) {
                     par.setNodeRunning();
                 }
@@ -78,10 +78,10 @@ public abstract class DFAbstractNode extends EditableNode implements DSIStatus {
     }
 
     private DSAction makeRestartAction() {
-        DSAction act = new DSAction() {
+        DSAction act = new DSAction.Parameterless() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DFAbstractNode) info.getParent()).restartNode();
+                ((DFAbstractNode) info.get()).restartNode();
                 return null;
             }
         };

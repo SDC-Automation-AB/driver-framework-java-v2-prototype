@@ -69,10 +69,10 @@ public abstract class EditableNode extends DSNode {
     }
     
     public DSAction makeRemoveAction() {
-        DSAction act = new DSAction() {
+        DSAction act = new DSAction.Parameterless() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((EditableNode) info.getParent()).delete();
+                ((EditableNode) info.get()).delete();
                 return null;
             }
         };
@@ -85,10 +85,10 @@ public abstract class EditableNode extends DSNode {
     
     
     public DSAction makeEditAction() {
-        DSAction act = new DSAction() {
+        DSAction act = new DSAction.Parameterless() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((EditableNode) info.getParent()).edit(invocation.getParameters());
+                ((EditableNode) info.get()).edit(invocation.getParameters());
                 return null;
             }
         };
@@ -135,11 +135,11 @@ public abstract class EditableNode extends DSNode {
     // should only be called on dummy instance
     public DSAction getAddAction() {
         final EditableNode inst = this;
-        DSAction act = new DSAction() {
+        DSAction act = new DSAction.Parameterless() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
                 System.out.println(info.getName() + "   " + invocation.getParameters());
-                inst.addNewInstance(info.getParent(), invocation.getParameters());
+                inst.addNewInstance(info.getNode(), invocation.getParameters());
                 return null;
             }
         };

@@ -87,7 +87,7 @@ public abstract class DFPointNode extends DFAbstractNode implements DSIValue {
     @Override
     public void onChildChanged(DSInfo child) {
         if (child == valueInfo) {
-            fire(VALUE_TOPIC, null);
+            fire(VALUE_CHANGED, null);
         }
     }
 

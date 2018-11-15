@@ -23,7 +23,7 @@ public abstract class EditableValueNode extends EditableNode implements DSIValue
     @Override
     public void onChildChanged(DSInfo child) {
         if (child == valueInfo) {
-            fire(VALUE_TOPIC, null);
+            fire(VALUE_CHANGED, null);
         }
     }
 

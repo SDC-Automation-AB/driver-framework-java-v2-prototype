@@ -23,10 +23,10 @@ public class DSRuntimeRootNodeTest extends MainNode implements FailCallback {
     @Override
     protected void declareDefaults() {
         super.declareDefaults();
-        DSAction act = new DSAction() {
+        DSAction act = new DSAction.Parameterless() {
             @Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DSRuntimeRootNodeTest) info.getParent()).startDummy(invocation.getParameters());
+                ((DSRuntimeRootNodeTest) info.get()).startDummy(invocation.getParameters());
                 return null;
             }
         };

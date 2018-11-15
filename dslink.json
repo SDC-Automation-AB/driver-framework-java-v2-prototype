@@ -1,10 +1,10 @@
 {
   "name": "DFTesting",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Test link for Driver Framework",
   "main": "bin/dslink-java-v2-example",
   "configs": {
-    "handler_class": {
+    "main-node": {
       "desc": "Fully qualified class name of the root node of the link.",
       "type": "string",
       "value": "org.iot.dsa.dslink.dfexample.MainNode"
