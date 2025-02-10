@@ -84,7 +84,21 @@ public class ParameterDefinition {
         } else if (enumtype != null) {
             metadata = action.addParameter(name, (DSIValue) enumtype, description);
         } else {
-            metadata = action.addParameter(name, type, description);
+            switch(type) {
+                case STRING:
+                    metadata = action.addParameter(name, DSString.EMPTY, description);
+                    break;
+                case NUMBER:
+                    metadata = action.addParameter(name, DSDouble.NULL, description);
+                    break;
+                case BOOL:
+                    metadata = action.addParameter(name, DSBool.NULL, description);
+                    break;
+                case ENUM:
+                    metadata = action.addParameter(name, DSFlexEnum.NULL, description);
+                default:
+                    throw new IllegalArgumentException("Cannot handle type: " + type);
+            }
         }
 
         if (placeholder != null) {

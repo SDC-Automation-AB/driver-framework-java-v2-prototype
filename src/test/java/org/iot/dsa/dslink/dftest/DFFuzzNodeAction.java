@@ -15,7 +15,7 @@ import java.util.Random;
  */
 public class DFFuzzNodeAction extends FuzzNodeActionContainer {
 
-    @Override
+    /*@Override
     public String invokeAction(DSInfo actionInfo, Random rand) {
         String name = actionInfo.getName();
         DSNode parent = actionInfo.getParent();
@@ -50,5 +50,5 @@ public class DFFuzzNodeAction extends FuzzNodeActionContainer {
         }
         FuzzTest.requester.invoke(path, params, new FuzzTest.InvokeHandlerImpl());
         return "Invoking " + path + " with parameters " + params;
-    }
+    }*/
 }

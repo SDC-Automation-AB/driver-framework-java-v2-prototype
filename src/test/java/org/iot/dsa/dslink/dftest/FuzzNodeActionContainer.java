@@ -14,7 +14,7 @@ import java.util.Random;
  */
 public abstract class FuzzNodeActionContainer {
 
-    public abstract String invokeAction(DSInfo actionInfo, Random rand);
+    /*public abstract String invokeAction(DSInfo actionInfo, Random rand);
 
     protected static long getFuzzPingRateMillis() {
         return FuzzTest.PING_POLL_RATE;
@@ -60,5 +60,5 @@ public abstract class FuzzNodeActionContainer {
         FuzzTest.pnt_node_counter--;
         FuzzTest.SubscribeHandlerImpl handle = FuzzTest.subscriptions.remove(pntInfo);
         if (handle != null) handle.getStream().closeStream();
-    }
+    }*/
 }

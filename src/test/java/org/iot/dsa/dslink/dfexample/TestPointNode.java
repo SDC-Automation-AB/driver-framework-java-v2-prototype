@@ -43,7 +43,11 @@ public class TestPointNode extends DFPointNode {
         return parameters.getString("ID");
     }
 
-    
+    @Override
+    public boolean isNull() {
+        return this == null;
+    }
+
 //    private TestDeviceNode getParentNode() {
 //        DSNode parent =  getParent();
 //        if (parent instanceof TestDeviceNode) {

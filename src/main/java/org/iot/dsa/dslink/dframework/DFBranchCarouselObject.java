@@ -33,7 +33,7 @@ public class DFBranchCarouselObject extends DFCarouselObject {
 
     private void killOrSpawnChildren(boolean kill) {
         for (DSInfo info : homeNode) {
-            DSIObject o = info.getObject();
+            DSIObject o = info.get();
             if (o instanceof DFAbstractNode) {
                 DFAbstractNode child = (DFAbstractNode) o;
                 if (kill) {

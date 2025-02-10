@@ -5,6 +5,7 @@ import org.iot.dsa.node.DSIValue;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.DSValueType;
+import org.iot.dsa.node.event.DSEvent;
 
 public abstract class EditableValueNode extends EditableNode implements DSIValue{
     
@@ -23,7 +24,7 @@ public abstract class EditableValueNode extends EditableNode implements DSIValue
     @Override
     public void onChildChanged(DSInfo child) {
         if (child == valueInfo) {
-            fire(VALUE_CHANGED, null);
+            fire(new DSEvent(VALUE_CHANGED), null, null);
         }
     }
 

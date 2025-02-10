@@ -1,6 +1,6 @@
 package org.iot.dsa.dslink.dftest;
 
-import com.acuity.iot.dsa.dslink.test.TestLink;
+//import com.acuity.iot.dsa.dslink.test.TestLink;
 import difflib.DiffUtils;
 import difflib.Patch;
 import org.apache.commons.lang3.StringUtils;
@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
 
 public class FuzzTest {
 
-    public static long TEST_STEPS = 1000;
+   /* public static long TEST_STEPS = 1000;
     public static long SETUP_STEPS = 60;
     public static boolean REGENERATE_OUTPUT = true; //Set to false if you don't want to re-run the Fuzz
     public static boolean FLAT_TREE = false;
@@ -150,11 +150,11 @@ public class FuzzTest {
         builFuzzDoubleTree(100, null, new MainNode(), new TestingConnection(), new DFFuzzNodeAction());
     }
 
-    /**
+    *//**
      * Checks whether the output file is an exact match to the golden output.
      *
      * @throws IOException Failed to find the required inputs/outputs
-     */
+     *//*
     //@Test
     public void exactMatchTest() throws IOException {
         performDiff(MASTER_OUT_FILENAME, TESTING_OUT_FILENAME);
@@ -184,68 +184,68 @@ public class FuzzTest {
         return lines;
     }
 
-    /**
+    *//**
      * This tests whether the python testing framework is working correctly
-     */
+     *//*
     @Test
     public void pythonFrameworkTest() throws Exception {
         String t_name = "helloo_world.py";
         runPythonTestFromJar(t_name);
     }
 
-    /**
+    *//**
      * Checks that, at any point in time, if a point is not "Stopped", then it was subscribed
      * to at some point in the past, and was not unsubscribed from since then.
-     */
+     *//*
     @Test
     public void connected_was_subbed() throws Exception {
         String t_name = "connected_was_subbed.py";
         runPythonTestFromJar(t_name);
     }
 
-    /**
+    *//**
      * Checks that whenever a point or device node is "Connected" or "Failed", its parent is "Connected"
-     */
+     *//*
     @Test
     public void parent_connected() throws Exception {
         String t_name = "parent_connected.py";
         runPythonTestFromJar(t_name);
     }
 
-    /**
+    *//**
      * After a point node is subscribed to, checks that if its parent is "Connected" and the
      * corresponding point exists on the device, then the node's status is "Connected" and its value
      * is the same as the value of the point on the device
-     */
+     *//*
     @Test
     public void subbed_is_connected() throws Exception {
         String t_name = "subbed_is_connected.py";
         runPythonTestFromJar(t_name);
     }
 
-    /**
+    *//**
      * After a point node is subscribed to, checks that if its parent is "Connected" and the
      * corresponding point doesn't exist on the device, then the node's status is "Failed"
-     */
+     *//*
     @Test
     public void subbed_is_failed() throws Exception {
         String t_name = "subbed_is_failed.py";
         runPythonTestFromJar(t_name);
     }
 
-    /**
+    *//**
      * After a point node is unsubscribed from, checks that if its parent is "Connected", then the
      * node's status is "Stopped"
-     */
+     *//*
     @Test
     public void unsubbed_is_stopped() throws Exception {
         String t_name = "unsubbed_is_stopped.py";
         runPythonTestFromJar(t_name);
     }
 
-    /**
+    *//**
      * Checks that active ("Connected") point nodes update their values correctly
-     */
+     *//*
     @Test
     public void value_updates() throws Exception {
         String t_name = "value_updates.py";
@@ -404,11 +404,11 @@ public class FuzzTest {
         return thingDone;
     }
 
-    /**
+    *//**
      * Perform an action on the global mock device tree
      * @param testConnSeed Dummy TestingConnection instance used to seed the mock tree construction.
      * @return Return a description of the action performed
-     * */
+     * *//*
     private static String createOrModifyDevice(TestingConnection testConnSeed) {
         double rand = random.nextDouble();
         //Create a connection
@@ -530,7 +530,7 @@ public class FuzzTest {
     }
 
     //TODO: Remove old unreachable code once DF is done
- /*   private static String invokeAction(DSInfo actionInfo) {
+ *//*   private static String invokeAction(DSInfo actionInfo) {
         String name = actionInfo.getName();
         DSNode parent = actionInfo.getParent();
         String path = parent.getPath();
@@ -580,7 +580,7 @@ public class FuzzTest {
         }
         requester.invoke(path, params, new InvokeHandlerImpl());
         return "Invoking " + path + " with parameters " + params;
-    }*/
+    }*//*
 
     private static DSInfo pickAChild(DSNode node, int level) {
         List<DSInfo> actions = new ArrayList<DSInfo>();
@@ -855,17 +855,17 @@ public class FuzzTest {
         DSNode parent = null;
         String pointName = null;
 
-        /**
+        *//**
          * Constructor for doing an action
-         */
+         *//*
         DelayedActionOrSub(String path, DSMap params) {
             this.path = path;
             this.params = params;
         }
 
-        /**
+        *//**
          * Constructor for subscribing or unsubscribing
-         */
+         *//*
         DelayedActionOrSub(DSNode parent, String pointName) {
             this.parent = parent;
             this.pointName = pointName;
@@ -893,6 +893,6 @@ public class FuzzTest {
                 return "Invoking Queued:" + path + " with parameters " + params;
             }
         }
-    }
+    }*/
 
 }

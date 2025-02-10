@@ -2,6 +2,7 @@ import groovy.json.JsonSlurper
 
 apply plugin: 'application'
 apply plugin: 'java-library'
+apply plugin: 'maven-publish'
 
 group 'org.iot.dsa'
 mainClassName = 'org.iot.dsa.dslink.DSLink'
@@ -32,8 +33,9 @@ repositories {
 
 dependencies {
     //implementation 'org.iot-dsa:dslink-v2-websocket:+' //for a locally installed sdk
-    implementation 'com.github.iot-dsa-v2.sdk-dslink-java-v2:dslink-v2-websocket:+'
-    implementation 'com.github.iot-dsa-v2:sdk-dslink-java-v2:+'
+//    implementation 'com.github.iot-dsa-v2.sdk-dslink-java-v2:dslink-v2-websocket:+'
+    implementation 'com.github.iot-dsa-v2.sdk-dslink-java-v2:dslink-v2-websocket:0.79.2'
+    //implementation 'com.github.iot-dsa-v2:sdk-dslink-java-v2:+'
     testImplementation group: 'org.python', name: 'jython-standalone', version: '2.7.0'
     testImplementation 'com.github.bkromhout:java-diff-utils:+'
     testImplementation 'org.apache.commons:commons-lang3:3.4'
@@ -60,6 +62,30 @@ task testJar(group: 'build', type: Jar, dependsOn: classes) {
 artifacts {
     archives sourcesJar
     archives testJar
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            groupId = 'com.github.iot-dsa-v2'
+            artifactId = 'driver-framework-java-v2-prototype'
+            version = '1.1.5'
+
+            artifact sourcesJar
+            artifact testJar
+        }
+    }
+
+    repositories {
+        maven {
+            url 'https://repo.sdc-automation.se/releases'
+            credentials {
+                username = System.getenv("SDC_REPO_USER")
+                password = System.getenv("SDC_REPO_USER_TOKEN")
+            }
+        }
+    }
 }
 
 wrapper {

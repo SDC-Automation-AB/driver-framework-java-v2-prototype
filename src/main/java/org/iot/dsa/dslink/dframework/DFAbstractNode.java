@@ -1,14 +1,15 @@
 package org.iot.dsa.dslink.dframework;
 
+import org.iot.dsa.dslink.ActionResults;
 import org.iot.dsa.dslink.dframework.DFHelpers.DFStatus;
 import org.iot.dsa.node.DSBool;
 import org.iot.dsa.node.DSIStatus;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSStatus;
 import org.iot.dsa.node.DSString;
-import org.iot.dsa.node.action.ActionInvocation;
-import org.iot.dsa.node.action.ActionResult;
+
 import org.iot.dsa.node.action.DSAction;
+import org.iot.dsa.node.action.DSIActionRequest;
 import org.iot.dsa.util.DSException;
 
 /**
@@ -34,12 +35,25 @@ public abstract class DFAbstractNode extends EditableNode implements DSIStatus {
         declareDefault(DFHelpers.REMOVE, makeRemoveAction());
         //declareDefault(DFHelpers.PRINT, makePrintAction());
 
-        declareDefault(DFHelpers.IS_STOPPED, DSBool.FALSE).setReadOnly(true).setHidden(true);
+        declareDefault(DFHelpers.IS_STOPPED, DSBool.FALSE).setReadOnly(true).setPrivate((true));
     }
 
     DSAction makeStartStopAction() {
-        DSAction act = new DSAction.Parameterless() {
+        DSAction act = new DSAction() {
             @Override
+            public ActionResults invoke(DSIActionRequest request) {
+                DFAbstractNode node = ((DFAbstractNode)request.getTarget());
+                if (node.isNodeStopped()) {
+                    node.setNodeRunning();
+                }
+                else {
+                    node.setNodeStopped();
+                }
+                return null;
+            }
+
+
+            /*@Override
             public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
                 DFAbstractNode par = ((DFAbstractNode) info.get());
                 if (par.isNodeStopped()) {
@@ -49,7 +63,7 @@ public abstract class DFAbstractNode extends EditableNode implements DSIStatus {
                     par.setNodeStopped();
                 }
                 return null;
-            }
+            }*/
         };
         return act;
     }
@@ -78,11 +92,11 @@ public abstract class DFAbstractNode extends EditableNode implements DSIStatus {
     }
 
     private DSAction makeRestartAction() {
-        DSAction act = new DSAction.Parameterless() {
+        DSAction act = new DSAction() {
             @Override
-            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DFAbstractNode) info.get()).restartNode();
-                return null;
+            public ActionResults invoke(DSIActionRequest request) {
+                ((DFAbstractNode) request.getTarget()).restartNode();
+                return super.invoke(request);
             }
         };
         return act;

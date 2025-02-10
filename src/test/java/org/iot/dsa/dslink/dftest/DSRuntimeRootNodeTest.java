@@ -1,11 +1,11 @@
 package org.iot.dsa.dslink.dftest;
 
+import org.iot.dsa.dslink.ActionResults;
 import org.iot.dsa.dslink.dfexample.MainNode;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSMap;
-import org.iot.dsa.node.action.ActionInvocation;
-import org.iot.dsa.node.action.ActionResult;
 import org.iot.dsa.node.action.DSAction;
+import org.iot.dsa.node.action.DSIActionRequest;
 
 /**
  * @author James (Juris) Puchin
@@ -23,11 +23,11 @@ public class DSRuntimeRootNodeTest extends MainNode implements FailCallback {
     @Override
     protected void declareDefaults() {
         super.declareDefaults();
-        DSAction act = new DSAction.Parameterless() {
+        DSAction act = new DSAction() {
             @Override
-            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((DSRuntimeRootNodeTest) info.get()).startDummy(invocation.getParameters());
-                return null;
+            public ActionResults invoke(DSIActionRequest request) {
+                ((DSRuntimeRootNodeTest)request.getTarget()).startDummy(request.getParameters());
+                return super.invoke(request);
             }
         };
         declareDefault("Start Dummy", act);

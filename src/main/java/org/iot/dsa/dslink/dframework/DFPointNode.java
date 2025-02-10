@@ -4,8 +4,10 @@ import org.iot.dsa.dslink.dframework.DFHelpers.DFStatus;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIValue;
 import org.iot.dsa.node.DSInfo;
+import org.iot.dsa.node.DSNode;
 import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.DSValueType;
+import org.iot.dsa.node.event.DSEvent;
 
 /**
  * @author James (Juris) Puchin
@@ -87,7 +89,7 @@ public abstract class DFPointNode extends DFAbstractNode implements DSIValue {
     @Override
     public void onChildChanged(DSInfo child) {
         if (child == valueInfo) {
-            fire(VALUE_CHANGED, null);
+            fire(new DSEvent(DSNode.VALUE_CHANGED), null, null);
         }
     }
 

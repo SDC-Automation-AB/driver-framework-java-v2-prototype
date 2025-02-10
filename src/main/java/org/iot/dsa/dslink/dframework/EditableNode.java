@@ -1,16 +1,18 @@
 package org.iot.dsa.dslink.dframework;
 
 import java.util.List;
+import org.iot.dsa.dslink.ActionResults;
 import org.iot.dsa.dslink.DSMainNode;
 import org.iot.dsa.node.DSElement;
 import org.iot.dsa.node.DSIObject;
 import org.iot.dsa.node.DSInfo;
 import org.iot.dsa.node.DSMap;
 import org.iot.dsa.node.DSNode;
+import org.iot.dsa.node.DSString;
 import org.iot.dsa.node.DSValueType;
-import org.iot.dsa.node.action.ActionInvocation;
-import org.iot.dsa.node.action.ActionResult;
+
 import org.iot.dsa.node.action.DSAction;
+import org.iot.dsa.node.action.DSIActionRequest;
 import org.iot.dsa.util.DSException;
 
 public abstract class EditableNode extends DSNode {
@@ -69,10 +71,11 @@ public abstract class EditableNode extends DSNode {
     }
     
     public DSAction makeRemoveAction() {
-        DSAction act = new DSAction.Parameterless() {
+        DSAction act = new DSAction() {
+
             @Override
-            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((EditableNode) info.get()).delete();
+            public ActionResults invoke(DSIActionRequest request) {
+                ((EditableNode)request.getTarget()).delete();
                 return null;
             }
         };
@@ -85,11 +88,11 @@ public abstract class EditableNode extends DSNode {
     
     
     public DSAction makeEditAction() {
-        DSAction act = new DSAction.Parameterless() {
+        DSAction act = new DSAction() {
             @Override
-            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                ((EditableNode) info.get()).edit(invocation.getParameters());
-                return null;
+            public ActionResults invoke(DSIActionRequest request) {
+                ((EditableNode)request.getTarget()).edit(request.getParameters());
+                return super.invoke(request);
             }
         };
         makeEditParameters(act, getParameterDefinitions(), parameters);
@@ -119,7 +122,7 @@ public abstract class EditableNode extends DSNode {
     }
     
     public static void makeAddParameters(DSAction action, List<ParameterDefinition> parameterDefinitions) {
-        action.addParameter(DFHelpers.NAME, DSValueType.STRING, null);
+        action.addParameter(DFHelpers.NAME, DSString.EMPTY, null);
         for (ParameterDefinition paramDefn: parameterDefinitions) {
             paramDefn.addToAction(action);
         }
@@ -135,12 +138,12 @@ public abstract class EditableNode extends DSNode {
     // should only be called on dummy instance
     public DSAction getAddAction() {
         final EditableNode inst = this;
-        DSAction act = new DSAction.Parameterless() {
+        DSAction act = new DSAction() {
+
             @Override
-            public ActionResult invoke(DSInfo info, ActionInvocation invocation) {
-                System.out.println(info.getName() + "   " + invocation.getParameters());
-                inst.addNewInstance(info.getNode(), invocation.getParameters());
-                return null;
+            public ActionResults invoke(DSIActionRequest request) {
+                inst.addNewInstance((DSNode) request.getTarget(), request.getParameters());
+                return super.invoke(request);
             }
         };
         makeAddParameters(act, getParameterDefinitions());
